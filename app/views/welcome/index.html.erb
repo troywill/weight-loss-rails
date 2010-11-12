@@ -1,2 +1,8 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+Current time: <%= Time.now %><br/>
+Your weight: <%= Reading.last_weight(1) %><br/>
+Your goal:<br/>
+<hr />
+<%= readings %>
+<hr />
+User ID: <%= session[:user_id] %> Foo
+

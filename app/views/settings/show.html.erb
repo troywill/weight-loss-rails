@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @setting.user_id %>
+</p>
+
+<p>
+  <b>Start weight:</b>
+  <%= @setting.start_weight %>
+</p>
+
+<p>
+  <b>Start time:</b>
+  <%= @setting.start_time %>
+</p>
+
+<p>
+  <b>Weight loss rate:</b>
+  <%= @setting.weight_loss_rate %>
+</p>
+
+
+<%= link_to 'Edit', edit_setting_path(@setting) %> |
+<%= link_to 'Back', settings_path %>

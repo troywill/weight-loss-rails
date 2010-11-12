@@ -1,7 +1,5 @@
 class WelcomeController < ApplicationController
   def index
-    user_id = session[:user_id]
-    @readings = Reading.where( :user_id => user_id )
   end
 
   def login
