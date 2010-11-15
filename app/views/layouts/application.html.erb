@@ -8,16 +8,16 @@
   <%= csrf_meta_tag %>
 <body>
   <div id='header'>
-      <h1>H1 <%= @user_id %> H1</h1>
+      <h1><%= header_string %></h1>
   </div>
   <div id='sidebar'>
     <%= link_to image_tag("home.png", :border=>0), root_path %>
-    <h1>Links</h1>
-    <p>
-      <%= link_to "New Reading", new_reading_path %><br />
-      <%= link_to "Readings", readings_path %><br />
-      <%= edit_settings %>
-    </p>
+    <ul>
+      <li><%= link_to "New Reading", new_reading_path %></li>
+      <li><%= link_to "Readings", readings_path %></li>
+      <li><%= edit_settings %></li>
+    </ul>
+    <%= image_tag("statistics.png", :size => "64x64", :alt => "Statistics") %>
   </div>
   <div id='main'>
     <%= yield %>

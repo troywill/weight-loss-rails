@@ -1,7 +1,7 @@
 #header {
     position: fixed;
     width: 100%;
-    height: 1.5em;
+    height: 2.5em;
     top: 0;
     right: 0;
     bottom: auto;
@@ -9,12 +9,12 @@
     color: white;
     background-color: #443266;
     margin: 0;
-    padding: 0;
+    padding: 0.5em;
     text-align: center;
 }
 
 #header h1 {
-    font-size: 1em;
+    font-size: 1.5em;
     margin: 0;
     padding: 0;
 }    
@@ -23,23 +23,39 @@
     position: fixed;
     width: 10em;
     height: auto;
-    top: 1.5em;
+    top: 2.5em;
     right: auto;
     bottom: 1.5em;
     left: 0;
-    background-color: #C3C3E5
+    background-color: #C3C3E5;
+    padding: 8px;
+}
+
+#sidebar ul {
+    margin-left: auto;
+    margin-right: auto;
+    border: dotted 1px;
+    width: 9em;
+    float: right;
+}
+
+#sidebar img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
 }
 
 #main {
     position: fixed;
     width: auto;
     height: auto;
-    top: 1.5em;
+    top: 2.5em;
     right: 0;
     bottom: 1.5em;
     left: 10em;
     background-color: #F1F0FF;
     overflow: auto;
+    padding: 4px;
 }
 
 #footer {

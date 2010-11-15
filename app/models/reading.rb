@@ -3,11 +3,11 @@ class Reading < ActiveRecord::Base
   validates :user_id, :numericality => true
   validates :weight, :numericality => true
 
-  def self.last_weight(user_id)
-    return where( :user_id => user_id ).last.weight
-  end
-
 #  default_scope :order => 'created_at DESC'
+
+  def self.last_weight(user_id)
+    return Reading.unscoped.order('reading_time DESC').where( :user_id => user_id ).last.weight
+  end
 
   # scope :by_user, lambda do |user_id|
   #   where('user_id == ?', user_id)

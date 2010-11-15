@@ -1,5 +1,5 @@
 Current time: <%= Time.now %><br/>
-Your weight: <%= Reading.last_weight(1) %><br/>
+Your weight: <%= Reading.last_weight(session[:user_id]) %><br/>
 Your goal:<br/>
 <hr />
 <%= readings %>

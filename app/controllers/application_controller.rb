@@ -1,8 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :identify_user, :except => :login
-
-  @user_id = 10
+  require 'statistics'
 
   def identify_user
     if User.find_by_id(session[:user_id])
