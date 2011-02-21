@@ -1,4 +1,6 @@
-source ./rrp-lib.sh
+#!/bin/bash
+set -o errexit
+source lib-rrp
 
 USER_MODEL="${TOP_DIR}/app/models/user.rb"
 
