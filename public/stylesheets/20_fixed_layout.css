@@ -14,9 +14,13 @@
 }
 
 #header h1 {
-    font-size: 1.5em;
+    font-size: 1.3em;
     margin: 0;
     padding: 0;
+}    
+
+#header h2 {
+    font-size: 1.2em;
 }    
 
 #sidebar {
@@ -55,7 +59,18 @@
     left: 10em;
     background-color: #F1F0FF;
     overflow: auto;
-    padding: 4px;
+    padding: 8px;
+}
+
+#milestone {
+    padding: 8px 0;
+    line-height: 1;
+    font-size: 3em;
+}
+
+#lost_block {
+    border-top: solid 2px #E68CF0;
+    font-size: 2em;
 }
 
 #footer {
@@ -82,4 +97,38 @@
 
 #footer p {
     display:inline;
+}
+
+table, th, td {
+    border: 1px solid #666;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+
+th {
+    padding: 5px 10px;
+    font-size: 90%;
+    text-transform: uppercase;
+    text-align: left;
+    color: #333
+}
+    
+td {
+    padding: 0 10px;
+}
+
+tr.monday {
+    background-color: #bac;
+}
+
+caption {
+    padding: 10px 0;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 120%;
 }

@@ -1,8 +1,4 @@
-Current time: <%= Time.now %><br/>
-Your weight: <%= Reading.last_weight(session[:user_id]) %><br/>
-Your goal:<br/>
-<hr />
+<%= milestone_string %>
+<%= last_reading %>
+<%= statistics_table %>
 <%= readings %>
-<hr />
-User ID: <%= session[:user_id] %> Foo
-

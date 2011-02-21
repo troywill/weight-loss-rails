@@ -13,9 +13,18 @@ class Setting < ActiveRecord::Base
     return start_weight
   end
 
+  def self.get_rate( user_id )
+    rate = Setting.where('user_id == ?', user_id).last.weight_loss_rate
+  end
+
   def self.get_start_time( user_id )
     start_time = Setting.where('user_id == ?', user_id).last.start_time
-    return start_time.to_i
+    return start_time
+  end
+
+  def self.get_total_time( user_id )
+    start_time = Setting.where('user_id == ?', user_id).last.start_time
+    return Time.now - start_time
   end
 
 end

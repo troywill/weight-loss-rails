@@ -2,8 +2,7 @@ class ReadingsController < ApplicationController
   # GET /readings
   # GET /readings.xml
   def index
-    @readings = Reading.all
-    @readings = Reading.by_user(session[:user_id])
+    @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -36,6 +35,7 @@ class ReadingsController < ApplicationController
   # GET /readings/1/edit
   def edit
     @reading = Reading.find(params[:id])
+#    @reading.reading_time = Time.now
   end
 
   # POST /readings
