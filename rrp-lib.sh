@@ -1,3 +1,4 @@
 EDITOR='emacs -nw'
 # EDITOR=mate
-TOP_DIR="../.."
+TOP_DIR="../../.."
+
