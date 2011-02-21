@@ -1,0 +1,2 @@
+logout
+session[:user_id] = nil
