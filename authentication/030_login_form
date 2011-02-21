@@ -1,4 +1,6 @@
-source ./rrp-lib.sh
+#!/bin/bash
+set -o errexit
+source lib-rrp
 LOGIN_PAGE="${TOP_DIR}/app/views/welcome/login.html.erb"
 
 function edit_login_form () {

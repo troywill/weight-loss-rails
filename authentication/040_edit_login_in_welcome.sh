@@ -1,4 +1,6 @@
-source ./rrp-lib.sh
+#!/bin/bash
+set -o errexit
+source ./lib-rrp-auth
 WELCOME_CONTROLLER="${TOP_DIR}/app/controllers/welcome_controller.rb"
 
 function edit_login_method () {

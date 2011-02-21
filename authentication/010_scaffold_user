@@ -1,5 +1,7 @@
 #!/bin/bash
-source ./rrp-lib.sh
+set -o errexit
+source lib-rrp
+exit
 NAME='user'
 
 function up () {

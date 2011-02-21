@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./rrp-lib.sh
+source ./lib-rrp
 NAME='setting' # lower case singular
 
 function do_generate () {
