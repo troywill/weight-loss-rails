@@ -29,3 +29,5 @@ ${EDITOR} ${LOGIN_PAGE}
 }
 
 edit_login_form
+
+${EDITOR} ${TOP_DIR}/config/routes.rb
