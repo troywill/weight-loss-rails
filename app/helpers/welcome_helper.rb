@@ -28,7 +28,7 @@ module WelcomeHelper
     start_time = Setting.get_start_time(session[:user_id])
     start_time_string = time_ago_in_words( start_time )
     time_now = Time.now
-    sixteen_weeks = time_now - 140.days
+    sixteen_weeks = time_now - 112.days
     eight_weeks = time_now - 56.days
     four_weeks = time_now - 28.days
     three_weeks = time_now - 21.days
