@@ -7,13 +7,21 @@ NAME='user'
 function up () {
     rails generate scaffold ${NAME} \
 	name:string \
-	username:string \
 	email:string \
 	phone:string \
 	height:decimal \
-	sex:string
+	sex:string \
+	start_weight:decimal \
+	start_time:datetime \
+	weight_loss_rate:integer \
+	filter_rate_gain:integer \
+	filter_rate_loss:integer \
+	forward_rate:integer \
+	google_doc:string
     rake db:migrate
 }
+#	username:string \
+
 
 function down () {
     echo
@@ -22,7 +30,6 @@ function down () {
 function edit_model () {
     cat >> ${TOP_DIR}/app/models/${NAME}.rb <<EOF
   validates :name, :presence => true
-#  validates :username, :presence => true, :uniqueness => true
   validates :email, :presence => true, :uniqueness => true
 EOF
     $EDITOR ${TOP_DIR}/app/models/${NAME}.rb
