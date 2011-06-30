@@ -5,10 +5,13 @@ source lib-rrp
 NAME='user'
 
 function up () {
-    rails generate scaffold ${NAME} name:string \
+    rails generate scaffold ${NAME} \
+	name:string \
 	username:string \
 	email:string \
-	phone:string
+	phone:string \
+	height:decimal \
+	sex:string
     rake db:migrate
 }
 
