@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
-source lib-rrp
+source ./lib-rrp
 
 function check_admin_user () {
     # Not a big deal, but should create initial user before adding

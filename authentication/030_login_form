@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
-source lib-rrp
+source ./lib-rrp
 LOGIN_PAGE="${TOP_DIR}/app/views/welcome/login.html.erb"
 
 function edit_login_form () {
@@ -10,12 +10,8 @@ cat >> ${LOGIN_PAGE} <<EOF
   <legend>Please Log In</legend>
   <% form_tag do %>
     <p>
-      <label for="name">Username:</label>
-      <%= text_field_tag :username, params[:username] %>
-    </p>
-    <p>
-      <label for="password">Password:</label>
-      <%= password_field_tag :password, params[:password] %>
+      <label for="email">Email:</label>
+      <%= text_field_tag :email, params[:email] %>
     </p>
     <p>
       <%= submit_tag "Login" %>
