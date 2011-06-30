@@ -7,7 +7,6 @@ NAME='user'
 function up () {
     rails generate scaffold ${NAME} name:string \
 	username:string \
-	password:string \
 	email:string \
 	phone:string
     rake db:migrate
@@ -21,7 +20,7 @@ function edit_model () {
     cat >> ${TOP_DIR}/app/models/${NAME}.rb <<EOF
   validates :name, :presence => true
   validates :username, :presence => true, :uniqueness => true
-  validates :password, :presence => true
+  validates :email, :presence => true, :uniqueness => true
 EOF
     $EDITOR ${TOP_DIR}/app/models/${NAME}.rb
 }

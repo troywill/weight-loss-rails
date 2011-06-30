@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mon Feb 21 11:17:13 PST 2011 <troydwill@gmail.com>
+# <troydwill@gmail.com>
 source ./lib-rrp
 rails generate controller welcome index login logout
 ${EDITOR} ${TOP_DIR}/config/routes.rb
