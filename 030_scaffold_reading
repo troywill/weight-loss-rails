@@ -12,7 +12,7 @@ function do_generate () {
 function edit_model () {
     MODEL="${TOP_DIR}/app/models/${NAME}.rb"
     cat >> ${MODEL} <<EOF
-  belongs_to: user
+  belongs_to :user
   validates :user_id, :numericality => true
   validates :weight, :numericality => true
 EOF
