@@ -7,7 +7,10 @@ function do_generate () {
 	user_id:integer \
 	start_weight:decimal \
 	start_time:datetime \
-	weight_loss_rate:integer
+	weight_loss_rate:integer \
+	filter_rate_gain:integer \
+	filter_rate_loss:integer \
+	forward_rate:integer
 }
 
 function edit_model () {
