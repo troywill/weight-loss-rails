@@ -22,7 +22,7 @@ function down () {
 function edit_model () {
     cat >> ${TOP_DIR}/app/models/${NAME}.rb <<EOF
   validates :name, :presence => true
-  validates :username, :presence => true, :uniqueness => true
+#  validates :username, :presence => true, :uniqueness => true
   validates :email, :presence => true, :uniqueness => true
 EOF
     $EDITOR ${TOP_DIR}/app/models/${NAME}.rb
