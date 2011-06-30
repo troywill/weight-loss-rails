@@ -18,8 +18,6 @@ function edit_model () {
 EOF
 
     $EDITOR ${MODEL}
-
-    echo "Don't forget to edit foreign key model, if applicable" && sleep 1
     
 }
 
