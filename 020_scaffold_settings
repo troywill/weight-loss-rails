@@ -10,7 +10,8 @@ function do_generate () {
 	weight_loss_rate:integer \
 	filter_rate_gain:integer \
 	filter_rate_loss:integer \
-	forward_rate:integer
+	forward_rate:integer \
+	google_doc:string
 }
 
 function edit_model () {
