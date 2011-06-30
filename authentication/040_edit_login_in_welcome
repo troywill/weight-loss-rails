@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
-source lib-rrp
+source ./lib-rrp
 WELCOME_CONTROLLER="${TOP_DIR}/app/controllers/welcome_controller.rb"
 
 function edit_login_method () {
@@ -9,12 +9,14 @@ cat >> ${WELCOME_CONTROLLER} <<EOF
 def login
   session[:user_id] = nil
   if request.post?
-    user = User.authenticate(params[:username], params[:password])
+#    user = User.authenticate(params[:username], params[:password])
+    user = User.authenticate(params[:email])
     if user
       session[:user_id] = user.id
       redirect_to(:action => "index" )
     else
-      flash.now[:notice] = "Invalid user/password combination"
+#      flash.now[:notice] = "Invalid user/password combination"
+      flash.now[:notice] = "Unknown email"
     end
   end
 end
