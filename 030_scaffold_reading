@@ -1,6 +1,6 @@
 #!/bin/bash
 source ./lib-rrp
-NAME='reading' # lower case singular
+NAME='reading'
 
 function do_generate () {
     rails generate scaffold ${NAME} \
