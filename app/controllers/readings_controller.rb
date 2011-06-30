@@ -42,6 +42,7 @@ class ReadingsController < ApplicationController
   # POST /readings.xml
   def create
     @reading = Reading.new(params[:reading])
+    @reading.user_id = session[:user_id]
 
     respond_to do |format|
       if @reading.save

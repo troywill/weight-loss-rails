@@ -2,6 +2,7 @@ class WelcomeController < ApplicationController
   def index
     user_id = session[:user_id]
     @readings = Reading.where( :user_id => user_id ).order('reading_time DESC')
+    @settings = Setting.where( :user_id => user_id ).first
   end
 
   def login
@@ -20,5 +21,4 @@ class WelcomeController < ApplicationController
   def logout
     session[:user_id] = nil
   end
-
 end
