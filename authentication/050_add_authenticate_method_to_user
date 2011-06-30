@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
-source lib-rrp
+source ./lib-rrp
 
 USER_MODEL="${TOP_DIR}/app/models/user.rb"
 
@@ -8,10 +8,13 @@ function add_authenticate_method () {
 
     cat >> ${USER_MODEL} <<EOF
 # See page 163
-def self.authenticate(username, password)
-  user = self.find_by_username(username)
+# def self.authenticate(username, password)
+def self.authenticate(email)
+#  user = self.find_by_username(username)
+  user = self.find_by_email(email)
   if user
-    if user.password != password
+#    if user.password != password
+    if user.email != email
       user = nil
     end
   end
