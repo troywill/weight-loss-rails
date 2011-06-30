@@ -11,9 +11,9 @@ function up () {
 	phone:string \
 	height:decimal \
 	sex:string \
-	start_weight:decimal \
-	start_time:datetime \
-	weight_loss_rate:integer \
+	goal_start_weight:decimal \
+	goal_start_time:datetime \
+	goal_loss_rate:integer \
 	filter_rate_gain:integer \
 	filter_rate_loss:integer \
 	forward_rate:integer \
