@@ -1,0 +1,7 @@
+#!/bin/bash
+set -o errexit
+set -o nounset
+
+echo "<TDW July 2011>: If you want a multi-user system, go into ./authentication directory and execute scripts in numeric order"
+
+
