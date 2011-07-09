@@ -7,7 +7,7 @@ function edit_login_method () {
 
 cat >> ${WELCOME_CONTROLLER} <<EOF
 def logout
-  session[:email] = nil
+  session[:user_id] = nil
 end
 
 EOF
