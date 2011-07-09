@@ -16,12 +16,8 @@ function up () {
 	goal_loss_rate:integer \
 	filter_rate_gain:integer \
 	filter_rate_loss:integer \
-	forward_rate:integer \
-	google_doc:string
-    rake db:migrate
+	shared_doc:string
 }
-#	username:string \
-
 
 function down () {
     echo
@@ -31,9 +27,19 @@ function edit_model () {
     cat >> ${TOP_DIR}/app/models/${NAME}.rb <<EOF
   validates :name, :presence => true
   validates :email, :presence => true, :uniqueness => true
+  validates :phone, :presence => true
+  validates :height, :presence => true, :numericality => true
+  validates :sex, :presence => true
+  validates :goal_start_weight, :presence => true, :numericality => true
+  validates :goal_start_time, :presence => true, :numericality => true
+  validates :goal_loss_rate, :presence => true, :numericality => true
+  validates :filter_rate_gain, :presence => true, :numericality => true
+  validates :filter_rate_loss, :presence => true, :numericality => true
+  validates :shared_doc, :presence => true
 EOF
     $EDITOR ${TOP_DIR}/app/models/${NAME}.rb
 }
 
 up
 edit_model
+echo "If ready do 'rake db:migrate' to update database"
