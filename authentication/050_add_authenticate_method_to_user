@@ -7,7 +7,7 @@ USER_MODEL="${TOP_DIR}/app/models/user.rb"
 function add_authenticate_method () {
 
     cat >> ${USER_MODEL} <<EOF
-# See page 163
+# Agile book uses more elaborate method with more security
 # def self.authenticate(username, password)
 def self.authenticate(email)
 #  user = self.find_by_username(username)
