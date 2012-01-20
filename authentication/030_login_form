@@ -6,18 +6,16 @@ LOGIN_PAGE="${TOP_DIR}/app/views/welcome/login.html.erb"
 function edit_login_form () {
 
 cat >> ${LOGIN_PAGE} <<EOF
-<fieldset>
-  <legend>Please Log In</legend>
-  <% form_tag do %>
-    <p>
-      <label for="email">Email:</label>
-      <%= text_field_tag :email, params[:email] %>
-    </p>
-    <p>
-      <%= submit_tag "Login" %>
-    </p>
+  <%= form_tag do %>
+    <fieldset>
+      <legend>Please Log In</legend>
+      <p>
+        <label for="email">Email:</label>
+        <%= text_field_tag :email, params[:email] %>
+      </p>
+      <p><%= submit_tag "Login" %></p>
+    </fieldset>
   <% end %>
-</fieldset>
 EOF
 
 ${EDITOR} ${LOGIN_PAGE}
