@@ -1,0 +1,16 @@
+# -*- mode:org -*-
+
+#+title: Rails authentication
+
+
+* Starting out
+1. Ryan Bates’ Railscast: http://railscasts.com/episodes/250-authentication-from-scratch
+2. Michael Hartl’s online book: http://railstutorial.org/chapters/modeling-and-viewing-users-two#top
+
+* Devise
+1. http://railscasts.com/episodes/210-customizing-devise
+2. http://www.tonyamoyal.com/2010/07/28/rails-authentication-with-devise-and-cancan-customizing-devise-controllers/
+3. http://railscasts.com/episodes/209-introducing-devise
+4. http://ruby-toolbox.com/categories/rails_authentication.html
+5. https://github.com/plataformatec/devise/tree/v1.1.6
+6. https://github.com/plataformatec/devise/tree/v1.1.6/README.rdoc
