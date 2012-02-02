@@ -24,15 +24,23 @@ EOF
 
     cat >> ${APPLICATION_CONTROLLER} <<EOF
 
-  private
-    def identify_user
-      if User.find_by_id(session[:user_id])
-        @user = User.find_by_id(session[:user_id])
-      else
-        flash[:notice] = "Please log in"
-        redirect_to :controller => :welcome, :action => :login
+private
+  def identify_user
+    if cookies[:weight_loss_cookie]
+      if User.find_by_email(cookies[:weight_loss_cookie])
+        @user = User.find_by_email(cookies[:weight_loss_cookie])
+        session[:user_id] = @user.id
+        return
       end
     end
+    if User.find_by_id(session[:user_id])
+      @user = User.find_by_id(session[:user_id])
+    else
+      flash[:notice] = "Please log in"
+      redirect_to :controller => :welcome, :action => :login
+    end
+  end
+
 EOF
 
 ${EDITOR} ${APPLICATION_CONTROLLER}
@@ -41,3 +49,4 @@ ${EDITOR} ${APPLICATION_CONTROLLER}
 
 check_admin_user
 add_before_filter_to_application_controller
+
