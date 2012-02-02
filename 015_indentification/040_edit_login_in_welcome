@@ -7,8 +7,8 @@ function edit_login_method () {
 
 cat >> ${WELCOME_CONTROLLER} <<EOF
 def login
-#  session[:user_id] = nil
-#  if request.post?
+ session[:user_id] = nil
+ if request.post?
     if user = User.authenticate(params[:email])
       session[:user_id] = user.id
       redirect_to(:action => "index" )

@@ -1,4 +1,4 @@
 EDITOR='emacs -nw'
 # EDITOR=mate
 TOP_DIR="../../.."
-
+INSPECT_DATABASE="${EDITOR} ${TOP_DIR}/db"
