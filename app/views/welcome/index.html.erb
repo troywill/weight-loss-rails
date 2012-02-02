@@ -1,6 +1,0 @@
-<ul>
-<li>Goal loss rate: <%=@settings.weight_loss_rate %> calories per day</li>
-<li>Current weight goal: <%= @settings.start_weight - (( Time.now.to_i - @settings.start_time.to_i ) * (@settings.weight_loss_rate/3500.0/864000)) %></li>
-<li>Current weight (estimated): </li>
-<li>Difference: </li>
-</ul>
