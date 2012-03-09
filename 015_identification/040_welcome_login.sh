@@ -28,4 +28,5 @@ ${EDITOR} ${WELCOME_CONTROLLER}
 
 edit_login_method
 
-exit
+echo "Add Post method to config.rb"
+
