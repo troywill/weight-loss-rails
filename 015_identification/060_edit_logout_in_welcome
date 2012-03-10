@@ -8,6 +8,7 @@ function edit_login_method () {
 cat >> ${WELCOME_CONTROLLER} <<EOF
 def logout
   session[:user_id] = nil
+  cookies.delete :weight_loss_cookie
 end
 
 EOF
