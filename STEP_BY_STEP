@@ -1,1 +1,22 @@
-* Run 010_controller_welcome
+-*- mode: org -*-
+* Display date
+** Time.now 2012-03-09 18:55:26 -0800
+** Time.now.to_s(:long_ordinal) ( See [[http://api.rubyonrails.org/classes/Time.html][Time.html]] )
+* Display current goal
+** Controller
+#+BEGIN_SRC ruby
+   u = User.find(session[:user_id])
+   @goal_now = User.goal_now(u.id)
+#+END_SRC   
+** Model
+#+BEGIN_SRC ruby   
+   def self.goal_now(user_id)
+     u = User.find(user_id)
+     elapsed_time = Time.now - u.goal_start_time
+     lbs_per_second = ( u.goal_loss_rate / 86400.0 / 3500.0 )
+     return ( u.goal_start_weight - lbs_per_second * elapsed_time )
+   end
+#+END_SRC
+** View
+   number_with_precision(@goal_now, :precision => 3)
+   
