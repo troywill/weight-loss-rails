@@ -19,4 +19,41 @@
 #+END_SRC
 ** View
    number_with_precision(@goal_now, :precision => 3)
-   
+* Mail
+** Chapter 13: Task H: Sending Mail
+*** environment.rb
+    config.action_mailer.delivery_method = :smtp | :sendmail | :test
+
+   Depot::Application.configure do
+     config.action_mailer.delivery_method = :smtp
+
+     config.action_mailer.smtp_settings = {
+       address: "smtp.gmail.com",
+       port: 587,
+       domain: "domain.of.sender.net",
+       authentication: "plain",
+       user_name: "dave",
+       password: "secret",
+       enable_starttls_auto: true
+     }
+   end
+#+END_SRC
+*** restart server
+*** rails generate mailer GoalReminder goal calculation
+      create  app/mailers/goal_reminder.rb
+      invoke  erb
+      create    app/views/goal_reminder
+      create    app/views/goal_reminder/goal.text.erb
+      create    app/views/goal_reminder/calculation.text.erb
+      invoke  test_unit
+      create    test/functional/goal_reminder_test.rb
+*** Change into app/mailers and edit goal_reminder.rb
+*** In console => GoalReminder.goal.deliver
+*** 24.1 A Stand-Alone Application Using Active Record
+#+BEGIN_SRC ruby
+    require "config/environment.rb"
+    order = Order.find(1)
+    order.name = "Dave Thomas"
+    order.save
+#+END_SRC
+** stand alone application
