@@ -21,7 +21,7 @@
    number_with_precision(@goal_now, :precision => 3)
 * Mail
 ** Chapter 13: Task H: Sending Mail
-*** environment.rb
+1. [X] environment.rb
     config.action_mailer.delivery_method = :smtp | :sendmail | :test
 
    Depot::Application.configure do
@@ -38,8 +38,8 @@
      }
    end
 #+END_SRC
-*** restart server
-*** rails generate mailer GoalReminder goal calculation
+2. [X] restart server
+3. [X] rails generate mailer GoalReminder goal calculation
       create  app/mailers/goal_reminder.rb
       invoke  erb
       create    app/views/goal_reminder
@@ -47,9 +47,9 @@
       create    app/views/goal_reminder/calculation.text.erb
       invoke  test_unit
       create    test/functional/goal_reminder_test.rb
-*** Change into app/mailers and edit goal_reminder.rb
-*** In console => GoalReminder.goal.deliver
-*** 24.1 A Stand-Alone Application Using Active Record
+4. [X] Change into app/mailers and edit goal_reminder.rb
+5. [ ] In console => GoalReminder.goal.deliver
+6. [ ] 24.1 A Stand-Alone Application Using Active Record
 #+BEGIN_SRC ruby
     require "config/environment.rb"
     order = Order.find(1)
@@ -58,7 +58,7 @@
 #+END_SRC
 ** stand alone application
 * Add New Reading to Welcome Page
-1. [ ] Add a _form partial by linking to reading/_form
+1. [X] Add a _form partial by linking to reading/_form
 undefined method model_name' for NilClass:Class
 Extracted source (around line #1):
 
@@ -66,9 +66,8 @@ Extracted source (around line #1):
 2:   <% if @reading.errors.any? %>
 3:     <div id="error_explanation">
 4:       <h2><%= pluralize(@reading.errors.count, "error") %> prohibited this reading from being saved:</h2>
-2. [ ] Add  @reading = Reading.new to welcome/index
+2. [X] Add  @reading = Reading.new to welcome/index
 3. [ ] Add hidden field ( see http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html )
 4. [ ] Delete <%= f.label :user_id %><br />
 5. [ ] Add @reading.user_id = session[:user_id] in create method in readings controller
-
 
