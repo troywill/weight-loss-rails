@@ -57,3 +57,18 @@
     order.save
 #+END_SRC
 ** stand alone application
+* Add New Reading to Welcome Page
+1. [ ] Add a _form partial by linking to reading/_form
+undefined method model_name' for NilClass:Class
+Extracted source (around line #1):
+
+1: <%= form_for(@reading) do |f| %>
+2:   <% if @reading.errors.any? %>
+3:     <div id="error_explanation">
+4:       <h2><%= pluralize(@reading.errors.count, "error") %> prohibited this reading from being saved:</h2>
+2. [ ] Add  @reading = Reading.new to welcome/index
+3. [ ] Add hidden field ( see http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html )
+4. [ ] Delete <%= f.label :user_id %><br />
+5. [ ] Add @reading.user_id = session[:user_id] in create method in readings controller
+
+
