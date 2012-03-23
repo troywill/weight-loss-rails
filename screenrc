@@ -17,12 +17,14 @@ title "app"
 screen 2 emacs --no-window-system models
 title "models"
 
-screen 3 emacs --no-window-system controllers
+screen 3 emacs --no-window-system views
+title "views"
+
+screen 4 emacs --no-window-system controllers
 title "controllers"
 
-screen 4 emacs --no-window-system ../db
+screen 5 emacs --no-window-system ../db
 title "db"
 
-screen 5 rails console
+screen 6 rails console
 title "console"
-
