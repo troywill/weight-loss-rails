@@ -102,4 +102,5 @@ sudo gem install gruff
        <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
 #+END_SRC
 * Display readings table on Welcome Page
+1. 
 
