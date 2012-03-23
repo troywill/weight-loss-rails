@@ -102,5 +102,9 @@ sudo gem install gruff
        <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
 #+END_SRC
 * Display readings table on Welcome Page
-1. 
+1. [ ] @readings = Readings.all won't work because would get other user's Readings
+2. [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
+3. [ ] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
+4. [ ] See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
+5. [ ] See Agile book, active record
 
