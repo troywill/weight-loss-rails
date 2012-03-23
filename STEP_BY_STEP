@@ -79,4 +79,25 @@ sudo gem install gruff
        1. [ ] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.1.tar.bz2 or from https://github.com/rmagick/rmagick
        2. [ ] Run "ruby setup.rb"
        3. [ ] Run "sudo ruby setup.rb install"
+       4. [ ] cd into plugins and run gem unpack gruff
 4. [ ] rails generate controller WeightGraph week month year
+5. [ ] In config/environment.rb add require 'gruff' after the ::Application.initialize! line
+6. [ ] See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
+7. [ ] See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
+8. [ ] In weight_graph_controller.rb:
+#+BEGIN_SRC ruby
+  def month
+    g = Gruff::Line.new
+    g.title = "My Graph" 
+    g.data("Apples", [1, 2, 3, 4, 4, 3])
+    g.data("Oranges", [4, 8, 7, 9, 8, 9])
+    g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+    g.data("Peaches", [9, 9, 10, 8, 7, 9])
+    g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
+    send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
+  end
+#+END_SRC
+9. [ ] In View:
+#+BEGIN_SRC ruby       
+       <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
+#+END_SRC
