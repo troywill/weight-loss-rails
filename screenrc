@@ -7,13 +7,22 @@ hardstatus on
 hardstatus alwayslastline
 hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
 
+screen 0 emacs --no-window-system STEP_BY_STEP
+title "STEPS"
+
 chdir ../../app
-screen 0 bash
+screen 1 bash
 title "app"
 
-screen 1 emacs --no-window-system models
+screen 2 emacs --no-window-system models
 title "models"
 
-chdir ../controllers
-screen 1 emacs --no-window-system controllers
+screen 3 emacs --no-window-system controllers
 title "controllers"
+
+screen 4 emacs --no-window-system ../db
+title "db"
+
+screen 5 rails console
+title "console"
+
