@@ -107,4 +107,51 @@ sudo gem install gruff
 3. [ ] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
 4. [ ] See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
 5. [ ] See Agile book, active record
-
+* Weight as a function of time
+1. [ ] In Readings model
+  def self.weight_at_time(user_id, time)
+    time_initial = Reading.time_initial(user_id)
+    weight_initial = Reading.weight_initial(user_id)
+    if ( time < time_initial )
+      return weight_initial
+    end
+    max_gain_rate = User.filter_rate_gain(user_id)
+    max_loss_rate = User.filter_rate_loss(user_id)
+    readings = Reading.get_readings_after( user_id, time_initial, time )
+    for reading in readings
+      w = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, reading.reading_time, reading.weight)
+      time_initial = reading.reading_time
+      weight_initial = w
+    end
+    next_reading = Reading.get_next_reading_after(user_id, time)
+    if next_reading
+      weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial, next_reading.reading_time, next_readi\
+ng.weight, time )
+    else
+      weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+    end
+    #    return number_with_precision(weight, :precision => 5 )                                                               
+    return weight
+  end
+2. [ ] In Reading model, time_initial function
+  def self.time_initial( user_id )
+    return Reading.order('reading_time ASC').where(:user_id => user_id).first.reading_time
+  end
+3. [ ] In Reading model, weight_initial function
+  def self.weight_initial( user_id )
+    return Reading.order('reading_time ASC').where(:user_id => user_id).first.weight
+  end
+4. [ ] In User model, functions filter_rate_gain, filter_rate_loss, goal_loss_rate
+#+BEGIN_SRC ruby
+  def self.filter_rate_gain(user_id)
+    return User.where(:id => user_id).first.filter_rate_gain
+  end
+  def self.filter_rate_loss(user_id)
+    return User.where(:id => user_id).first.filter_rate_loss
+  end
+  def self.goal_loss_rate(user_id)
+    cals_per_day = User.where(:id => user_id).first.goal_loss_rate
+    lbs_per_second = cals_per_day / 3500.0 / 86400.0
+    return  lbs_per_second
+  end
+#+END_SRC
