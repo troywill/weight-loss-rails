@@ -196,3 +196,12 @@ ng.weight, time )
 #+END_SRC
 
 * Weight loss/gain over the last 28 days
+* Graph last 28 days
+#+BEGIN_SRC ruby
+  def month
+    g = Gruff::Line.new
+    g.title = "My Graph" 
+    g.data("Apples", [1, 2, 3, 4, 4, 3])
+#    g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
+    send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "28days.png")
+  end
