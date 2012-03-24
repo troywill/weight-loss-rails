@@ -108,7 +108,7 @@ sudo gem install gruff
 4. [ ] See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
 5. [ ] See Agile book, active record
 * Weight as a function of time
-1. [ ] In Readings model
+1. [ ] In Readings model, weight_at_time function
   def self.weight_at_time(user_id, time)
     time_initial = Reading.time_initial(user_id)
     weight_initial = Reading.weight_initial(user_id)
@@ -153,5 +153,34 @@ ng.weight, time )
     cals_per_day = User.where(:id => user_id).first.goal_loss_rate
     lbs_per_second = cals_per_day / 3500.0 / 86400.0
     return  lbs_per_second
+  end
+#+END_SRC
+5. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
+#+BEGIN_SRC ruby
+  def self.get_readings_after( user_id, start_time, end_time )
+    return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
+  end
+  def self.get_next_reading_after( user_id, time )
+      return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
+  end
+#+END_SRC
+6. [ ] In Reading model, 
+#+BEGIN_SRC ruby
+  def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+    if ( weight == initial_time )
+      return weight
+    else
+      delta_time = ( time - initial_time ).to_i
+      cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+      max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+      min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+      if ( weight > max_allowable_weight )
+        return max_allowable_weight
+      end
+      if ( weight < min_allowable_weight )
+        return min_allowable_weight
+      end
+    end
+    return  weight
   end
 #+END_SRC
