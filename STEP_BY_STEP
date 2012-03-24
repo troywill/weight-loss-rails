@@ -164,7 +164,7 @@ ng.weight, time )
       return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
   end
 #+END_SRC
-6. [ ] In Reading model, 
+6. [ ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
 #+BEGIN_SRC ruby
   def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
     if ( weight == initial_time )
@@ -184,3 +184,15 @@ ng.weight, time )
     return  weight
   end
 #+END_SRC
+7. [ ] In Reading model, interpolate
+#+BEGIN_SRC ruby
+  def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+    filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+    delta_time = next_time - last_time
+    delta_weight = ( filtered_next_weight - last_weight )
+    percent = ( time - last_time ) / delta_time.to_f
+    interpolated_weight = last_weight + percent * delta_weight
+  end
+#+END_SRC
+
+* Weight loss/gain over the last 28 days
