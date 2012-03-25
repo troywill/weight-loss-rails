@@ -216,6 +216,8 @@ ng.weight, time )
       else
         weight = Reading.weight_at_time(user_id, time_at_point_in_past)
       end
+      # Three significant digits to stop Gruff graph library from acting strangely                                            
+      weight = ((weight * 10000).to_i)/10000.0
       weight_array.push(weight)
     end
 
