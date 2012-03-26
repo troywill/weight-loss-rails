@@ -1,29 +1,24 @@
 #!/bin/bash
 source ./lib-rrp
-NAME='goal'
+NAME='setting'
 
 function do_generate () {
     rails generate scaffold ${NAME} \
 	user_id:integer \
-	end_weight:decimal \
-	start_weight:decimal \
-	start_date:datetime \
-	weight_loss_rate:integer \
-	history:text \
-	status:integer
+	one_hour:boolean \
+	twelve_hours:boolean \
+	one_day:boolean \
+	three_days:boolean \
+	one_week:boolean \
+	four_weeks:boolean \
+	one_year:boolean \
+	four_years:boolean
 }
 
 function edit_model () {
     MODEL="${TOP_DIR}/app/models/${NAME}.rb"
     cat >> ${MODEL} <<EOF
   belongs_to :user
-  validates :user_id, :presence => true, :numericality => true
-  validates :weight_loss_rate, :presence => true, :numericality => true
-  validates :end_weight, :presence => true, :numericality => true
-  validates :start_weight, :presence => true, :numericality => true
-  validates :weight_loss_rate, :presence => true, :numericality => true
-  validates :status, :presence => true, :numericality => true
-  validates :start_date, :presence => true
 EOF
 
     $EDITOR ${MODEL}
