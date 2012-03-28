@@ -23,8 +23,11 @@ title "views"
 screen 4 emacs --no-window-system controllers
 title "controllers"
 
-screen 5 emacs --no-window-system ../db
+screen 5 emacs --no-window-system helpers
+title "controllers"
+
+screen 6 emacs --no-window-system ../db
 title "db"
 
-screen 6 rails console
+screen 7 rails console
 title "console"
