@@ -23,7 +23,7 @@ module WelcomeHelper
       time_in_words = distance_of_time_in_words_to_now(Time.now + seconds_to_catch_up)
       catch_up_string = ". You can catch up in #{time_in_words}."
     end
-    return "You are #{number_with_precision(@diff)} lbs #{direction_verb} your goal#{catch_up_string}".html_safe
+    return "You are <span style='font-weight:bold'>#{number_with_precision(@diff)}</span> lbs #{direction_verb} your goal#{catch_up_string}".html_safe
   end
   def last_reading_as_string
     user_id = session[:user_id]
@@ -31,6 +31,6 @@ module WelcomeHelper
     last_weight = last_reading.weight
     last_time = last_reading.reading_time
     time_ago_in_words = time_ago_in_words(last_time)
-    return "Your last measurement was #{last_weight} #{time_ago_in_words} ago"
+    return "Your last scale reading was <span style='font-weight:bold'>#{last_weight}</span> #{time_ago_in_words} ago".html_safe
   end
 end

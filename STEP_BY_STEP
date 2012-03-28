@@ -227,11 +227,13 @@ ng.weight, time )
   end
 #+END_SRC
 * Make pretty layout
-1. [ ] Run CSS application ( See Github )
-2. [ ] Create welcome/graph.html.erb view
-3. [ ] Create graph method in welcome controller
-4. [ ] Add link to graph view in layout ( 
+1. [X] Run CSS application ( See Github )
+2. [X] Create welcome/graph.html.erb view
+3. [X] Create graph method in welcome controller
+4. [X] Add route
+5. [X] Add link to graph view in layout
 * Revisit analysis
+1. [ ] Link welcome.html.erb
 * Add last weight reading as words helper
 #+BEGIN_SRC ruby  
   def self.get_last_reading( user_id )
