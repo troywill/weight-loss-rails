@@ -1,0 +1,25 @@
+<h1>Weight loss goal status</h1>
+<ul>
+  <li>Your goal now at <%= Time.now %> is <%= number_with_precision(@goal_now) %> lbs</li>
+  <li><%= last_reading_as_string %></li>
+  <li>Your calculated weight now is <%= number_with_precision(Reading.weight_at_time(1, Time.now)) %> lbs</li>
+  <li><%= goal_difference_as_string %></li>
+</ul>
+<h1>Weight loss summary in words</h1>
+<ul>
+  <li><%= loss_hours_ago_as_string(1,'hour') %></li>
+  <li><%= loss_hours_ago_as_string(12,'12 hours') %></li>
+  <li><%= loss_hours_ago_as_string(24,'24 hours') %></li>
+  <li><%= loss_hours_ago_as_string(72,'3 days') %></li>
+  <li><span style='font-weight:bold'><%= loss_hours_ago_as_string(24*7,'7 days') %></style></li>
+  <li><span style='font-weight:bold'><%= loss_hours_ago_as_string(24*28,'28 days') %></style></li>
+  <li>Daily rate averaged over the last 28 days: <%= number_with_precision(@daily) %></li>
+</ul>
+<h1>Weight loss table</h1>
+<table>
+  <tr><td>1 hr</td><td><%= number_with_precision(@one_hour_diff) %> lbs, <%= number_with_precision((@one_hour_diff * 3500)) %> cals</td></tr>
+  <tr><td>12 hour</td><td><%= number_with_precision(@twelve_hour_diff) %> lbs, <%= number_with_precision((@twelve_hour_diff * 3500)) %> cals</td></tr>
+  <tr><td>24 hour</td><td><%= number_with_precision(@yesterday_diff) %> lbs, <%= number_with_precision((@yesterday_diff * 3500)) %> cals</td></tr>
+  <tr><td>3 days</td><td><%= number_with_precision(@three_days_diff) %> lbs, <%= number_with_precision((@three_days_diff * 3500)) %> cals</td></tr>
+</table>
+<hr />
