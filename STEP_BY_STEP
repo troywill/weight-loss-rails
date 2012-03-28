@@ -22,6 +22,7 @@
 * Mail
 ** Chapter 13: Task H: Sending Mail
 1. [ ] environment.rb
+#+BEGIN_SRC ruby       
     config.action_mailer.delivery_method = :smtp | :sendmail | :test
 
    Depot::Application.configure do
@@ -194,7 +195,6 @@ ng.weight, time )
     interpolated_weight = last_weight + percent * delta_weight
   end
 #+END_SRC
-
 * Weight loss/gain over the last 28 days
 * Graph last 28 days
 #+BEGIN_SRC ruby
@@ -226,4 +226,22 @@ ng.weight, time )
 
   end
 #+END_SRC
-  
+* Make pretty layout
+1. [ ] Run CSS application ( See Github )
+2. [ ] Create welcome/graph.html.erb view
+3. [ ] Create graph method in welcome controller
+4. [ ] Add link to graph view in layout ( 
+* Revisit analysis
+* Add last weight reading as words helper
+#+BEGIN_SRC ruby  
+  def self.get_last_reading( user_id )
+    return Reading.order('reading_time ASC').where(:user_id => user_id).last
+  end
+#+END_SRC
+* Figure out when we can achieve goal
+#+BEGIN_SRC ruby
+  # welcome_helper.rb
+  user_id = session[:user_id]
+  goal_loss_rate = User.goal_loss_rate(user_id)
+  lbs_per_second = goal_loss_rate / 3500 / 86400
+#+END_SRC
