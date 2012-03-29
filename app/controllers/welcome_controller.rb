@@ -83,10 +83,4 @@ class WelcomeController < ApplicationController
     send_data(g.to_blob, :type => 'image/png', :filename => "28days.png")
   end
 
-  def year
-  end
-end
-
-  end
-
 end
