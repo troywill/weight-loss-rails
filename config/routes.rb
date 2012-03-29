@@ -7,7 +7,7 @@ Troy::Application.routes.draw do
   
   get "welcome/index"
   get "welcome/graph"
-  get "welcome/two_year_graph"
+  get "welcome/one_year_graph"
   get "welcome/login"
   post "welcome/login"
   get "welcome/logout"

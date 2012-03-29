@@ -58,18 +58,18 @@ class WelcomeController < ApplicationController
     cookies.delete :weight_loss_cookie
   end
 
-  def two_year_graph
+  def one_year_graph
     g = Gruff::Line.new
     weight = 0
     time_at_point_in_past = 0
     user_id = session[:user_id]
     time_first_reading = Reading.time_initial(user_id)
     weight_first_reading = Reading.weight_initial(user_id).to_f
-    # Get weight values for last 28 days
+    # Get weight values for last 2 years
     weight_array = Array.new
-    number_of_periods = 28
+    number_of_periods = 24
     (0..number_of_periods).each do |period_num|
-      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).month
 
       if ( time_at_point_in_past < time_first_reading )
         weight = weight_first_reading
@@ -79,8 +79,9 @@ class WelcomeController < ApplicationController
       weight_array.push(weight)
     end
 
-    g.data "28 days", weight_array
-    send_data(g.to_blob, :type => 'image/png', :filename => "28days.png")
+    g.data "FOO", weight_array
+    send_data(g.to_blob, :type => 'image/png', :disposition => 'inline' )
+#    send_data(g.to_blob, :type => 'image/png', :filename => "two_year.png", )
   end
 
 end

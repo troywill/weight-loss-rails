@@ -7,7 +7,6 @@
         <%= javascript_include_tag "application" %>
         <%= csrf_meta_tags %>
   </head>
-
 <body>
   <div id='header'>
       <h1>header</h1>
@@ -18,6 +17,7 @@
       <ul>
         <li><%= link_to "analysis", root_path %></li>
         <li><%= link_to "graph", welcome_graph_path %></li>
+	<li><%= link_to "2 graph", welcome_two_year_graph_path %></li>
         <li><%= link_to "new reading", new_reading_path %></li>
         <li><%= link_to "all readings", readings_path %></li>
       </ul>
