@@ -2,7 +2,7 @@
 <ul>
   <li>Your goal now at <%= Time.now %> is <span style='font-weight:bold'><%= number_with_precision(@goal_now) %></span> lbs</li>
   <li><%= last_reading_as_string %></li>
-  <li>Your calculated weight now is <span style='font-weight:bold'><%= number_with_precision(Reading.weight_at_time(1, Time.now)) %></span> lbs</li>
+  <li>Your calculated weight now is <span style='font-weight:bold'><%= number_with_precision(Reading.weight_at_time(session[:user_id], Time.now)) %></span> lbs</li>
   <li><%= goal_difference_as_string %></li>
 </ul>
 <h2>About your weight loss goal</h2>
