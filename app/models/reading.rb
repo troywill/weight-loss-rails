@@ -74,7 +74,11 @@ class Reading < ActiveRecord::Base
   end
 
   def self.get_goal_difference
-    return 1
+    if defined?(session[:user_id])
+      return 100
+    else
+      user_id = session[:user_id]
+      return "User ID = #{user_id}"
+    end
   end
-
 end

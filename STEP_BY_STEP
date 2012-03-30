@@ -286,3 +286,11 @@ end
 2. [ ] Add view
 3. [ ] Add route
 
+* Footer
+1. [ ] Put function to find goal difference in the Reading model
+#+BEGIN_SRC ruby
+  def self.get_goal_difference
+    return 1
+  end
+#+END_SRC ruby
+2. [ ] @current_user ||= User.find(session[:user_id]) in application controller
