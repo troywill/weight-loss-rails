@@ -73,4 +73,8 @@ class Reading < ActiveRecord::Base
     return Reading.order('reading_time ASC').where(:user_id => user_id).last
   end
 
+  def self.get_goal_difference
+    return 1
+  end
+
 end
