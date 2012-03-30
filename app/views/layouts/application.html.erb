@@ -9,7 +9,7 @@
   </head>
 <body>
   <div id='header'>
-      <h1><% Goal  %></h1>
+      <h1>Goal <%= number_with_precision(User.goal_now(session[:user_id]), :precision => 1) %></h1>
   </div>
   <div id='sidebar'>
       <!-- see "Lists as Navigation", page 140, HTML Dog -->
@@ -26,7 +26,7 @@
   <%= yield %>
   </div>
   <div id='footer'>
-    <h1><%= Time.now %></h1>
+    <h1>Weight <%= number_with_precision(Reading.weight_at_time(session[:user_id], Time.now), :precision => 1 ) %></h1>
       <p></p>
   </div>
   </body>
