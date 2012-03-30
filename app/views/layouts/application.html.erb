@@ -26,7 +26,7 @@
   <%= yield %>
   </div>
   <div id='footer'>
-    <h1>Weight <%= number_with_precision(Reading.weight_at_time(session[:user_id], Time.now), :precision => 1 ) %></h1>
+    <h1>Weight <%= number_with_precision(Reading.weight_at_time(session[:user_id], Time.now), :precision => 1 ) %> <%= footer %></h1>
       <p></p>
   </div>
   </body>
