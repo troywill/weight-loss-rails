@@ -180,3 +180,13 @@ margin-right: auto;
 #footer p {
     display:inline;
 }
+
+.important_period {
+    font-size: 1em;
+}
+
+.very_important_period {
+    font-size: 1em;
+    font-weight:bold;
+    text-decoration: underline;
+}
