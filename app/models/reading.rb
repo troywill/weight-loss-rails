@@ -73,12 +73,9 @@ class Reading < ActiveRecord::Base
     return Reading.order('reading_time ASC').where(:user_id => user_id).last
   end
 
-  def self.get_goal_difference
-    if defined?(session[:user_id])
-      return 100
-    else
-      user_id = session[:user_id]
-      return "User ID = #{user_id}"
-    end
+  def self.goal_difference( user_id )
+    goal_now = User.goal_now(user_id)
+    weight_now = Reading.weight_at_time(user_id, Time.now)
+    return goal_now - weight_now
   end
 end

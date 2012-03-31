@@ -2,10 +2,6 @@ class ApplicationController < ActionController::Base
   before_filter :identify_user, :except => :login
   protect_from_forgery
 
-  def current_user
-    @current_user ||= User.find(session[:user_id])
-  end
-
   private
   def identify_user
     if cookies[:weight_loss_cookie]

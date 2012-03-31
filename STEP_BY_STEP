@@ -287,10 +287,27 @@ end
 3. [ ] Add route
 
 * Footer
-1. [ ] Put function to find goal difference in the Reading model
+1. [X] Put function to find goal difference in the Reading model
 #+BEGIN_SRC ruby
-  def self.get_goal_difference
-    return 1
-  end
+def self.goal_difference( user_id )
+  goal_now = User.goal_now(user_id)
+  weight_now = Reading.weight_at_time(user_id, Time.now)
+  return goal_now - weight_now
+end
 #+END_SRC ruby
-2. [ ] @current_user ||= User.find(session[:user_id]) in application controller
+2. [X] in application helper, footer method
+#+BEGIN_SRC ruby
+def footer
+  if session[:user_id]
+    user_id = session[:user_id]
+    lbs = number_with_precision(@diff, :precision => 1, :significant => true)
+    goal_difference = Reading.goal_difference(user_id)
+    # cals = @diff * 3500
+    # cals = number_with_precision(cals, :precision => 2, :significant => true)
+    #      return "#{lbs} lbs (#{cals} cal)"
+    return "#{lbs} lbs"
+  else
+    return "nil"
+  end
+end
+#+END_SRC ruby
