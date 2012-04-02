@@ -1,11 +1,15 @@
 <h1>Weight loss goal status</h1>
 <ul>
   <li>Your goal now at <%= Time.now %> is <span style='font-weight:bold'><%= number_with_precision(@goal_now) %></span> lbs</li>
-  <li><%= last_reading_as_string %></li>
   <li>Your calculated weight now is <span style='font-weight:bold'><%= number_with_precision(Reading.weight_at_time(session[:user_id], Time.now)) %></span> lbs</li>
-  <li><%= goal_difference_as_string %></li>
+  <li><%= goal_difference_as_string(@diff) %></li>
 </ul>
 <h2>About your weight loss goal</h2>
+<h2>About your last reading</h2>
+<ul>
+  <li><%= last_reading_as_string(@last_reading) %></li>
+  <li></li>
+</ul>
 <h1>Weight loss summary in words</h1>
 <ul>
   <li><%= loss_hours_ago_as_string(1,'hour') %></li>

@@ -36,6 +36,9 @@ class WelcomeController < ApplicationController
     @weight_diff = ( weight_now - weight_28 )
     # Figure out daily rate over the last 28 days
     @daily = @weight_diff * 3500 / 28
+
+    # About your last reading
+    @last_reading = Reading.get_last_reading(u.id)
     
   end
 

@@ -311,3 +311,6 @@ def footer
   end
 end
 #+END_SRC ruby
+* About your last reading
+  1. [ ] Refactor     last_reading = Reading.get_last_reading(user_id) helper to @last_reading in controller
+  
