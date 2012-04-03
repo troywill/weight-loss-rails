@@ -23,7 +23,7 @@ module WelcomeHelper
       time_in_words = distance_of_time_in_words_to_now(Time.now + seconds_to_catch_up)
       catch_up_string = ". You can catch up in #{time_in_words}."
     end
-    return "You are <span style='font-weight:bold'>#{number_with_precision(@diff)}</span> lbs #{direction_verb} your goal#{catch_up_string}".html_safe
+    return "Your calculated weight is <span style='font-weight:bold'>#{number_with_precision(@diff)}</span> lbs #{direction_verb} your goal#{catch_up_string}".html_safe
   end
   def last_reading_as_string(last_reading)
     last_weight = last_reading.weight
