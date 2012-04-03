@@ -8,7 +8,8 @@
 <h2>About your last reading</h2>
 <ul>
   <li><%= last_reading_as_string(@last_reading) %></li>
-  <li><%= last_reading_difference_string(@last_reading, @goal_now) %></li>
+  <li><%= last_reading_goal_now_difference(@last_reading, @goal_now) %></li>
+  <li><%= last_reading_weight_now_difference(@last_reading, @weight_now) %></li>
 </ul>
 <h1>Weight loss summary in words</h1>
 <ul>

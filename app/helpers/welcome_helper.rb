@@ -31,7 +31,7 @@ module WelcomeHelper
     time_ago_in_words = time_ago_in_words(last_time)
     return "Your last scale reading was <span style='font-weight:bold'>#{last_weight}</span> #{time_ago_in_words} ago".html_safe
   end
-  def last_reading_difference_string(last_reading, goal_now)
+  def last_reading_goal_now_difference(last_reading, goal_now)
     last_weight = last_reading.weight
     difference = last_weight - goal_now
     difference_status = 'above'
@@ -39,6 +39,16 @@ module WelcomeHelper
       difference_status = 'below'
       difference = difference * -1
     end
-    return "Your scale reading is #{number_with_precision(difference)} lbs #{difference_status} your goal"
+    return "Your scale reading is #{number_with_precision(difference, :precision => 2, :significant => true )} lbs #{difference_status} your goal"
+  end
+  def last_reading_weight_now_difference(last_reading, weight_now)
+    last_weight = last_reading.weight
+    difference = last_weight - weight_now
+    difference_status = 'above'
+    if ( difference <= 0 )
+      difference_status = 'below'
+      difference = difference * -1
+    end
+    return "Your scale reading is #{number_with_precision(difference, :precision => 2, :significant => true )} lbs #{difference_status} your calculated weight"
   end
 end
