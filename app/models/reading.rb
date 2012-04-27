@@ -9,10 +9,10 @@ class Reading < ActiveRecord::Base
     return Reading.order('reading_time ASC').where(:user_id => user_id).first.reading_time
   end
 
- def self.weight_initial( user_id )
+  def self.weight_initial( user_id )
     return Reading.order('reading_time ASC').where(:user_id => user_id).first.weight
   end
-
+  
   def self.weight_at_time(user_id, time)
     time_initial = Reading.time_initial(user_id)
     weight_initial = Reading.weight_initial(user_id)
@@ -36,7 +36,7 @@ class Reading < ActiveRecord::Base
     #    return number_with_precision(weight, :precision => 5 )                                                                   return weight
   end
 
-    def self.get_readings_after( user_id, start_time, end_time )
+ def self.get_readings_after( user_id, start_time, end_time )
     return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
   end                                                                                                                         
   def self.get_next_reading_after( user_id, time )
