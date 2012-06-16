@@ -4,6 +4,7 @@ class WeightGraphController < ApplicationController
 
   def month
     g = Gruff::Line.new
+    # Next line is transient bug fix (TDW)
     g.marker_count = 4 #explicitly assign value to @marker_count
     weight = 0
     time_at_point_in_past = 0
@@ -34,6 +35,7 @@ class WeightGraphController < ApplicationController
   def year
     logger.debug "TDW year"
     g = Gruff::Line.new
+    # Next line is transient bug fix ( TDW )
     g.marker_count = 4 #explicitly assign value to @marker_count
     weight = 0
     time_at_point_in_past = 0
