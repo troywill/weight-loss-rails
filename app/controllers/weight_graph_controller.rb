@@ -4,6 +4,7 @@ class WeightGraphController < ApplicationController
 
   def month
     g = Gruff::Line.new
+    g.marker_count = 4 #explicitly assign value to @marker_count
     weight = 0
     time_at_point_in_past = 0
     user_id = session[:user_id]
@@ -33,6 +34,7 @@ class WeightGraphController < ApplicationController
   def year
     logger.debug "TDW year"
     g = Gruff::Line.new
+    g.marker_count = 4 #explicitly assign value to @marker_count
     weight = 0
     time_at_point_in_past = 0
     user_id = session[:user_id]
