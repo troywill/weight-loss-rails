@@ -1,0 +1,18 @@
+* DONE git clone git@github.com:troywill/weight-loss-rails.git
+* DONE ./010_controller_welcome.sh
+#+begin_src example
+Troy::Application.routes.draw do
+  get "welcome/index"
+  get "welcome/login"
+  get "welcome/logout"
+  root :to => 'welcome#index'
+end
+#+end_src  
+* 015_identification [7/7]
+1. [X] ./010_scaffold_user.sh
+2. [X] Start rails server and add a user
+3. [X] ./020_identify_user
+4. [X] ./030_login_form and add POST route
+5. [X] ./040_welcome_login.sh
+6. [X] ./050_add_authenticate_method_to_user
+7. [X] ./060_edit_logout_in_welcome
