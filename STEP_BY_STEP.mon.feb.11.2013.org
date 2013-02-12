@@ -1,5 +1,5 @@
 -*- mode: org -*-
-* Display current goal
+* DONE Display current goal
 ** DONE goal_now in User model
 #+BEGIN_SRC ruby   
    def self.goal_now(user_id)
@@ -16,6 +16,116 @@
 #+END_SRC   
 ** DONE View
    <%= number_with_precision(@goal_now, :precision => 3)%>
+* TODO [7/7] Weight as a function of time
+1. [X] In Reading model, weight_at_time function
+   #+begin_src ruby
+     def self.weight_at_time(user_id, time)
+       time_initial = Reading.time_initial(user_id)
+       weight_initial = Reading.weight_initial(user_id)
+       if ( time < time_initial )
+         return weight_initial
+       end
+       max_gain_rate = User.filter_rate_gain(user_id)
+       max_loss_rate = User.filter_rate_loss(user_id)
+       readings = Reading.get_readings_after( user_id, time_initial, time )
+       for reading in readings
+         w = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, reading.reading_time, reading.weight)
+         time_initial = reading.reading_time
+         weight_initial = w
+       end
+       next_reading = Reading.get_next_reading_after(user_id, time)
+       if next_reading
+         weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial, next_reading.reading_time, next_readi\
+                               ng.weight, time )
+       else
+         weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+       end
+       #    return number_with_precision(weight, :precision => 5 )                                                               
+       return weight
+     end
+   #+end_src
+2. [X] In Reading model, time_initial function
+   #+begin_src ruby
+     def self.time_initial( user_id )
+       return Reading.order('reading_time ASC').where(:user_id => user_id).first.reading_time
+     end
+   #+end_src
+3. [X] In Reading model, weight_initial function
+   #+begin_src ruby
+     def self.weight_initial( user_id )
+       return Reading.order('reading_time ASC').where(:user_id => user_id).first.weight
+     end
+   #+end_src
+4. [X] In User model, functions filter_rate_gain, filter_rate_loss, goal_loss_rate
+   #+begin_src ruby
+  def self.filter_rate_gain(user_id)
+    return User.where(:id => user_id).first.filter_rate_gain
+  end
+  def self.filter_rate_loss(user_id)
+    return User.where(:id => user_id).first.filter_rate_loss
+  end
+  def self.goal_loss_rate(user_id)
+    cals_per_day = User.where(:id => user_id).first.goal_loss_rate
+    lbs_per_second = cals_per_day / 3500.0 / 86400.0
+    return  lbs_per_second
+  end
+   #+end_src
+5. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
+   #+BEGIN_SRC ruby
+     def self.get_readings_after( user_id, start_time, end_time )
+       return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
+     end
+     def self.get_next_reading_after( user_id, time )
+         return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
+     end
+   #+END_SRC
+6. [X] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+   #+BEGIN_SRC ruby
+     def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+       if ( weight == initial_time )
+         return weight
+       else
+         delta_time = ( time - initial_time ).to_i
+         cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+         max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+         min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+         if ( weight > max_allowable_weight )
+           return max_allowable_weight
+         end
+         if ( weight < min_allowable_weight )
+           return min_allowable_weight
+         end
+       end
+       return  weight
+     end
+   #+END_SRC
+7. [X] In Reading model, interpolate
+   #+BEGIN_SRC ruby
+     def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+       filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+       delta_time = next_time - last_time
+       delta_weight = ( filtered_next_weight - last_weight )
+       percent = ( time - last_time ) / delta_time.to_f
+       interpolated_weight = last_weight + percent * delta_weight
+     end
+   #+END_SRC
+* TODO Display weight now
+  #+begin_src ruby
+    <%= Reading.weight_at_time(2, Time.now) %>
+  #+end_src
+* Add New Reading to Welcome Page
+1. [ ] Add a _form partial by linking to reading/_form
+undefined method model_name' for NilClass:Class
+Extracted source (around line #1):
+
+1: <%= form_for(@reading) do |f| %>
+2:   <% if @reading.errors.any? %>
+3:     <div id="error_explanation">
+4:       <h2><%= pluralize(@reading.errors.count, "error") %> prohibited this reading from being saved:</h2>
+2. [ ] Add  @reading = Reading.new to welcome/index
+3. [ ] Add hidden field ( see http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html )
+4. [ ] Delete <%= f.label :user_id %><br />
+5. [ ] Add @reading.user_id = session[:user_id] in create method in readings controller
 * Mail
 ** Chapter 13: Task H: Sending Mail
 1. [ ] environment.rb
@@ -55,113 +165,13 @@
     order.save
 #+END_SRC
 ** stand alone application
-* Add New Reading to Welcome Page
-1. [ ] Add a _form partial by linking to reading/_form
-undefined method model_name' for NilClass:Class
-Extracted source (around line #1):
-
-1: <%= form_for(@reading) do |f| %>
-2:   <% if @reading.errors.any? %>
-3:     <div id="error_explanation">
-4:       <h2><%= pluralize(@reading.errors.count, "error") %> prohibited this reading from being saved:</h2>
-2. [ ] Add  @reading = Reading.new to welcome/index
-3. [ ] Add hidden field ( see http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html )
-4. [ ] Delete <%= f.label :user_id %><br />
-5. [ ] Add @reading.user_id = session[:user_id] in create method in readings controller
-* Weight as a function of time
-1. [ ] In Readings model, weight_at_time function
-  def self.weight_at_time(user_id, time)
-    time_initial = Reading.time_initial(user_id)
-    weight_initial = Reading.weight_initial(user_id)
-    if ( time < time_initial )
-      return weight_initial
-    end
-    max_gain_rate = User.filter_rate_gain(user_id)
-    max_loss_rate = User.filter_rate_loss(user_id)
-    readings = Reading.get_readings_after( user_id, time_initial, time )
-    for reading in readings
-      w = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, reading.reading_time, reading.weight)
-      time_initial = reading.reading_time
-      weight_initial = w
-    end
-    next_reading = Reading.get_next_reading_after(user_id, time)
-    if next_reading
-      weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial, next_reading.reading_time, next_readi\
-ng.weight, time )
-    else
-      weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
-    end
-    #    return number_with_precision(weight, :precision => 5 )                                                               
-    return weight
-  end
-2. [ ] In Reading model, time_initial function
-  def self.time_initial( user_id )
-    return Reading.order('reading_time ASC').where(:user_id => user_id).first.reading_time
-  end
-3. [ ] In Reading model, weight_initial function
-  def self.weight_initial( user_id )
-    return Reading.order('reading_time ASC').where(:user_id => user_id).first.weight
-  end
-4. [ ] In User model, functions filter_rate_gain, filter_rate_loss, goal_loss_rate
-#+BEGIN_SRC ruby
-  def self.filter_rate_gain(user_id)
-    return User.where(:id => user_id).first.filter_rate_gain
-  end
-  def self.filter_rate_loss(user_id)
-    return User.where(:id => user_id).first.filter_rate_loss
-  end
-  def self.goal_loss_rate(user_id)
-    cals_per_day = User.where(:id => user_id).first.goal_loss_rate
-    lbs_per_second = cals_per_day / 3500.0 / 86400.0
-    return  lbs_per_second
-  end
-#+END_SRC
-5. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
-#+BEGIN_SRC ruby
-  def self.get_readings_after( user_id, start_time, end_time )
-    return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
-  end
-  def self.get_next_reading_after( user_id, time )
-      return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
-  end
-#+END_SRC
-6. [ ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
-#+BEGIN_SRC ruby
-  def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
-    if ( weight == initial_time )
-      return weight
-    else
-      delta_time = ( time - initial_time ).to_i
-      cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
-      max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
-      min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
-      if ( weight > max_allowable_weight )
-        return max_allowable_weight
-      end
-      if ( weight < min_allowable_weight )
-        return min_allowable_weight
-      end
-    end
-    return  weight
-  end
-#+END_SRC
-7. [ ] In Reading model, interpolate
-#+BEGIN_SRC ruby
-  def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
-    filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
-    delta_time = next_time - last_time
-    delta_weight = ( filtered_next_weight - last_weight )
-    percent = ( time - last_time ) / delta_time.to_f
-    interpolated_weight = last_weight + percent * delta_weight
-  end
-#+END_SRC
 * Display readings table on Welcome Page
 1. [ ] @readings = Readings.all won't work because would get other user's Readings
 2. [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
 3. [ ] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
 4. [ ] See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
 5. [ ] See Agile book, active record
-
+* Weight loss/gain over the last 28 days
 * Draw a graph
 1. [ ] [[http://nubyonrails.com/pages/gruff][http://nubyonrails.com/pages/gruff]]
 2. [ ] Build and Install RMagick
@@ -193,7 +203,6 @@ ng.weight, time )
 #+BEGIN_SRC ruby       
        <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
 #+END_SRC
-* Weight loss/gain over the last 28 days
 * Graph last 28 days
 #+BEGIN_SRC ruby
   def month
@@ -308,5 +317,3 @@ end
 #+END_SRC ruby
 * About your last reading
   1. [ ] Refactor     last_reading = Reading.get_last_reading(user_id) helper to @last_reading in controller
-  
-
