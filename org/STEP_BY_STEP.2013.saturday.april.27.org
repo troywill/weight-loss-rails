@@ -151,43 +151,55 @@
      #+END_SRC
 * Mail
 ** Chapter 13: Task H: Sending Mail
-1. [ ] environment.rb
-#+BEGIN_SRC ruby       
-    config.action_mailer.delivery_method = :smtp | :sendmail | :test
-
-   Depot::Application.configure do
-     config.action_mailer.delivery_method = :smtp
-
-     config.action_mailer.smtp_settings = {
-       address: "smtp.gmail.com",
-       port: 587,
-       domain: "domain.of.sender.net",
-       authentication: "plain",
-       user_name: "dave",
-       password: "secret",
-       enable_starttls_auto: true
-     }
-   end
-#+END_SRC
-2. [ ] restart server
-3. [ ] rails generate mailer GoalReminder goal calculation
-      create  app/mailers/goal_reminder.rb
-      invoke  erb
-      create    app/views/goal_reminder
-      create    app/views/goal_reminder/goal.text.erb
-      create    app/views/goal_reminder/calculation.text.erb
-      invoke  test_unit
-      create    test/functional/goal_reminder_test.rb
-4. [ ] Change into app/mailers and edit goal_reminder.rb
-5. [ ] In console => GoalReminder.goal.deliver
+1. [X] environment.rb
+   - file:../../config/environments/development.rb
+   #+BEGIN_SRC ruby       
+     config.action_mailer.delivery_method = :smtp | :sendmail | :test
+     
+     Depot::Application.configure do
+       config.action_mailer.delivery_method = :smtp
+       
+       config.action_mailer.smtp_settings = {
+         address: "smtp.gmail.com",
+         port: 587,
+         domain: "usahealthscience.com",
+         authentication: "plain",
+         user_name: "username",
+         password: "secret",
+         enable_starttls_auto: true
+       }
+     end
+   #+END_SRC
+2. [X] restart server
+3. [X] rails generate mailer GoalReminder goal calculation
+   #+BEGIN_SRC sh
+     rails generate mailer GoalReminder goal calculation
+   #+END_SRC
+   #+BEGIN_EXAMPLE
+     create  app/mailers/goal_reminder.rb
+     invoke  erb
+     create    app/views/goal_reminder
+     create    app/views/goal_reminder/goal.text.erb
+     create    app/views/goal_reminder/calculation.text.erb
+     invoke  test_unit
+     create    test/functional/goal_reminder_test.rb
+   #+END_EXAMPLE
+4. [X] Change into app/mailers and edit goal_reminder.rb
+   - file:../../app/mailers/goal_reminder.rb
+5. [X] In console => GoalReminder.goal.deliver
 6. [ ] 24.1 A Stand-Alone Application Using Active Record
-#+BEGIN_SRC ruby
-    require "config/environment.rb"
-    order = Order.find(1)
-    order.name = "Dave Thomas"
-    order.save
-#+END_SRC
-** stand alone application
+   #+BEGIN_SRC ruby
+     require "config/environment.rb"
+     order = Order.find(1)
+     order.name = "Dave Thomas"
+     order.save
+   #+END_SRC
+7. [ ] stand alone application
+   #+BEGIN_SRC ruby :tangle stand_alone/stand-alone-mailer.rb :shebang #!/usr/bin/env ruby
+     require "../../../config/environment.rb"
+     user_id = 1
+     GoalReminder.goal.deliver
+   #+END_SRC
 * Display readings table on Welcome Page
 1. [ ] @readings = Readings.all won't work because would get other user's Readings
 2. [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
