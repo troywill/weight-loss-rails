@@ -1,0 +1,342 @@
+-*- mode: org -*-
+* DONE [3/3]Display current goal
+** DONE goal_now in User model file:../../app/models/user.rb
+   #+BEGIN_SRC ruby   
+     def self.goal_now(user_id)
+       u = User.find(user_id)
+       elapsed_time = Time.now - u.goal_start_time
+       lbs_per_second = ( u.goal_loss_rate / 86400.0 / 3500.0 )
+       return ( u.goal_start_weight - lbs_per_second * elapsed_time )
+     end
+   #+END_SRC
+** DONE @goal_now in welcome controller, index method file:../../app/controllers/welcome_controller.rb (C-c C-o)
+   #+BEGIN_SRC ruby
+     u = User.find(session[:user_id])
+     @goal_now = User.goal_now(u.id)
+   #+END_SRC   
+** DONE View file:../../app/views/welcome/index.html.erb
+   <%= number_with_precision(@goal_now, :precision => 3)%>
+* DONE [7/7] Weight as a function of time
+1. [X] In Reading model, weight_at_time function file:../../app/models/reading.rb 
+   #+begin_src ruby
+     def self.weight_at_time(user_id, time)
+       time_initial = Reading.time_initial(user_id)
+       weight_initial = Reading.weight_initial(user_id)
+       if ( time < time_initial )
+         return weight_initial
+       end
+       max_gain_rate = User.filter_rate_gain(user_id)
+       max_loss_rate = User.filter_rate_loss(user_id)
+       readings = Reading.get_readings_after( user_id, time_initial, time )
+       for reading in readings
+         w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
+                          weight_initial, reading.reading_time, reading.weight)
+         time_initial = reading.reading_time
+         weight_initial = w
+       end
+       next_reading = Reading.get_next_reading_after(user_id, time)
+       if next_reading
+         weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
+                               next_reading.reading_time, next_reading.weight, time )
+       else
+         weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+       end
+       #    return number_with_precision(weight, :precision => 5 )                                                               
+       return weight
+     end
+   #+end_src
+2. [X] In Reading model, time_initial function file:../../app/models/reading.rb 
+   #+begin_src ruby
+     def self.time_initial( user_id )
+       return Reading.order('reading_time ASC').where(:user_id => user_id).first.reading_time
+     end
+   #+end_src
+3. [X] In Reading model, weight_initial function
+   #+begin_src ruby
+     def self.weight_initial( user_id )
+       return Reading.order('reading_time ASC').where(:user_id => user_id).first.weight
+     end
+   #+end_src
+4. [X] In User model, functions filter_rate_gain, filter_rate_loss, goal_loss_rate file:../../app/models/user.rb 
+   #+begin_src ruby
+     def self.filter_rate_gain(user_id)
+       return User.where(:id => user_id).first.filter_rate_gain
+     end
+     def self.filter_rate_loss(user_id)
+       return User.where(:id => user_id).first.filter_rate_loss
+     end
+     def self.goal_loss_rate(user_id)
+       cals_per_day = User.where(:id => user_id).first.goal_loss_rate
+       lbs_per_second = cals_per_day / 3500.0 / 86400.0
+       return  lbs_per_second
+     end
+   #+end_src
+5. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../../app/models/reading.rb 
+   #+BEGIN_SRC ruby
+     def self.get_readings_after( user_id, start_time, end_time )
+       return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
+     end
+     def self.get_next_reading_after( user_id, time )
+         return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
+     end
+   #+END_SRC
+6. [X] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight ) file:../../app/models/reading.rb 
+   #+BEGIN_SRC ruby
+     def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+       if ( weight == initial_time )
+         return weight
+       else
+         delta_time = ( time - initial_time ).to_i
+         cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+         max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+         min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+         if ( weight > max_allowable_weight )
+           return max_allowable_weight
+         end
+         if ( weight < min_allowable_weight )
+           return min_allowable_weight
+         end
+       end
+       return  weight
+     end
+   #+END_SRC
+7. [X] In Reading model, interpolate  file:../../app/models/reading.rb 
+   #+BEGIN_SRC ruby
+     def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+       filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+       delta_time = next_time - last_time
+       delta_weight = ( filtered_next_weight - last_weight )
+       percent = ( time - last_time ) / delta_time.to_f
+       interpolated_weight = last_weight + percent * delta_weight
+     end
+   #+END_SRC
+* DONE Display weight now in file:../../app/views/welcome/index.html.erb
+  #+begin_src ruby
+    <%= Reading.weight_at_time(session[:user_id], Time.now) %>
+  #+end_src
+* DONE [7/7] Add New Reading to Welcome Page
+  1. [X] Add a _form partial by copyingreading/_form 
+     - Note: we will have an error because @reading is not defined. Fix in next step.
+  2. [X] Add  @reading = Reading.new to index method in welcome controller
+  3. [X] Put embeded Ruby in index
+     #+BEGIN_SRC ruby
+       <%= render 'form' %>
+     #+END_SRC
+     - file:../../app/views/welcome/index.html.erb
+  4. [X] Add hidden field
+     - See http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field
+     #+BEGIN_SRC html
+       <%= f.hidden_field(:user_id, :value => session[:user_id]) %>
+     #+END_SRC
+     - file:../../app/views/welcome/_form.html.erb
+  5. [X] Delete <%= f.label :user_id %><br />
+     #+BEGIN_SRC html
+       <%= f.label :user_id %><br />
+       <%= f.number_field :user_id %>
+     #+END_SRC
+     - file:../../app/views/welcome/_form.html.erb
+  6. [X] Add @reading.user_id = session[:user_id] in create method in readings controller
+     - We do this because can create a new reading from reading scaffold
+     - file:../../app/controllers
+     #+BEGIN_SRC ruby
+       @reading.user_id = session[:user_id]
+     #+END_SRC
+  7. [X] Remove the user field
+     - file:../../app/views/readings/_form.html.erb
+     #+BEGIN_SRC html
+       <div class="field">
+         <%= f.label :user_id %><br />
+         <%= f.number_field :user_id %>
+       </div>
+     #+END_SRC
+* Mail
+** Chapter 13: Task H: Sending Mail
+1. [ ] environment.rb
+#+BEGIN_SRC ruby       
+    config.action_mailer.delivery_method = :smtp | :sendmail | :test
+
+   Depot::Application.configure do
+     config.action_mailer.delivery_method = :smtp
+
+     config.action_mailer.smtp_settings = {
+       address: "smtp.gmail.com",
+       port: 587,
+       domain: "domain.of.sender.net",
+       authentication: "plain",
+       user_name: "dave",
+       password: "secret",
+       enable_starttls_auto: true
+     }
+   end
+#+END_SRC
+2. [ ] restart server
+3. [ ] rails generate mailer GoalReminder goal calculation
+      create  app/mailers/goal_reminder.rb
+      invoke  erb
+      create    app/views/goal_reminder
+      create    app/views/goal_reminder/goal.text.erb
+      create    app/views/goal_reminder/calculation.text.erb
+      invoke  test_unit
+      create    test/functional/goal_reminder_test.rb
+4. [ ] Change into app/mailers and edit goal_reminder.rb
+5. [ ] In console => GoalReminder.goal.deliver
+6. [ ] 24.1 A Stand-Alone Application Using Active Record
+#+BEGIN_SRC ruby
+    require "config/environment.rb"
+    order = Order.find(1)
+    order.name = "Dave Thomas"
+    order.save
+#+END_SRC
+** stand alone application
+* Display readings table on Welcome Page
+1. [ ] @readings = Readings.all won't work because would get other user's Readings
+2. [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
+3. [ ] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
+4. [ ] See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
+5. [ ] See Agile book, active record
+* Weight loss/gain over the last 28 days
+* Draw a graph
+1. [ ] [[http://nubyonrails.com/pages/gruff][http://nubyonrails.com/pages/gruff]]
+2. [ ] Build and Install RMagick
+   1. [ ] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.1.tar.bz2 or from https://github.com/rmagick/rmagick
+   2. [ ] Run "ruby setup.rb"
+   3. [ ] Run "sudo ruby setup.rb install"
+3. [ ] sudo gem install gruff
+4. [ ] cd into plugins and run gem unpack gruff
+5. [ ] rails generate controller WeightGraph week month year
+6. [ ] In config/environment.rb add require 'gruff' after the ::Application.initialize! line
+7. [ ] See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
+8. [ ] See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
+9. [ ] In weight_graph_controller.rb:
+#+BEGIN_SRC ruby
+  def month
+    g = Gruff::Line.new
+    # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
+    g.marker_count = 4 #explicitly assign value to @marker_count
+    g.title = "My Graph" 
+    g.data("Apples", [1, 2, 3, 4, 4, 3])
+    g.data("Oranges", [4, 8, 7, 9, 8, 9])
+    g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+    g.data("Peaches", [9, 9, 10, 8, 7, 9])
+    g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
+    send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
+  end
+#+END_SRC
+9. [ ] In View:
+#+BEGIN_SRC ruby       
+       <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
+#+END_SRC
+* Graph last 28 days
+#+BEGIN_SRC ruby
+  def month
+    g = Gruff::Line.new
+    weight = 0
+    time_at_point_in_past = 0
+    user_id = session[:user_id]
+    time_first_reading = Reading.time_initial(user_id)
+    weight_first_reading = Reading.weight_initial(user_id).to_f
+    # Get weight values for last 28 days
+    weight_array = Array.new
+    number_of_periods = 28
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+      if ( time_at_point_in_past < time_first_reading )
+        weight = weight_first_reading
+      else
+        weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+      end
+      # Three significant digits to stop Gruff graph library from acting strangely                                            
+      weight = ((weight * 10000).to_i)/10000.0
+      weight_array.push(weight)
+    end
+
+    g.data "28 days", weight_array
+    send_data(g.to_blob, :type => 'image/png', :filename => "28days.png")
+
+  end
+#+END_SRC
+* Make pretty layout
+1. [ ] Run CSS application ( See Github )
+2. [ ] Create welcome/graph.html.erb view
+3. [ ] Create graph method in welcome controller
+4. [ ] Add route
+5. [ ] Add link to graph view in layout
+* Revisit analysis
+1. [ ] Link welcome.html.erb
+* Add last weight reading as words helper
+1. [ ] add method to welcome controller  
+#+BEGIN_SRC ruby
+  def self.get_last_reading( user_id )
+    return Reading.order('reading_time ASC').where(:user_id => user_id).last
+  end
+#+END_SRC
+* Figure out when we can achieve goal
+#+BEGIN_SRC ruby
+  # welcome_helper.rb
+  user_id = session[:user_id]
+  goal_loss_rate = User.goal_loss_rate(user_id)
+  lbs_per_second = goal_loss_rate / 3500 / 86400
+#+END_SRC
+* Graph last two years
+#+BEGIN_SRC ruby
+  def month
+    g = Gruff::Line.new
+    weight = 0
+    time_at_point_in_past = 0
+    user_id = session[:user_id]
+    time_first_reading = Reading.time_initial(user_id)
+    weight_first_reading = Reading.weight_initial(user_id).to_f
+    # Get weight values for last 28 days
+    weight_array = Array.new
+    number_of_periods = 28
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+      if ( time_at_point_in_past < time_first_reading )
+        weight = weight_first_reading
+      else
+        weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+      end
+      weight_array.push(weight)
+    end
+
+    g.data "28 days", weight_array
+    send_data(g.to_blob, :type => 'image/png', :filename => "28days.png")
+    
+  end
+
+  def year
+  end
+end
+#+END_SRC
+2. [ ] Add view
+3. [ ] Add route
+
+* Footer
+1. [ ] Put function to find goal difference in the Reading model
+#+BEGIN_SRC ruby
+def self.goal_difference( user_id )
+  goal_now = User.goal_now(user_id)
+  weight_now = Reading.weight_at_time(user_id, Time.now)
+  return goal_now - weight_now
+end
+#+END_SRC ruby
+2. [ ] in application helper, footer method
+#+BEGIN_SRC ruby
+def footer
+  if session[:user_id]
+    user_id = session[:user_id]
+    lbs = number_with_precision(@diff, :precision => 1, :significant => true)
+    goal_difference = Reading.goal_difference(user_id)
+    # cals = @diff * 3500
+    # cals = number_with_precision(cals, :precision => 2, :significant => true)
+    #      return "#{lbs} lbs (#{cals} cal)"
+    return "#{lbs} lbs"
+  else
+    return "nil"
+  end
+end
+#+END_SRC ruby
+* About your last reading
+  1. [ ] Refactor     last_reading = Reading.get_last_reading(user_id) helper to @last_reading in controller
