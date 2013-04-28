@@ -28,5 +28,4 @@ ${EDITOR} ${WELCOME_CONTROLLER}
 
 edit_login_method
 
-echo "Add Post method to config.rb"
-
+echo "Add Post method to routes.rb, i.e. post 'welcome/login'"
