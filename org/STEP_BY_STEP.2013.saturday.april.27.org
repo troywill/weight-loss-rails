@@ -1,5 +1,4 @@
--*- mode: org -*-
-* DONE [3/3]Display current goal
+* DONE [3/3] Display current goal
 ** DONE goal_now in User model file:../../app/models/user.rb
    #+BEGIN_SRC ruby   
      def self.goal_now(user_id)
@@ -114,7 +113,7 @@
   #+begin_src ruby
     <%= Reading.weight_at_time(session[:user_id], Time.now) %>
   #+end_src
-* DONE [7/7] Add New Reading to Welcome Page
+* DONE [7/7] Add New Reading to Welcome Page 
   1. [X] Add a _form partial by copyingreading/_form 
      - Note: we will have an error because @reading is not defined. Fix in next step.
   2. [X] Add  @reading = Reading.new to index method in welcome controller
@@ -149,77 +148,163 @@
          <%= f.number_field :user_id %>
        </div>
      #+END_SRC
-* Mail
-** Chapter 13: Task H: Sending Mail
-1. [X] environment.rb
-   - file:../../config/environments/development.rb
-   #+BEGIN_SRC ruby       
-     config.action_mailer.delivery_method = :smtp | :sendmail | :test
-     
-     Depot::Application.configure do
-       config.action_mailer.delivery_method = :smtp
-       
-       config.action_mailer.smtp_settings = {
-         address: "smtp.gmail.com",
-         port: 587,
-         domain: "usahealthscience.com",
-         authentication: "plain",
-         user_name: "username",
-         password: "secret",
-         enable_starttls_auto: true
-       }
-     end
-   #+END_SRC
-2. [X] restart server
-3. [X] rails generate mailer GoalReminder goal calculation
-   #+BEGIN_SRC sh
-     rails generate mailer GoalReminder goal calculation
-   #+END_SRC
-   #+BEGIN_EXAMPLE
-     create  app/mailers/goal_reminder.rb
-     invoke  erb
-     create    app/views/goal_reminder
-     create    app/views/goal_reminder/goal.text.erb
-     create    app/views/goal_reminder/calculation.text.erb
-     invoke  test_unit
-     create    test/functional/goal_reminder_test.rb
-   #+END_EXAMPLE
-4. [X] Change into app/mailers and edit goal_reminder.rb
-   - file:../../app/mailers/goal_reminder.rb
-5. [X] In console => GoalReminder.goal.deliver
-6. [ ] 24.1 A Stand-Alone Application Using Active Record
-   #+BEGIN_SRC ruby
-     require "config/environment.rb"
-     order = Order.find(1)
-     order.name = "Dave Thomas"
-     order.save
-   #+END_SRC
-7. [ ] stand alone application
-   #+BEGIN_SRC ruby :tangle stand_alone/stand-alone-mailer.rb :shebang #!/usr/bin/env ruby
-     require "../../../config/environment.rb"
-     user_id = 1
-     GoalReminder.goal.deliver
-   #+END_SRC
-* Display readings table on Welcome Page
-1. [ ] @readings = Readings.all won't work because would get other user's Readings
-2. [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
-3. [ ] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
-4. [ ] See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
-5. [ ] See Agile book, active record
-* Weight loss/gain over the last 28 days
-* Draw a graph
-1. [ ] [[http://nubyonrails.com/pages/gruff][http://nubyonrails.com/pages/gruff]]
-2. [ ] Build and Install RMagick
-   1. [ ] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.1.tar.bz2 or from https://github.com/rmagick/rmagick
-   2. [ ] Run "ruby setup.rb"
-   3. [ ] Run "sudo ruby setup.rb install"
-3. [ ] sudo gem install gruff
-4. [ ] cd into plugins and run gem unpack gruff
-5. [ ] rails generate controller WeightGraph week month year
-6. [ ] In config/environment.rb add require 'gruff' after the ::Application.initialize! line
-7. [ ] See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
-8. [ ] See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
-9. [ ] In weight_graph_controller.rb:
+* DONE [8/8] Build a mailer to send messages to users 
+  - see Chapter 13: Task H: Sending Mail
+  - [X] environment.rb
+    - file:../../config/environments/development.rb
+      #+BEGIN_SRC ruby 
+        config.action_mailer.delivery_method = :smtp | :sendmail | :test
+         
+        Depot::Application.configure do
+          config.action_mailer.delivery_method = :smtp
+           
+          config.action_mailer.smtp_settings = {
+            address: "smtp.gmail.com",
+            port: 587,
+            domain: "usahealthscience.com",
+            authentication: "plain",
+            user_name: "username",
+            password: "secret",
+            enable_starttls_auto: true
+          }
+        end
+      #+END_SRC
+  - [X] restart server
+  - [X] rails generate mailer GoalReminder goal calculation
+    #+BEGIN_SRC sh 
+      rails generate mailer GoalReminder goal calculation
+    #+END_SRC
+    #+BEGIN_EXAMPLE 
+      create  app/mailers/goal_reminder.rb
+      invoke  erb
+      create    app/views/goal_reminder
+      create    app/views/goal_reminder/goal.text.erb
+      create    app/views/goal_reminder/calculation.text.erb
+      invoke  test_unit
+      create    test/functional/goal_reminder_test.rb
+    #+END_EXAMPLE
+  - [X] Edit to, subject
+    + Change into app/mailers and edit goal_reminder.rb
+      - file:../../app/mailers/goal_reminder.rb 
+	#+BEGIN_SRC ruby
+          def goal
+            @greeting = "Hi at 2:53:29"
+            @user = User.find(1)
+            @goal = User.goal_now(@user.id)
+            subject = "#{@goal}"
+            mail( :to => "troydwill@gmail.com", :subject => "#{subject}" )
+          end
+	#+END_SRC
+  - [X] Edit the message text
+    + file:../../app/views/goal_reminder/goal.text.erb 
+      #+BEGIN_SRC html
+        <%= number_to_human(@goal, :units => {:unit => "pounds"}, :precision => 4, :significant => 0) %>
+        GoalReminder#goal
+        <%= @greeting %>, find me in app/views/app/views/goal_reminder/goal.text.erb
+      #+END_SRC
+  - [X] In console => GoalReminder.goal.deliver
+  - [X] 24.1 A Stand-Alone Application Using Active Record
+    #+BEGIN_SRC ruby
+      require "config/environment.rb"
+      order = Order.find(1)
+      order.name = "Dave Thomas"
+      order.save
+    #+END_SRC
+  - [X] Write stand alone mailer application
+    #+BEGIN_SRC ruby :tangle stand_alone/stand-alone-mailer.rb :shebang #!/usr/bin/env ruby
+      require "../../../config/environment.rb"
+      user_id = 1
+      GoalReminder.goal.deliver
+    #+END_SRC
+    - file:stand_alone/stand-alone-mailer.rb
+* DONE [3/3] Display readings table on Welcome Page
+  - @readings = Readings.all gives every user's readings; we only want the logged in user's readings
+  - [X] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC') 
+    + file:../../app/controllers/welcome_controller.rb ( welcome controller, index method )
+      #+BEGIN_SRC ruby
+        @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
+      #+END_SRC
+    + Since we've introduced the by_user method we need to define it. See next step.
+  - [X] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) } 
+    + file:../../app/models/reading.rb
+      #+BEGIN_SRC ruby
+        def self.by_user (user_id)
+          scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
+        end
+      #+END_SRC
+    + See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
+    + See Agile book, active record
+  - [X] View
+    + file:../../app/views/welcome/index.html.erb
+      #+BEGIN_SRC html
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Weight</th>
+              <th>Reading time</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          
+          <tbody>
+          <% @readings.each do |reading| %>
+          <tr>
+            <td><%= reading.user_id %></td>
+            <td><%= reading.weight %></td>
+            <td><%= reading.reading_time %></td>
+            <td><%= link_to 'Show', reading %></td>
+            <td><%= link_to 'Edit', edit_reading_path(reading) %></td>
+            <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+          </tbody>
+        </table>
+      #+END_SRC
+
+* DONE [2/2] Weight loss/gain over the last 28 days
+  - [X] Define a weight_loss_interval function 
+    + I wasn't sure whether to put in reading or user model. I
+      decided to put in reading model because that's where the
+      weight_at_time function is
+    + TDW Note to self: check if session hash is defined in model
+    + file:../../app/models/reading.rb
+      #+BEGIN_SRC ruby
+        def self.weight_loss_interval(user_id, start_time, finish_time )
+          user_id = session[:user_id]
+          start_weight = Reading.weight_at_time(user_id, start_time)
+          finish_weight = Reading.weight_at_time(user_id, finish_time)
+          return (finish_weight-start_weight)
+        end
+      #+END_SRC
+  - [X] Put in welcome/index
+    + file:../../app/views/welcome/index.html.erb
+      #+BEGIN_SRC html
+        <h1>28 days: <%= Reading.weight_loss_interval(session[:user_id],Time.now.ago(86400*28), Time.now) %></h1>
+      #+END_SRC
+* DONE [1/1] Change time zone
+  - rake -D time
+  - rake time:zones:us
+  - [X] file:../../config/application.rb
+    #+BEGIN_SRC ruby
+      # config.time_zone = 'Central Time (US & Canada)'
+      config.time_zone = 'Pacific Time (US & Canada)'
+    #+END_SRC
+* TODO [3/9] Draw a graph
+  1. http://nubyonrails.com/pages/gruff
+  2. [X] Build and Install RMagick
+     1. [X] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.2.tar.bz2 or from https://github.com/rmagick/rmagick
+     2. [X] Run "ruby setup.rb"
+     3. [X] Run "sudo ruby setup.rb install"
+  3. [X] sudo gem install gruff
+  4. [X] cd into plugins and run gem unpack gruff
+  5. [ ] rails generate controller WeightGraph week month year
+  6. [ ] In file:../../config/environment.rb add require 'gruff' after the ::Application.initialize! line
+  7. [ ] See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
+  8. [ ] See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
+  9. [ ] In weight_graph_controller.rb:
 #+BEGIN_SRC ruby
   def month
     g = Gruff::Line.new
