@@ -292,37 +292,38 @@
       # config.time_zone = 'Central Time (US & Canada)'
       config.time_zone = 'Pacific Time (US & Canada)'
     #+END_SRC
-* TODO [3/9] Draw a graph
+* DONE [8/8] Draw a graph
   1. http://nubyonrails.com/pages/gruff
   2. [X] Build and Install RMagick
      1. [X] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.2.tar.bz2 or from https://github.com/rmagick/rmagick
      2. [X] Run "ruby setup.rb"
      3. [X] Run "sudo ruby setup.rb install"
   3. [X] sudo gem install gruff
-  4. [X] cd into plugins and run gem unpack gruff
-  5. [ ] rails generate controller WeightGraph week month year
-  6. [ ] In file:../../config/environment.rb add require 'gruff' after the ::Application.initialize! line
-  7. [ ] See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
-  8. [ ] See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
-  9. [ ] In weight_graph_controller.rb:
-#+BEGIN_SRC ruby
-  def month
-    g = Gruff::Line.new
-    # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
-    g.marker_count = 4 #explicitly assign value to @marker_count
-    g.title = "My Graph" 
-    g.data("Apples", [1, 2, 3, 4, 4, 3])
-    g.data("Oranges", [4, 8, 7, 9, 8, 9])
-    g.data("Watermelon", [2, 3, 1, 5, 6, 8])
-    g.data("Peaches", [9, 9, 10, 8, 7, 9])
-    g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
-    send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
-  end
+  4. [X] add gruff to Gem file
+  5. [X] rails generate controller WeightGraph week month year
+  6. [X] (Optional) See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
+  7. [X] (Optional) See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
+  8. [X] In weight_graph_controller.rb:
+     - file:../../app/controllers
+     #+BEGIN_SRC ruby
+       def month
+         g = Gruff::Line.new
+         # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
+         g.marker_count = 4 #explicitly assign value to @marker_count
+         g.title = "My Graph" 
+         g.data("Apples", [1, 2, 3, 4, 4, 3])
+         g.data("Oranges", [4, 8, 7, 9, 8, 9])
+         g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+         g.data("Peaches", [9, 9, 10, 8, 7, 9])
+         g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
+         send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
+       end
 #+END_SRC
-9. [ ] In View:
-#+BEGIN_SRC ruby       
-       <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
-#+END_SRC
+  9. [X] In View:
+     - file:../../app/views/weight_graph/month.html.erb
+       #+BEGIN_SRC ruby       
+         <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
+       #+END_SRC
 * Graph last 28 days
 #+BEGIN_SRC ruby
   def month
