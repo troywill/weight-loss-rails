@@ -196,11 +196,11 @@
           end
 	#+END_SRC
   - [X] Edit the message text
-    + file:../../app/views/goal_reminder/goal.text.erb 
+    + file:../../app/views/goal_reminder/goal.text.erb
       #+BEGIN_SRC html
-        <%= number_to_human(@goal, :units => {:unit => "pounds"}, :precision => 4, :significant => 0) %>
+        <%= number_to_human(@goal, :units => {:unit => "pounds"}, :precision => 4, :significant => 4) %>
         GoalReminder#goal
-        <%= @greeting %>, find me in app/views/app/views/goal_reminder/goal.text.erb
+        <%= @greeting %>, http://usahealthscience.com:3000/readings/new
       #+END_SRC
   - [X] In console => GoalReminder.goal.deliver
   - [X] 24.1 A Stand-Alone Application Using Active Record
@@ -294,72 +294,172 @@
     #+END_SRC
 * DONE [8/8] Draw a graph
   1. http://nubyonrails.com/pages/gruff
-  2. [X] Build and Install RMagick
+  2. https://github.com/topfunky/gruff
+  3. http://www.undefined.com/ia/archives/2005/12/gruff_graph_007.html
+  4. [X] Build and Install RMagick
      1. [X] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.2.tar.bz2 or from https://github.com/rmagick/rmagick
      2. [X] Run "ruby setup.rb"
      3. [X] Run "sudo ruby setup.rb install"
-  3. [X] sudo gem install gruff
-  4. [X] add gruff to Gem file
-  5. [X] rails generate controller WeightGraph week month year
-  6. [X] (Optional) See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
-  7. [X] (Optional) See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
-  8. [X] In weight_graph_controller.rb:
-     - file:../../app/controllers
-     #+BEGIN_SRC ruby
-       def month
-         g = Gruff::Line.new
-         # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
-         g.marker_count = 4 #explicitly assign value to @marker_count
-         g.title = "My Graph" 
-         g.data("Apples", [1, 2, 3, 4, 4, 3])
-         g.data("Oranges", [4, 8, 7, 9, 8, 9])
-         g.data("Watermelon", [2, 3, 1, 5, 6, 8])
-         g.data("Peaches", [9, 9, 10, 8, 7, 9])
-         g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
-         send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
-       end
-#+END_SRC
-  9. [X] In View:
-     - file:../../app/views/weight_graph/month.html.erb
-       #+BEGIN_SRC ruby       
-         <img src="<%= url_for :controller => "weight_graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
-       #+END_SRC
-* Graph last 28 days
-#+BEGIN_SRC ruby
-  def month
-    g = Gruff::Line.new
-    weight = 0
-    time_at_point_in_past = 0
-    user_id = session[:user_id]
-    time_first_reading = Reading.time_initial(user_id)
-    weight_first_reading = Reading.weight_initial(user_id).to_f
-    # Get weight values for last 28 days
-    weight_array = Array.new
-    number_of_periods = 28
-    (0..number_of_periods).each do |period_num|
-      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
-
-      if ( time_at_point_in_past < time_first_reading )
-        weight = weight_first_reading
-      else
-        weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+  5. [X] sudo gem install gruff
+  6. [X] add gruff to Gem file
+  7. [X] Generate the controller for generating Graphs
+     #+BEGIN_SRC sh
+       rails generate controller Graph generate week month year
+     #+END_SRC
+  8. [X] (Optional) See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
+  9. [X] (Optional) See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
+  10. [X] In weight_graph_controller.rb:
+      - file:../../app/controllers/graph_controller.rb
+      #+BEGIN_SRC ruby
+	def month
+          g = Gruff::Line.new
+          # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
+          g.marker_count = 4 #explicitly assign value to @marker_count
+          g.title = "My Graph" 
+          g.data("Apples", [1, 2, 3, 4, 4, 3])
+          g.data("Oranges", [4, 8, 7, 9, 8, 9])
+          g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+          g.data("Peaches", [9, 9, 10, 8, 7, 9])
+          g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
+          send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
+	end
+ #+END_SRC
+  11. [X] In View:
+      - file:../../app/views/graph/month.html.erb
+	#+BEGIN_SRC ruby       
+          <img src="<%= url_for :controller => "graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
+	#+END_SRC
+* TODO [1/2] Graph last 28 days
+  1. [X] file:../../app/controllers/graph_controller.rb
+    #+BEGIN_SRC ruby
+      def month
+        g = Gruff::Line.new
+        weight = 0
+        time_at_point_in_past = 0
+        user_id = session[:user_id]
+        time_first_reading = Reading.time_initial(user_id)
+        weight_first_reading = Reading.weight_initial(user_id).to_f
+        # Get weight values for last 28 days
+        weight_array = Array.new
+        number_of_periods = 28
+        (0..number_of_periods).each do |period_num|
+          time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+          
+          if ( time_at_point_in_past < time_first_reading )
+            weight = weight_first_reading
+          else
+            weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+          end
+          # Three significant digits to stop Gruff graph library from acting strangely                                            
+          weight = ((weight * 10000).to_i)/10000.0
+          weight_array.push(weight)
+        end
+        
+        g.data "28 days", weight_array
+        send_data(g.to_blob, :type => 'image/png', :filename => "28days.png", :disposition => 'inline' )
+        # this writes the file to the hard drive for caching
+        # and then writes it to the screen.
+        # g.write("/tmp/month.png")
+        # send_file "/tmp/month.png", :type => 'image/png', :disposition => 'inline'
       end
-      # Three significant digits to stop Gruff graph library from acting strangely                                            
-      weight = ((weight * 10000).to_i)/10000.0
-      weight_array.push(weight)
-    end
-
-    g.data "28 days", weight_array
-    send_data(g.to_blob, :type => 'image/png', :filename => "28days.png")
-
-  end
-#+END_SRC
-* Make pretty layout
-1. [ ] Run CSS application ( See Github )
-2. [ ] Create welcome/graph.html.erb view
-3. [ ] Create graph method in welcome controller
-4. [ ] Add route
-5. [ ] Add link to graph view in layout
+    #+END_SRC
+  2. [ ] file:../../app/views/graph/month.html.erb
+* TODO Draw Google Graph
+  1. [X] Generate the controller for generating Graphs
+     #+BEGIN_SRC sh
+       rails generate controller GoogleGraph week month year
+     #+END_SRC
+  2. [ ] See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
+  3. [X] Place a 28 day data array method in Readings controller
+     - Commentary: :: We will pass data into Google javascript in the view
+     - file:../../app/models/reading.rb
+       #+BEGIN_SRC ruby
+         def self.month_array(user_id)
+           weight = 0
+           time_at_point_in_past = 0
+           time_first_reading = Reading.time_initial(user_id)
+           weight_first_reading = Reading.weight_initial(user_id).to_f
+           # Get weight values for last 28 days
+           weight_array = Array.new
+           weight_array.push(['Year','Weight'])
+           number_of_periods = 28
+           (0..number_of_periods).each do |period_num|
+             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+             
+             if ( time_at_point_in_past < time_first_reading )
+               weight = weight_first_reading
+             else
+               weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+             end
+             # Three significant digits to stop Gruff graph library from acting strangely                                            
+             weight = ((weight * 10000).to_i)/10000.0
+             weight_array.push(["", weight])
+           end
+           return weight_array
+         end
+       #+END_SRC
+  4. [ ] Create a GoogleGraph layout
+     - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
+     - file:../../app/views/layouts/google_graph.html.erb
+       #+BEGIN_SRC html
+         <html>
+           <head>
+             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+             <script type="text/javascript">
+               google.load("visualization", "1", {packages:["corechart"]});
+               google.setOnLoadCallback(drawChart);
+         
+               function drawChart() {
+               var data = google.visualization.arrayToDataTable(
+               [['Year','Sales','Expenses'],['2013',1000,400],['2005',1170,460],['2006',660,1120],['2007',1030,540]]
+               );
+               data = google.visualization.arrayToDataTable(
+               <%= raw Reading.month_array(session[:user_id]).to_json %>
+               );
+         
+               var options = {
+               title: 'Weight 1 month'
+               };
+               
+               var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+               chart.draw(data, options);
+               }
+             </script>
+           </head>
+           <body>
+             <div id="chart_div" style="width: 900px; height: 500px;"></div>
+           </body>
+         </html>
+       #+END_SRC
+  5. [ ] Create a goal as a function of time method, place in User model
+     - file:../../app/models/user.rb
+       #+BEGIN_SRC ruby
+         def self.goal_at_time(user_id, time)
+           u = User.find(user_id)
+           if ( time < u.goal_start_time )
+             return u.goal_start_weight.to_f
+           end
+           elapsed_time = time - u.goal_start_time
+           lbs_per_second = ( u.goal_loss_rate / 86400.0 / 3500.0 )
+           return ( u.goal_start_weight - lbs_per_second * elapsed_time ).to_f
+         end
+       #+END_SRC
+  6. [ ] Add goal to month_array method in Reading model so it shows on the Google chart
+     - file:../../app/model/reading.rb
+       #+BEGIN_SRC ruby
+         weight_array.push(['Year','Weight', 'Goal'])
+         ...
+         goal = User.goal_at_time(user_id, time_at_point_in_past)
+         weight_array.push(["", weight, goal])
+       #+END_SRC
+* TODO [1/6] Make pretty layout
+  1. [X] Update file:../../app/views/layouts/application.html.erb
+     - [X] Copy application.html.erb from repo
+  2. [ ] Copy stylesheet from repo to 
+  3. [ ] Create welcome/graph.html.erb view
+  4. [ ] Create graph method in welcome controller
+  5. [ ] Add route
+  6. [ ] Add link to graph view in layout
 * Revisit analysis
 1. [ ] Link welcome.html.erb
 * Add last weight reading as words helper
