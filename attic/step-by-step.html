@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>-*- mode: org -*-</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="-*- mode: org -*-"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-04-28T19:33+0400"/>
+<meta name="author" content=""/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">-*- mode: org -*-</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 [3/3]Display current goal</a>
+<ul>
+<li><a href="#sec-1-1">1.1 goal<sub>now</sub> in User model file:../../app/models/user.rb</a></li>
+<li><a href="#sec-1-2">1.2 @goal<sub>now</sub> in welcome controller, index method file:../../app/controllers/welcome_controller.rb (C-c C-o)</a></li>
+<li><a href="#sec-1-3">1.3 View file:../../app/views/welcome/index.html.erb</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2 [7/7] Weight as a function of time</a></li>
+<li><a href="#sec-3">3 Display weight now in file:../../app/views/welcome/index.html.erb</a></li>
+<li><a href="#sec-4">4 [7/7] Add New Reading to Welcome Page</a></li>
+<li><a href="#sec-5">5 Mail</a>
+<ul>
+<li><a href="#sec-5-1">5.1 Chapter 13: Task H: Sending Mail</a></li>
+</ul>
+</li>
+<li><a href="#sec-6">6 Display readings table on Welcome Page</a></li>
+<li><a href="#sec-7">7 Weight loss/gain over the last 28 days</a></li>
+<li><a href="#sec-8">8 Draw a graph</a></li>
+<li><a href="#sec-9">9 Graph last 28 days</a></li>
+<li><a href="#sec-10">10 Make pretty layout</a></li>
+<li><a href="#sec-11">11 Revisit analysis</a></li>
+<li><a href="#sec-12">12 Add last weight reading as words helper</a></li>
+<li><a href="#sec-13">13 Figure out when we can achieve goal</a></li>
+<li><a href="#sec-14">14 Graph last two years</a></li>
+<li><a href="#sec-15">15 Footer</a></li>
+<li><a href="#sec-16">16 About your last reading</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> <span class="done DONE">DONE</span> [3/3]Display current goal</h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> <span class="done DONE">DONE</span> goal<sub>now</sub> in User model <a href="../../app/models/user.rb">../../app/models/user.rb</a></h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+
+
+<pre class="example">def self.goal_now(user_id)
+  u = User.find(user_id)
+  elapsed_time = Time.now - u.goal_start_time
+  lbs_per_second = ( u.goal_loss_rate / 86400.0 / 3500.0 )
+  return ( u.goal_start_weight - lbs_per_second * elapsed_time )
+end
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> <span class="done DONE">DONE</span> @goal<sub>now</sub> in welcome controller, index method <a href="../../app/controllers/welcome_controller.rb">../../app/controllers/welcome_controller.rb</a> (C-c C-o)</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+
+
+<pre class="example">u = User.find(session[:user_id])
+@goal_now = User.goal_now(u.id)
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> <span class="done DONE">DONE</span> View <a href="../../app/views/welcome/index.html.erb">../../app/views/welcome/index.html.erb</a></h3>
+<div class="outline-text-3" id="text-1-3">
+
+<p>   &lt;%= number<sub>with</sub><sub>precision</sub>(@goal<sub>now</sub>, :precision =&gt; 3)%&gt;
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> <span class="done DONE">DONE</span> [7/7] Weight as a function of time</h2>
+<div class="outline-text-2" id="text-2">
+
+<ol>
+<li><code>[X]</code> In Reading model, weight<sub>at</sub><sub>time</sub> function <a href="../../app/models/reading.rb">../../app/models/reading.rb</a> 
+
+
+
+<pre class="example">def self.weight_at_time(user_id, time)
+  time_initial = Reading.time_initial(user_id)
+  weight_initial = Reading.weight_initial(user_id)
+  if ( time &lt; time_initial )
+    return weight_initial
+  end
+  max_gain_rate = User.filter_rate_gain(user_id)
+  max_loss_rate = User.filter_rate_loss(user_id)
+  readings = Reading.get_readings_after( user_id, time_initial, time )
+  for reading in readings
+    w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
+                     weight_initial, reading.reading_time, reading.weight)
+    time_initial = reading.reading_time
+    weight_initial = w
+  end
+  next_reading = Reading.get_next_reading_after(user_id, time)
+  if next_reading
+    weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
+                          next_reading.reading_time, next_reading.weight, time )
+  else
+    weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+  end
+  #    return number_with_precision(weight, :precision =&gt; 5 )                                                               
+  return weight
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, time<sub>initial</sub> function <a href="../../app/models/reading.rb">../../app/models/reading.rb</a> 
+
+
+
+<pre class="example">def self.time_initial( user_id )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user_id).first.reading_time
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, weight<sub>initial</sub> function
+
+
+
+<pre class="example">def self.weight_initial( user_id )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user_id).first.weight
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In User model, functions filter<sub>rate</sub><sub>gain</sub>, filter<sub>rate</sub><sub>loss</sub>, goal<sub>loss</sub><sub>rate</sub> <a href="../../app/models/user.rb">../../app/models/user.rb</a> 
+
+
+
+<pre class="example">def self.filter_rate_gain(user_id)
+  return User.where(:id =&gt; user_id).first.filter_rate_gain
+end
+def self.filter_rate_loss(user_id)
+  return User.where(:id =&gt; user_id).first.filter_rate_loss
+end
+def self.goal_loss_rate(user_id)
+  cals_per_day = User.where(:id =&gt; user_id).first.goal_loss_rate
+  lbs_per_second = cals_per_day / 3500.0 / 86400.0
+  return  lbs_per_second
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, self.get<sub>readings</sub><sub>after</sub>, self.get<sub>next</sub><sub>reading</sub><sub>after</sub>( user<sub>id</sub>, time ) <a href="../../app/models/reading.rb">../../app/models/reading.rb</a> 
+
+
+
+<pre class="example">def self.get_readings_after( user_id, start_time, end_time )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user_id).where('reading_time &gt;= ? AND reading_time &lt;= ?', start_time, end_time)
+end
+def self.get_next_reading_after( user_id, time )
+    return Reading.order('reading_time ASC').where(:user_id =&gt; user_id).where('reading_time &gt; ?', time).first
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, apply<sub>filter</sub>( max<sub>gain</sub><sub>rate</sub>, max<sub>loss</sub><sub>rate</sub>, initial<sub>time</sub>, initial<sub>weight</sub>, time, weight ) <a href="../../app/models/reading.rb">../../app/models/reading.rb</a> 
+
+
+
+<pre class="example">def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+  if ( weight == initial_time )
+    return weight
+  else
+    delta_time = ( time - initial_time ).to_i
+    cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+    max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+    min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+    if ( weight &gt; max_allowable_weight )
+      return max_allowable_weight
+    end
+    if ( weight &lt; min_allowable_weight )
+      return min_allowable_weight
+    end
+  end
+  return  weight
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, interpolate  <a href="../../app/models/reading.rb">../../app/models/reading.rb</a> 
+
+
+
+<pre class="example">def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+  filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+  delta_time = next_time - last_time
+  delta_weight = ( filtered_next_weight - last_weight )
+  percent = ( time - last_time ) / delta_time.to_f
+  interpolated_weight = last_weight + percent * delta_weight
+end
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> <span class="done DONE">DONE</span> Display weight now in <a href="../../app/views/welcome/index.html.erb">../../app/views/welcome/index.html.erb</a></h2>
+<div class="outline-text-2" id="text-3">
+
+
+
+
+<pre class="example">&lt;%= Reading.weight_at_time(session[:user_id], Time.now) %&gt;
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> <span class="done DONE">DONE</span> [7/7] Add New Reading to Welcome Page</h2>
+<div class="outline-text-2" id="text-4">
+
+<ol>
+<li><code>[X]</code> Add a <sub>form</sub> partial by copyingreading/<sub>form</sub> 
+<ul>
+<li>Note: we will have an error because @reading is not defined. Fix in next step.
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Add  @reading = Reading.new to index method in welcome controller
+</li>
+<li><code>[X]</code> Put embeded Ruby in index
+
+
+
+<pre class="example">&lt;%= render 'form' %&gt;
+</pre>
+
+<ul>
+<li><a href="../../app/views/welcome/index.html.erb">../../app/views/welcome/index.html.erb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Add hidden field
+<ul>
+<li>See <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field">http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field</a>
+
+
+
+<pre class="example">&lt;%= f.hidden_field(:user_id, :value =&gt; session[:user_id]) %&gt;
+</pre>
+
+<ul>
+<li><a href="../../app/views/welcome/_form.html.erb">../../app/views/welcome/_form.html.erb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Delete &lt;%= f.label :user<sub>id</sub> %&gt;&lt;br /&gt;
+
+
+
+<pre class="example">&lt;%= f.label :user_id %&gt;&lt;br /&gt;
+&lt;%= f.number_field :user_id %&gt;
+</pre>
+
+<ul>
+<li><a href="../../app/views/welcome/_form.html.erb">../../app/views/welcome/_form.html.erb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Add @reading.user<sub>id</sub> = session[:user<sub>id]</sub> in create method in readings controller
+<ul>
+<li>We do this because can create a new reading from reading scaffold
+</li>
+<li><a href="../../app/controllers">../../app/controllers</a>
+
+
+
+<pre class="example">@reading.user_id = session[:user_id]
+</pre>
+
+</li>
+<li><code>[X]</code> Remove the user field
+<ul>
+<li><a href="../../app/views/readings/_form.html.erb">../../app/views/readings/_form.html.erb</a>
+
+
+
+<pre class="example">&lt;div class="field"&gt;
+  &lt;%= f.label :user_id %&gt;&lt;br /&gt;
+  &lt;%= f.number_field :user_id %&gt;
+&lt;/div&gt;
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Mail</h2>
+<div class="outline-text-2" id="text-5">
+
+
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Chapter 13: Task H: Sending Mail</h3>
+<div class="outline-text-3" id="text-5-1">
+
+<ol>
+<li><code>[X]</code> environment.rb
+<ul>
+<li><a href="../../config/environments/development.rb">../../config/environments/development.rb</a>
+
+
+
+<pre class="example">config.action_mailer.delivery_method = :smtp | :sendmail | :test
+
+Depot::Application.configure do
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "usahealthscience.com",
+    authentication: "plain",
+    user_name: "username",
+    password: "secret",
+    enable_starttls_auto: true
+  }
+end
+</pre>
+
+</li>
+<li><code>[X]</code> restart server
+</li>
+<li><code>[X]</code> rails generate mailer GoalReminder goal calculation
+
+
+
+<pre class="example">rails generate mailer GoalReminder goal calculation
+</pre>
+
+
+<pre class="example">create  app/mailers/goal_reminder.rb
+invoke  erb
+create    app/views/goal_reminder
+create    app/views/goal_reminder/goal.text.erb
+create    app/views/goal_reminder/calculation.text.erb
+invoke  test_unit
+create    test/functional/goal_reminder_test.rb
+</pre>
+
+</li>
+<li><code>[X]</code> Change into app/mailers and edit goal<sub>reminder</sub>.rb
+<ul>
+<li><a href="../../app/mailers/goal_reminder.rb">../../app/mailers/goal_reminder.rb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> In console =&gt; GoalReminder.goal.deliver
+</li>
+<li><code>[&nbsp;]</code> 24.1 A Stand-Alone Application Using Active Record
+
+
+
+<pre class="example">require "config/environment.rb"
+order = Order.find(1)
+order.name = "Dave Thomas"
+order.save
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> stand alone application
+
+
+
+<pre class="example">require "../../../config/environment.rb"
+user_id = 1
+GoalReminder.goal.deliver
+</pre>
+
+</li>
+</ol>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Display readings table on Welcome Page</h2>
+<div class="outline-text-2" id="text-6">
+
+<ol>
+<li><code>[&nbsp;]</code> @readings = Readings.all won't work because would get other user's Readings
+</li>
+<li><code>[&nbsp;]</code> Controller: @readings = Reading.by<sub>user</sub>(session[:user<sub>id]</sub>).order('reading<sub>time</sub> DESC')
+</li>
+<li><code>[&nbsp;]</code> Model: scope :by<sub>user</sub>, lambda { |user<sub>id|</sub> where('user<sub>id</sub> = ?', user<sub>id</sub>) }
+</li>
+<li><code>[&nbsp;]</code> See <a href="http://asciicasts.com/episodes/215-advanced-queries-in-rails-3">http://asciicasts.com/episodes/215-advanced-queries-in-rails-3</a>
+</li>
+<li><code>[&nbsp;]</code> See Agile book, active record
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Weight loss/gain over the last 28 days</h2>
+<div class="outline-text-2" id="text-7">
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Draw a graph</h2>
+<div class="outline-text-2" id="text-8">
+
+<ol>
+<li><code>[&nbsp;]</code> <a href="http://nubyonrails.com/pages/gruff">http://nubyonrails.com/pages/gruff</a>
+</li>
+<li><code>[&nbsp;]</code> Build and Install RMagick
+<ol>
+<li><code>[&nbsp;]</code> Download <a href="http://rubyforge.org/frs/download.php/70067/RMagick-2.13.1.tar.bz2">http://rubyforge.org/frs/download.php/70067/RMagick-2.13.1.tar.bz2</a> or from <a href="https://github.com/rmagick/rmagick">https://github.com/rmagick/rmagick</a>
+</li>
+<li><code>[&nbsp;]</code> Run "ruby setup.rb"
+</li>
+<li><code>[&nbsp;]</code> Run "sudo ruby setup.rb install"
+</li>
+</ol>
+
+</li>
+<li><code>[&nbsp;]</code> sudo gem install gruff
+</li>
+<li><code>[&nbsp;]</code> cd into plugins and run gem unpack gruff
+</li>
+<li><code>[&nbsp;]</code> rails generate controller WeightGraph week month year
+</li>
+<li><code>[&nbsp;]</code> In config/environment.rb add require 'gruff' after the ::Application.initialize! line
+</li>
+<li><code>[&nbsp;]</code> See <a href="http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/">http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/</a>
+</li>
+<li><code>[&nbsp;]</code> See <a href="http://api.rubyonrails.org/classes/ActionController/DataStreaming.html">http://api.rubyonrails.org/classes/ActionController/DataStreaming.html</a>
+</li>
+<li><code>[&nbsp;]</code> In weight<sub>graph</sub><sub>controller</sub>.rb:
+</li>
+</ol>
+
+
+
+
+<pre class="example">def month
+  g = Gruff::Line.new
+  # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
+  g.marker_count = 4 #explicitly assign value to @marker_count
+  g.title = "My Graph" 
+  g.data("Apples", [1, 2, 3, 4, 4, 3])
+  g.data("Oranges", [4, 8, 7, 9, 8, 9])
+  g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+  g.data("Peaches", [9, 9, 10, 8, 7, 9])
+  g.labels = {0 =&gt; '2003', 2 =&gt; '2004', 4 =&gt; '2012'}
+  send_data(g.to_blob, :disposition =&gt; 'inline', :type =&gt; 'image/png', :filename =&gt; "1week.png")
+end
+</pre>
+
+<ol>
+<li><code>[&nbsp;]</code> In View:
+</li>
+</ol>
+
+
+
+
+<pre class="example">&lt;img src="&lt;%= url_for :controller =&gt; "weight_graph", :action=&gt; "month" %&gt;" style="border:10px solid #aabcca;" /&gt;
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Graph last 28 days</h2>
+<div class="outline-text-2" id="text-9">
+
+
+
+
+<pre class="example">def month
+  g = Gruff::Line.new
+  weight = 0
+  time_at_point_in_past = 0
+  user_id = session[:user_id]
+  time_first_reading = Reading.time_initial(user_id)
+  weight_first_reading = Reading.weight_initial(user_id).to_f
+  # Get weight values for last 28 days
+  weight_array = Array.new
+  number_of_periods = 28
+  (0..number_of_periods).each do |period_num|
+    time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+    if ( time_at_point_in_past &lt; time_first_reading )
+      weight = weight_first_reading
+    else
+      weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+    end
+    # Three significant digits to stop Gruff graph library from acting strangely                                            
+    weight = ((weight * 10000).to_i)/10000.0
+    weight_array.push(weight)
+  end
+
+  g.data "28 days", weight_array
+  send_data(g.to_blob, :type =&gt; 'image/png', :filename =&gt; "28days.png")
+
+end
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Make pretty layout</h2>
+<div class="outline-text-2" id="text-10">
+
+<ol>
+<li><code>[&nbsp;]</code> Run CSS application ( See Github )
+</li>
+<li><code>[&nbsp;]</code> Create welcome/graph.html.erb view
+</li>
+<li><code>[&nbsp;]</code> Create graph method in welcome controller
+</li>
+<li><code>[&nbsp;]</code> Add route
+</li>
+<li><code>[&nbsp;]</code> Add link to graph view in layout
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Revisit analysis</h2>
+<div class="outline-text-2" id="text-11">
+
+<ol>
+<li><code>[&nbsp;]</code> Link welcome.html.erb
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Add last weight reading as words helper</h2>
+<div class="outline-text-2" id="text-12">
+
+<ol>
+<li><code>[&nbsp;]</code> add method to welcome controller  
+</li>
+</ol>
+
+
+
+
+<pre class="example">def self.get_last_reading( user_id )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user_id).last
+end
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Figure out when we can achieve goal</h2>
+<div class="outline-text-2" id="text-13">
+
+
+
+
+<pre class="example"># welcome_helper.rb
+user_id = session[:user_id]
+goal_loss_rate = User.goal_loss_rate(user_id)
+lbs_per_second = goal_loss_rate / 3500 / 86400
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> Graph last two years</h2>
+<div class="outline-text-2" id="text-14">
+
+
+
+
+<pre class="example">  def month
+    g = Gruff::Line.new
+    weight = 0
+    time_at_point_in_past = 0
+    user_id = session[:user_id]
+    time_first_reading = Reading.time_initial(user_id)
+    weight_first_reading = Reading.weight_initial(user_id).to_f
+    # Get weight values for last 28 days
+    weight_array = Array.new
+    number_of_periods = 28
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+      if ( time_at_point_in_past &lt; time_first_reading )
+        weight = weight_first_reading
+      else
+        weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+      end
+      weight_array.push(weight)
+    end
+
+    g.data "28 days", weight_array
+    send_data(g.to_blob, :type =&gt; 'image/png', :filename =&gt; "28days.png")
+
+  end
+
+  def year
+  end
+end
+</pre>
+
+<ol>
+<li><code>[&nbsp;]</code> Add view
+</li>
+<li><code>[&nbsp;]</code> Add route
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> Footer</h2>
+<div class="outline-text-2" id="text-15">
+
+<ol>
+<li><code>[&nbsp;]</code> Put function to find goal difference in the Reading model
+</li>
+</ol>
+
+
+
+
+<pre class="example">def self.goal_difference( user_id )
+  goal_now = User.goal_now(user_id)
+  weight_now = Reading.weight_at_time(user_id, Time.now)
+  return goal_now - weight_now
+end
+</pre>
+
+<ol>
+<li><code>[&nbsp;]</code> in application helper, footer method
+</li>
+</ol>
+
+
+
+
+<pre class="example">def footer
+  if session[:user_id]
+    user_id = session[:user_id]
+    lbs = number_with_precision(@diff, :precision =&gt; 1, :significant =&gt; true)
+    goal_difference = Reading.goal_difference(user_id)
+    # cals = @diff * 3500
+    # cals = number_with_precision(cals, :precision =&gt; 2, :significant =&gt; true)
+    #      return "#{lbs} lbs (#{cals} cal)"
+    return "#{lbs} lbs"
+  else
+    return "nil"
+  end
+end
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-16" class="outline-2">
+<h2 id="sec-16"><span class="section-number-2">16</span> About your last reading</h2>
+<div class="outline-text-2" id="text-16">
+
+<ol>
+<li><code>[&nbsp;]</code> Refactor     last<sub>reading</sub> = Reading.get<sub>last</sub><sub>reading</sub>(user<sub>id</sub>) helper to @last<sub>reading</sub> in controller
+</li>
+</ol>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2013-04-28T19:33+0400</p>
+<p class="author">Author: </p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

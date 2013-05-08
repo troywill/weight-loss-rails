@@ -1,0 +1,33 @@
+escape ``
+
+# An alternative hardstatus to display a bar at the bottom listing the
+# windownames and highlighting the current windowname in blue. (This is only
+# enabled if there is no hardstatus setting for your terminal)
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
+
+screen 0 emacs --no-window-system step-by-step.org
+title "STEPS"
+
+chdir ../../app
+screen 1 bash
+title "app"
+
+screen 2 emacs --no-window-system models
+title "models"
+
+screen 3 emacs --no-window-system views
+title "views"
+
+screen 4 emacs --no-window-system controllers
+title "controllers"
+
+screen 5 emacs --no-window-system helpers
+title "helpers"
+
+screen 6 emacs --no-window-system ../db
+title "db"
+
+screen 7 rails console
+title "console"
