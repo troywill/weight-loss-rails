@@ -1,0 +1,1048 @@
+* [100%] Create a new rails application
+  1. [X] Run the 'rails' command
+     #+BEGIN_SRC sh
+       rails new weight_loss
+     #+END_SRC
+  2. [X] Enable a JavaScript runtime in file:../Gemfile
+     #+BEGIN_SRC ruby
+       # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+       gem 'therubyracer', platforms: :ruby
+     #+END_SRC
+  3. [X] Create a “home” controller and a “home/index” page
+     #+BEGIN_SRC sh
+       rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
+     #+END_SRC
+     - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
+  4. [X] Set the default route to home/index in file:../config/routes.rb
+     #+BEGIN_SRC ruby
+       root 'home#index'
+     #+END_SRC
+* [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+  1. [X] Enable `devise` and `protected_attributes` gems in [[file:../Gemfile][Gemfile]]
+     #+BEGIN_SRC congf
+       gem 'devise'
+       gem 'protected_attributes'
+     #+END_SRC
+  2. [X] Run the Devise gem install generator
+     #+BEGIN_SRC sh
+       rails generate devise:install
+     #+END_SRC
+  3. [X] Generate a User Model and generate routes for user activities
+     #+BEGIN_SRC 
+       rails generate devise User
+     #+END_SRC
+  4. [X] Run the devise_create_users database migration the was created by in the previous command
+     #+BEGIN_SRC sh
+       rake db:migrate
+     #+END_SRC
+  5. [X] Restart the Rails server
+  6. [X] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
+     #+BEGIN_SRC html
+       <h1>Home#index</h1>
+       <p>Find me in app/views/home/index.html.erb</p>
+       <li><%= link_to "Sign Up", new_user_registration_path %></li>
+       <li><%= link_to "Sign In", new_user_session_path %></li>
+       <li><%= link_to "Sign Out", destroy_user_session_path, :method => 'delete' %></li>
+     #+END_SRC
+
+* [100%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+   1. [X] Install bootstrap-sass
+	#+BEGIN_SRC sh
+	  sudo gem install bootstrap-sass
+	#+END_SRC
+	- ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
+   2. [X] Add `bootstap-sass` and `sass-rails` Gems in [[file:../Gemfile][Gemfile]]
+	#+BEGIN_SRC ruby
+        gem 'bootstap-sass'
+      #+END_SRC
+	- Note that `sass-rails` is already in your Gemfile
+   3. [X] Add the following line to file:../config/application.rb
+	#+BEGIN_SRC ruby
+        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
+	#+END_SRC
+	- Place after the `class Application < Rails::Application` line
+	- See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
+   4. [X] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
+	#+BEGIN_SRC js
+        ... 
+        //= require jquery
+        ...
+        //= require bootstrap
+	#+END_SRC
+   5. [X] Rename application.css application.scss
+	    #+BEGIN_SRC sh
+            cd ../app/assets/stylesheets/ && mv -v application.css application.css.scss
+          #+END_SRC
+   6. [X] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
+	#+BEGIN_SRC css
+        @import "bootstrap";
+        body { padding-top: 60px; }
+        @import "bootstrap-responsive";
+	#+END_SRC
+	- bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
+   7. [X] Restart server
+     
+* [100%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+  1. [X] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
+     #+BEGIN_SRC html
+       <%= link_to "Home", root_path, :class => 'brand' %>
+       <ul class="nav">
+         <% if user_signed_in? %>
+         <li>
+           <%= link_to('Logout', destroy_user_session_path, :method=>'delete') %>
+         </li>
+         <% else %>
+         <li>
+           <%= link_to('Login', new_user_session_path)  %>
+         </li>
+         <% end %>
+         <% if user_signed_in? %>
+         <li>
+           <%= link_to('Edit account', edit_user_registration_path) %>
+         </li>
+         <% else %>
+         <li>
+           <%= link_to('Sign up', new_user_registration_path)  %>
+         </li>
+         <% end %>
+                <li><%= link_to "Overview", root_path %></li>
+         <li><%= link_to "New reading", root_path %></li>
+         <li><%= link_to "See all readings", root_path %></li>
+         <li><%= link_to "Goal", root_path %></li>
+         <li><%= link_to "3 day graph", root_path %></li>
+         <li><%= link_to "28 day graph", root_path %></li>
+         <li><%= link_to "1 year graph", root_path %></li>
+         <li><%= link_to "4 year graph", root_path %></li>
+       </ul>
+     #+END_SRC
+  2. [X] Create a Messages partial in file:../app/views/layouts/_messages.html.erb
+     #+BEGIN_SRC html
+       <% flash.each do |name, msg| %>
+         <% if msg.is_a?(String) %>
+         <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+           <a class="close" data-dismiss="alert">&#215;</a>
+           <%= content_tag :div, msg, :id => "flash_#{name}" %>
+         </div>
+         <% end %>
+       <% end %>
+     #+END_SRC
+  3. [X] New Application Layout with Twitter Bootstrap file:../app/views/layouts/application.html.erb
+     #+BEGIN_SRC html
+       <!doctype html>
+       <html>
+         <head>
+           <meta charset="utf-8">
+           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+           <title><%= content_for?(:title) ? yield(:title) : "Myapp" %></title>
+           <meta name="description" content="">
+           <meta name="author" content="">
+           <%= stylesheet_link_tag "application", :media => "all" %>
+           <%= javascript_include_tag "application" %>
+           <%= csrf_meta_tags %>
+           <%= yield(:head) %>
+         </head>
+         <body>
+           <header class="navbar navbar-fixed-top">
+             <nav class="navbar-inner">
+               <div class="container">
+                 <%= render 'layouts/navigation' %>
+               </div>
+             </nav>
+           </header>
+           <div id="main" role="main">
+             <div class="container">
+               <div class="content">
+                 <div class="row">
+                   <div class="span12">
+                     <%= render 'layouts/messages' %>
+                     <%= yield %>
+                   </div>
+                 </div>
+                 <footer>
+                 </footer>
+               </div>
+             </div> <!--! end of .container -->
+           </div> <!--! end of #main -->
+         </body>
+       </html>
+     #+END_SRC
+
+* DONE [2/2] Create User model, controller, and view
+  1. [X] Generate a `user` scaffold
+     #+BEGIN_SRC sh
+       rails generate scaffold user name:string email:string
+     #+END_SRC
+  2. [X] Update the database
+     #+BEGIN_SRC sh
+       rake db:migrate
+     #+END_SRC
+  #+END_SRC
+* DONE [7/7] Identify the user
+  1. [X] Add a before filter to the application controller
+     - See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
+     - place the line after "class ApplicationController < ActionController::Base"
+     - file:../app/controllers/application_controller.rb
+       #+BEGIN_SRC ruby
+         before_filter :identify_user, :except => :login
+       #+END_SRC
+  2. [X] write a idenify_user method in application controller
+     - make the method private
+     - file:../app/controllers/application_controller.rb
+       #+BEGIN_SRC ruby
+         private
+         def identify_user
+           if cookies[:weight_loss_cookie]
+             if User.find_by_email(cookies[:weight_loss_cookie])
+               @user = User.find_by_email(cookies[:weight_loss_cookie])
+               session[:user_id] = @user.id
+               return
+             end
+           end
+           if User.find_by_id(session[:user_id])
+             @user = User.find_by_id(session[:user_id])
+           else
+             flash[:notice] = "Please log in"
+             redirect_to :controller => :welcome, :action => :login
+           end
+         end
+       #+END_SRC
+  3. [X] Add a form to the login page
+     - file:../app/views/welcome/login.html.erb
+       #+BEGIN_SRC html
+         <%= form_tag do %>
+         <fieldset>
+           <legend>Please Log In</legend>
+           <p>
+             <label for="email">Email:</label>
+             <%= text_field_tag :email, params[:email] %>
+           </p>
+           <p><%= submit_tag "Login" %></p>
+         </fieldset>
+         <% end %>
+       #+END_SRC
+  4. [X] Add a POST route for the login form
+     - file:../config/routes.rb
+       #+BEGIN_SRC ruby
+         Weight::Application.routes.draw do
+           resources :users
+         
+           get "welcome/index"
+           get "welcome/login"
+           post "welcome/login"
+           get "welcome/logout"
+           ...
+       #+END_SRC
+  5. [X] Add a login method to the welcome controller
+     - file:../app/controllers/welcome_controller.rb
+       #+BEGIN_SRC ruby
+         def login
+           session[:user_id] = nil
+           if request.post?
+             if user = User.authenticate(params[:email])
+               session[:user_id] = user.id
+               # http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html
+               cookies[:weight_loss_cookie] = { :value => user.email, :expires => 1.month.from_now }
+               redirect_to(:action => "index" )
+             else
+               flash.now[:notice] = "Unknown email"
+             end
+           end
+         end
+       #+END_SRC
+  6. [X] Add an authenticate method to the user model
+     - file:../app/models/user.rb
+       #+BEGIN_SRC ruby
+         # Agile book uses more elaborate method with more security
+         # def self.authenticate(username, password)
+         def self.authenticate(email)
+           #  user = self.find_by_username(username)
+           user = self.find_by_email(email)
+           if user
+             #    if user.password != password
+               if user.email != email
+                 user = nil
+               end
+           end
+           user
+         end
+       #+END_SRC
+  7. [X] Write the logout method in the welcome controller
+     - file:../app/controllers/welcome_controller.rb
+       #+BEGIN_SRC ruby
+         def logout
+           session[:user_id] = nil
+           cookies.delete :weight_loss_cookie
+         end
+       #+END_SRC
+* DONE [5/5] Create "Readings" model, controller, and views
+  1. [X] Generate scaffold
+     #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
+       rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing:boolean --force
+     #+END_SRC
+  2. [X] Relationship to User, validations
+     file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       belongs_to :user
+       validates :user_id, :numericality => true
+       validates :weight, :numericality => true
+     #+END_SRC
+  3. [X] Default clothing in values in Model
+     - file:../db/migrate/
+       #+BEGIN_SRC ruby
+         class CreateReadings < ActiveRecord::Migration
+           def change
+             create_table :readings do |t|
+               t.integer :user_id
+               t.decimal :weight
+               t.datetime :reading_time
+               t.boolean :clothing, :default => 0
+               
+               t.timestamps
+             end
+           end
+         end
+       #+END_SRC
+  4. [X] Migrate the database, i.e. rake db:migrate
+  5. [X] Add to file:../app/views/layouts/application.html.erb
+     #+BEGIN_SRC html
+       <li><%= link_to "All readings", readings_path %></li>
+     #+END_SRC
+* DONE [3/3] User ID on new Reading
+  1. [X] Remove user id field from file:../app/views/readings/_form.html.erb
+  2. [X] Remove breaks in form
+  3. [X] Add user id to create method in readings controller
+     file:../app/controllers/readings_controller.rb
+     #+BEGIN_SRC ruby
+       @reading.user_id = @user.id
+     #+END_SRC
+     - note that @user comes from application controller, identify_user method
+* DONE [10/11] Create "Settings" model, controller, and views, default values
+  1. [X] Generate scaffold
+     #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
+       rails generate scaffold setting user_id:integer \
+           filter_rate_gain:integer \
+           filter_rate_loss:integer \
+           custom_graph:boolean \
+           graph_upper:integer \
+           graph_lower:integer \
+           graph_lines:integer \
+           si:boolean \
+           clothing:boolean \
+           clothing_wt:decimal\
+           timezone:integer \
+           locale:string \
+           --force
+     #+END_SRC
+  2. [X] Validations
+     - file:../app/models/setting.rb
+       #+BEGIN_SRC ruby
+         validates :filter_rate_gain, :presence => true, :numericality => true
+         validates :filter_rate_loss, :presence => true, :numericality => true
+         validates :graph_upper, :presence => true, :numericality => true
+         validates :graph_lower, :presence => true, :numericality => true
+         validates :graph_lines, :presence => true, :numericality => true
+         validates :clothing_wt, :presence => true, :numericality => true
+         validates :timezone, :presence => true, :numericality => true
+         validates :locale,  :presence => true
+       #+END_SRC
+  3. [X] Default values
+     - file:../db/migrate 2013...._create_settings.rb
+       #+BEGIN_SRC ruby
+         t.integer :user_id
+         t.integer :filter_rate_gain, :default => 500
+         t.integer :filter_rate_loss, :default => 1000
+         t.boolean :custom_graph, :default => 0
+         t.integer :graph_upper, :default => 300
+         t.integer :graph_lower, :default => 0
+         t.integer :graph_lines, :default => 5
+         t.boolean :si, :default => 0
+         t.boolean :clothing, :default => 0
+         t.decimal :clothing_wt, :default => 5
+         t.integer :timezone, :default => -7
+         t.string :locale, :default => "en_US.UTF-8"
+       #+END_SRC
+  4. [X] Database migration
+  5. [X] Add @user.id to create method
+     - file:../app/controllers/settings_controller.rb
+       #+BEGIN_SRC ruby
+         def create
+           @setting = Setting.new(setting_params)
+           @setting.user_id = @user.id
+       #+END_SRC
+  6. [X] Remove user_id from form
+     - file:../app/views/settings/_form.html.erb
+       #+BEGIN_SRC ruby
+         # Delete following div, user_id is supplied in the controller instead
+         <div class="field">
+           <%= f.label :user_id %><br>
+           <%= f.number_field :user_id %>
+         </div>
+       #+END_SRC
+  7. [X] settings_path in application layout
+  8. [ ] Fix numeric fields snafu
+  9. [X] Remove link breaks from form
+  10. [X] Relationship between Setting and User
+      - file:../app/models/setting.rb
+	#+BEGIN_SRC ruby
+	  class Setting < ActiveRecord::Base
+          belongs_to :user
+          ...
+        #+END_SRC
+  11. [X] Relationship between User and Setting
+      - file:../app/models/user.rb
+	#+BEGIN_SRC ruby
+	  class User < ActiveRecord::Base
+            has_one :setting
+	#+END_SRC
+* DONE Add New Settings to be created when a new user is created
+  - file:../app/controllers/users_controller.rb
+    #+BEGIN_SRC ruby
+      def create
+    @user = User.new(user_params)
+
+    respond_to do |format|
+      if @user.save
+        Setting.create(:user_id => @user.id)
+    #+END_SRC
+* DONE [8/8] Create Goal model, controller, and views
+  1. [X] Generate scaffold
+     #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
+       rails generate scaffold goal user_id:integer \
+           goal_start_weight:decimal \
+           goal_start_time:datetime \
+           goal_loss_rate:integer \
+           goal_finish_time:datetime
+     #+END_SRC
+  2. [X] Relationship between Goal and User
+     - file:../app/models/goal.rb
+       #+BEGIN_SRC ruby
+	 class Setting < ActiveRecord::Base
+           belongs_to :user
+         ...
+       #+END_SRC
+  3. [X] Relationship between User and Goal
+     - file:../app/models/user.rb
+       #+BEGIN_SRC ruby
+	 class User < ActiveRecord::Base
+           has_one :setting
+           has_many :goals
+       #+END_SRC
+  4. [X] Default values
+     - file:../db/migrate/ 2013xxx_create_goals.rb
+       #+BEGIN_SRC ruby
+         t.integer :goal_loss_rate, :default => 500
+         t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
+       #+END_SRC
+  5. [X] Validations
+     - file:../app/models/goal.rb
+       #+BEGIN_SRC ruby
+         validates :user_id, :presence => true, :numericality => true
+       #+END_SRC
+  6. [X] Migrate database
+  7. [X] user_id
+     - file:../app/controllers/goals_controller.rb
+     #+BEGIN_SRC ruby
+         # POST /goals
+         # POST /goals.json
+         def create
+           @goal = Goal.new(goal_params)
+           @goal.user_id = @user.id
+     #+END_SRC
+  8. [X] update form
+     - file:../app/views/goals/_form.html.erb
+* DONE [2/2] Display current goal
+** DONE goal_now in Goal model file:../app/models/goal.rb
+   #+BEGIN_SRC ruby   
+     def self.goal_now(user_id)
+       goal = Goal.where(:user_id => user_id).last
+       return 0 if 
+       elapsed_time = Time.now - setting.goal_start_time
+       lbs_per_second = ( setting.goal_loss_rate / 86400.0 / 3500.0 )
+       return ( setting.goal_start_weight - lbs_per_second * elapsed_time )
+     end
+   #+END_SRC
+** DONE View file:../app/views/welcome/index.html.erb
+   <%= number_with_precision(@goal_now, :precision => 3)%>
+* DONE [5/5] Weight as a function of time
+  1. [X] In Reading model, initial_reading function
+     - file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.initial_reading( user_id )
+         return Reading.order('reading_time ASC').where(:user_id => user_id).first
+       end
+     #+END_SRC
+  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
+     - file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.get_readings_after( user_id, start_time, end_time )
+	 return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
+       end
+       def self.get_next_reading_after( user_id, time )
+           return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
+       end
+     #+END_SRC
+  3. [X] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+     - file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+	 if ( weight == initial_time )
+           return weight
+	 else
+           delta_time = ( time - initial_time ).to_i
+           cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+           max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+           min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+           if ( weight > max_allowable_weight )
+             return max_allowable_weight
+           end
+           if ( weight < min_allowable_weight )
+             return min_allowable_weight
+           end
+	 end
+	 return  weight
+       end
+     #+END_SRC
+  4. [X] In Reading model, interpolate
+     - file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+	 filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+	 delta_time = next_time - last_time
+	 delta_weight = ( filtered_next_weight - last_weight )
+	 percent = ( time - last_time ) / delta_time.to_f
+	 interpolated_weight = last_weight + percent * delta_weight
+       end
+     #+END_SRC
+  5. [X] In Reading model, weight_at_time function file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.weight_at_time(user_id, time)
+         setting = Setting.where(:user_id => user_id).last
+         initial_reading = Reading.initial_reading(user_id)
+         time_initial = initial_reading.reading_time
+         weight_initial = initial_reading.weight
+         if ( time < time_initial )
+           return weight_initial
+         end
+         max_gain_rate = setting.filter_rate_gain
+         max_loss_rate = setting.filter_rate_loss
+         readings = Reading.get_readings_after( user_id, time_initial, time )
+         for reading in readings
+           w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
+                            weight_initial, reading.reading_time, reading.weight)
+           time_initial = reading.reading_time
+           weight_initial = w
+         end
+         next_reading = Reading.get_next_reading_after(user_id, time)
+         if next_reading
+           weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
+                                 next_reading.reading_time, next_reading.weight, time )
+         else
+           weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+         end
+         return weight
+       end
+     #+END_SRC
+* DONE Display weight now in file:../app/views/welcome/index.html.erb
+  #+BEGIN_SRC ruby
+    <%= Reading.weight_at_time(@user.id, Time.now) %>
+  #+END_SRC
+* TODO [3/7] Draw Google Graph
+  1. [X] Generate the controller for generating Graphs
+     #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
+       rails generate controller GoogleGraph three_day week month year four_year
+     #+END_SRC
+  2. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
+  3. [X] Path for Google Graph three day in layout
+     - file:../app/views/layouts/application.html.erb
+     #+BEGIN_SRC html
+        <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
+     #+END_SRC
+  4. [X] Place a 3 day data array method in Readings controller
+     - Commentary: :: We will pass data into Google javascript in the view
+     - file:../app/models/reading.rb
+       #+BEGIN_SRC ruby
+         def self.three_day_data_array(user_id)
+           weight = 0
+           time_at_point_in_past = 0
+           
+           initial_reading = Reading.initial_reading(user_id)
+           time_initial = initial_reading.reading_time
+           weight_initial = initial_reading.weight
+           
+           # Get weight values for last 3 days
+           weight_array = Array.new
+           weight_array.push(['Last 3 days','Weight'])
+           number_of_periods = 72
+           
+           (0..number_of_periods).each do |period_num|
+             time_at_point_in_past = Time.now-(number_of_periods-period_num).hour
+             
+             if ( time_at_point_in_past < time_initial )
+               weight = weight_initial
+             else
+               weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+             end
+             weight_array.push(["", weight.to_f])
+           end
+             return "#{weight_array}"
+         end  
+       #+END_SRC
+  5. [ ] Place a 28 day data array method in Readings controller
+     - Commentary: :: We will pass data into Google javascript in the view
+     - file:../app/models/reading.rb
+       #+BEGIN_SRC ruby
+         def self.month_array(user_id)
+           weight = 0
+           time_at_point_in_past = 0
+           time_first_reading = Reading.time_initial(user_id)
+           weight_first_reading = Reading.weight_initial(user_id).to_f
+           # Get weight values for last 28 days
+           weight_array = Array.new
+           weight_array.push(['Year','Weight'])
+           number_of_periods = 28
+           (0..number_of_periods).each do |period_num|
+             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+             
+             if ( time_at_point_in_past < time_first_reading )
+               weight = weight_first_reading
+             else
+               weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+             end
+             # Three significant digits to stop Gruff graph library from acting strangely                                            
+             weight = ((weight * 10000).to_i)/10000.0
+             weight_array.push(["", weight])
+           end
+           return weight_array
+         end
+       #+END_SRC
+  6. [ ] Create a GoogleGraph layout
+     - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
+     - Reference file:../app/views/layouts/google_graph.html.erb
+       #+BEGIN_SRC html
+         <html>
+           <head>
+             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+             <script type="text/javascript">
+               google.load("visualization", "1", {packages:["corechart"]});
+               google.setOnLoadCallback(drawChart);
+         
+               function drawChart() {
+               var data = google.visualization.arrayToDataTable(
+               [['Year','Sales','Expenses'],['2013',1000,400],['2005',1170,460],['2006',660,1120],['2007',1030,540]]
+               );
+               data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(session[:user_id]).to_json %> );
+         
+               var options = {
+               title: 'Weight 1 month'
+               };
+               
+               var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+               chart.draw(data, options);
+               }
+             </script>
+           </head>
+           <body>
+             <div id="chart_div" style="width: 900px; height: 500px;"></div>
+           </body>
+         </html>
+       #+END_SRC
+  7. [ ] Create a goal as a function of time method, place in User model
+     - file:../../app/models/user.rb
+       #+BEGIN_SRC ruby
+         def self.goal_at_time(user_id, time)
+           u = User.find(user_id)
+           if ( time < u.goal_start_time )
+             return u.goal_start_weight.to_f
+           end
+           elapsed_time = time - u.goal_start_time
+           lbs_per_second = ( u.goal_loss_rate / 86400.0 / 3500.0 )
+           return ( u.goal_start_weight - lbs_per_second * elapsed_time ).to_f
+         end
+       #+END_SRC
+  8. [ ] Add goal to month_array method in Reading model so it shows on the Google chart
+     - file:../../app/model/reading.rb
+       #+BEGIN_SRC ruby
+         weight_array.push(['Year','Weight', 'Goal'])
+         ...
+         goal = User.goal_at_time(user_id, time_at_point_in_past)
+         weight_array.push(["", weight, goal])
+       #+END_SRC
+* [2/2] Deploy to marv.usahealthscience.com
+  1. [X] weight.usahealthscience.com
+     1. [X] http://namecheap.com
+     2. [X] All Host Records
+        | SUB-DOMAIN | IP ADDRESS/URL  | RECORD TYPE |
+        |------------+-----------------+-------------|
+        | marv       | aaa.bbb.ccc.ddd | A(Address)  |
+  2. [X] /etc/httpd/conf/httpd.conf (CentOS 6.4)
+     1. [X] ServerName Directive
+	#+BEGIN_SRC example
+	  #ServerName www.example.com:80
+	  ServerName marv.usahealthscience.com:80
+	#+END_SRC
+     2. [X] Restart Apache server
+	#+BEGIN_SRC sh
+	  httpd -k restart
+	#+END_SRC
+     3. [X] Stop Apache server
+	#+BEGIN_SRC sh
+	  httpd -k stop
+	#+END_SRC
+     4. [ ] Backup httpd.conf
+     5. [ ] Remove apache
+	#+BEGIN_SRC sh
+	  yum remove httpd
+          # removes httpd-devel
+	#+END_SRC
+     6. [ ] Install apache
+	#+BEGIN_SRC sh
+	  yum install httpd-devel
+	#+END_SRC
+	
+	
+
+* TODO [0/3] Display readings table on Welcome Page
+  - @readings = Readings.all gives every user's readings; we only want the logged in user's readings
+  - [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC') 
+    + file:../../app/controllers/welcome_controller.rb ( welcome controller, index method )
+      #+BEGIN_SRC ruby
+        @readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
+      #+END_SRC
+    + Since we've introduced the by_user method we need to define it. See next step.
+  - [ ] Model: scope :by_user, lambda { |user_id| where('user_id = ?', user_id) } 
+    + file:../../app/models/reading.rb
+      #+BEGIN_SRC ruby
+        def self.by_user (user_id)
+          scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
+        end
+      #+END_SRC
+    + See http://asciicasts.com/episodes/215-advanced-queries-in-rails-3
+    + See Agile book, active record
+  - [ ] View
+    + file:../../app/views/welcome/index.html.erb
+      #+BEGIN_SRC html
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Weight</th>
+              <th>Reading time</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          
+          <tbody>
+          <% @readings.each do |reading| %>
+          <tr>
+            <td><%= reading.user_id %></td>
+            <td><%= reading.weight %></td>
+            <td><%= reading.reading_time %></td>
+            <td><%= link_to 'Show', reading %></td>
+            <td><%= link_to 'Edit', edit_reading_path(reading) %></td>
+            <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+          </tbody>
+        </table>
+      #+END_SRC
+* TODO [0/8] Build a mailer to send messages to users 
+  - see Chapter 13: Task H: Sending Mail
+  - [ ] environment.rb
+    - file:../../config/environments/development.rb
+      #+BEGIN_SRC ruby 
+        config.action_mailer.delivery_method = :smtp | :sendmail | :test
+         
+        Depot::Application.configure do
+          config.action_mailer.delivery_method = :smtp
+           
+          config.action_mailer.smtp_settings = {
+            address: "smtp.gmail.com",
+            port: 587,
+            domain: "usahealthscience.com",
+            authentication: "plain",
+            user_name: "username",
+            password: "secret",
+            enable_starttls_auto: true
+          }
+        end
+      #+END_SRC
+  - [ ] restart server
+  - [ ] rails generate mailer GoalReminder goal calculation
+    #+BEGIN_SRC sh 
+      rails generate mailer GoalReminder goal calculation
+    #+END_SRC
+    #+BEGIN_EXAMPLE 
+      create  app/mailers/goal_reminder.rb
+      invoke  erb
+      create    app/views/goal_reminder
+      create    app/views/goal_reminder/goal.text.erb
+      create    app/views/goal_reminder/calculation.text.erb
+      invoke  test_unit
+      create    test/functional/goal_reminder_test.rb
+    #+END_EXAMPLE
+  - [ ] Edit to, subject
+    + Change into app/mailers and edit goal_reminder.rb
+      - file:../../app/mailers/goal_reminder.rb 
+	#+BEGIN_SRC ruby
+          def goal
+            @greeting = "Hi at 2:53:29"
+            @user = User.find(1)
+            @goal = User.goal_now(@user.id)
+            subject = "#{@goal}"
+            mail( :to => "troydwill@gmail.com", :subject => "#{subject}" )
+          end
+	#+END_SRC
+  - [ ] Edit the message text
+    + file:../../app/views/goal_reminder/goal.text.erb
+      #+BEGIN_SRC html
+        <%= number_to_human(@goal, :units => {:unit => "pounds"}, :precision => 4, :significant => 4) %>
+        GoalReminder#goal
+        <%= @greeting %>, http://usahealthscience.com:3000/readings/new
+      #+END_SRC
+  - [ ] In console => GoalReminder.goal.deliver
+  - [ ] 24.1 A Stand-Alone Application Using Active Record
+    #+BEGIN_SRC ruby
+      require "config/environment.rb"
+      order = Order.find(1)
+      order.name = "Dave Thomas"
+      order.save
+    #+END_SRC
+  - [ ] Write stand alone mailer application
+    #+BEGIN_SRC ruby :tangle stand_alone/stand-alone-mailer.rb :shebang #!/usr/bin/env ruby
+      require "../../../config/environment.rb"
+      user_id = 1
+      GoalReminder.goal.deliver
+    #+END_SRC
+    - file:stand_alone/stand-alone-mailer.rb
+
+* TODO [0/2] Weight loss/gain over the last 28 days
+  - [ ] Define a weight_loss_interval function 
+    + I wasn't sure whether to put in reading or user model. I
+      decided to put in reading model because that's where the
+      weight_at_time function is
+    + TDW Note to self: check if session hash is defined in model
+    + file:../../app/models/reading.rb
+      #+BEGIN_SRC ruby
+        def self.weight_loss_interval(user_id, start_time, finish_time )
+          user_id = session[:user_id]
+          start_weight = Reading.weight_at_time(user_id, start_time)
+          finish_weight = Reading.weight_at_time(user_id, finish_time)
+          return (finish_weight-start_weight)
+        end
+      #+END_SRC
+  - [ ] Put in welcome/index
+    + file:../../app/views/welcome/index.html.erb
+      #+BEGIN_SRC html
+        <h1>28 days: <%= Reading.weight_loss_interval(session[:user_id],Time.now.ago(86400*28), Time.now) %></h1>
+      #+END_SRC
+* TODO [0/1] Change time zone
+  - rake -D time
+  - rake time:zones:us
+  - [ ] file:../../config/application.rb
+    #+BEGIN_SRC ruby
+      # config.time_zone = 'Central Time (US & Canada)'
+      config.time_zone = 'Pacific Time (US & Canada)'
+    #+END_SRC
+* TODO [0/2] Graph last 28 days
+  1. [ ] file:../../app/controllers/graph_controller.rb
+    #+BEGIN_SRC ruby
+      def month
+        g = Gruff::Line.new
+        weight = 0
+        time_at_point_in_past = 0
+        user_id = session[:user_id]
+        time_first_reading = Reading.time_initial(user_id)
+        weight_first_reading = Reading.weight_initial(user_id).to_f
+        # Get weight values for last 28 days
+        weight_array = Array.new
+        number_of_periods = 28
+        (0..number_of_periods).each do |period_num|
+          time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+          
+          if ( time_at_point_in_past < time_first_reading )
+            weight = weight_first_reading
+          else
+            weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+          end
+          # Three significant digits to stop Gruff graph library from acting strangely                                            
+          weight = ((weight * 10000).to_i)/10000.0
+          weight_array.push(weight)
+        end
+        
+        g.data "28 days", weight_array
+        send_data(g.to_blob, :type => 'image/png', :filename => "28days.png", :disposition => 'inline' )
+        # this writes the file to the hard drive for caching
+        # and then writes it to the screen.
+        # g.write("/tmp/month.png")
+        # send_file "/tmp/month.png", :type => 'image/png', :disposition => 'inline'
+      end
+    #+END_SRC
+  2. [ ] file:../../app/views/graph/month.html.erb
+* Revisit analysis
+1. [ ] Link welcome.html.erb
+* Add last weight reading as words helper
+1. [ ] add method to welcome controller  
+#+BEGIN_SRC ruby
+  def self.get_last_reading( user_id )
+    return Reading.order('reading_time ASC').where(:user_id => user_id).last
+  end
+#+END_SRC
+* Figure out when we can achieve goal
+#+BEGIN_SRC ruby
+  # welcome_helper.rb
+  user_id = session[:user_id]
+  goal_loss_rate = User.goal_loss_rate(user_id)
+  lbs_per_second = goal_loss_rate / 3500 / 86400
+#+END_SRC
+* Graph last two years
+#+BEGIN_SRC ruby
+  def month
+    g = Gruff::Line.new
+    weight = 0
+    time_at_point_in_past = 0
+    user_id = session[:user_id]
+    time_first_reading = Reading.time_initial(user_id)
+    weight_first_reading = Reading.weight_initial(user_id).to_f
+    # Get weight values for last 28 days
+    weight_array = Array.new
+    number_of_periods = 28
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+      if ( time_at_point_in_past < time_first_reading )
+        weight = weight_first_reading
+      else
+        weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+      end
+      weight_array.push(weight)
+    end
+
+    g.data "28 days", weight_array
+    send_data(g.to_blob, :type => 'image/png', :filename => "28days.png")
+    
+  end
+
+  def year
+  end
+end
+#+END_SRC
+2. [ ] Add view
+3. [ ] Add route
+
+* Footer
+1. [ ] Put function to find goal difference in the Reading model
+#+BEGIN_SRC ruby
+def self.goal_difference( user_id )
+  goal_now = User.goal_now(user_id)
+  weight_now = Reading.weight_at_time(user_id, Time.now)
+  return goal_now - weight_now
+end
+#+END_SRC ruby
+2. [ ] in application helper, footer method
+#+BEGIN_SRC ruby
+def footer
+  if session[:user_id]
+    user_id = session[:user_id]
+    lbs = number_with_precision(@diff, :precision => 1, :significant => true)
+    goal_difference = Reading.goal_difference(user_id)
+    # cals = @diff * 3500
+    # cals = number_with_precision(cals, :precision => 2, :significant => true)
+    #      return "#{lbs} lbs (#{cals} cal)"
+    return "#{lbs} lbs"
+  else
+    return "nil"
+  end
+end
+#+END_SRC ruby
+* About your last reading
+  1. [ ] Refactor     last_reading = Reading.get_last_reading(user_id) helper to @last_reading in controller
+* Emacs Org Mode Cheat Table
+** Emacs termology  
+  - M-x means hold Alt key and tap x
+  - C-c means hold Ctrl key and then tap c key
+  
+  | Key      | Function | Description                             |
+  |----------+----------+-----------------------------------------|
+  | C-j      |          |                                         |
+  | <s + TAB |          | #+BEGIN_SRC / #+END_SRC macro expansion |
+  | C-'      |          |                                         |
+** Window splitting
+   - C-x 2 :: Split window in two
+   - C-o :: Switch to the other window
+* CSS Resources
+  - http://designshack.net/articles/css/715-awesomely-simple-and-free-css-layouts/
+* Attic
+** TODO [0/7] Add New Reading to Welcome Page 
+  1. [ ] Add a _form partial by copyingreading/_form 
+     - Note: we will have an error because @reading is not defined. Fix in next step.
+  2. [ ] Add  @reading = Reading.new to index method in welcome controller
+  3. [ ] Put embeded Ruby in index
+     #+BEGIN_SRC ruby
+       <%= render 'form' %>
+     #+END_SRC
+     - file:../../app/views/welcome/index.html.erb
+  4. [ ] Add hidden field
+     - See http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field
+     #+BEGIN_SRC html
+       <%= f.hidden_field(:user_id, :value => session[:user_id]) %>
+     #+END_SRC
+     - file:../../app/views/welcome/_form.html.erb
+  5. [ ] Delete <%= f.label :user_id %><br />
+     #+BEGIN_SRC html
+       <%= f.label :user_id %><br />
+       <%= f.number_field :user_id %>
+     #+END_SRC
+     - file:../../app/views/welcome/_form.html.erb
+  6. [ ] Add @reading.user_id = session[:user_id] in create method in readings controller
+     - We do this because can create a new reading from reading scaffold
+     - file:../../app/controllers
+     #+BEGIN_SRC ruby
+       @reading.user_id = session[:user_id]
+     #+END_SRC
+  7. [ ] Remove the user field
+     - file:../../app/views/readings/_form.html.erb
+     #+BEGIN_SRC html
+       <div class="field">
+         <%= f.label :user_id %><br />
+         <%= f.number_field :user_id %>
+       </div>
+     #+END_SRC
+** TODO [0/8] Draw a graph
+  1. http://nubyonrails.com/pages/gruff
+  2. https://github.com/topfunky/gruff
+  3. http://www.undefined.com/ia/archives/2005/12/gruff_graph_007.html
+  4. [ ] Build and Install RMagick
+     1. [ ] Download http://rubyforge.org/frs/download.php/70067/RMagick-2.13.2.tar.bz2 or from https://github.com/rmagick/rmagick
+     2. [ ] Run "ruby setup.rb"
+     3. [ ] Run "sudo ruby setup.rb install"
+  5. [ ] sudo gem install gruff
+  6. [ ] add gruff to Gem file
+  7. [ ] Generate the controller for generating Graphs
+     #+BEGIN_SRC sh
+       rails generate controller Graph generate week month year
+     #+END_SRC
+  8. [ ] (Optional) See http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/
+  9. [ ] (Optional) See http://api.rubyonrails.org/classes/ActionController/DataStreaming.html
+  10. [ ] In weight_graph_controller.rb:
+      - file:../../app/controllers/graph_controller.rb
+      #+BEGIN_SRC ruby
+	def month
+          g = Gruff::Line.new
+          # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
+          g.marker_count = 4 #explicitly assign value to @marker_count
+          g.title = "My Graph" 
+          g.data("Apples", [1, 2, 3, 4, 4, 3])
+          g.data("Oranges", [4, 8, 7, 9, 8, 9])
+          g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+          g.data("Peaches", [9, 9, 10, 8, 7, 9])
+          g.labels = {0 => '2003', 2 => '2004', 4 => '2012'}
+          send_data(g.to_blob, :disposition => 'inline', :type => 'image/png', :filename => "1week.png")
+	end
+ #+END_SRC
+  11. [ ] In View:
+      - file:../../app/views/graph/month.html.erb
+	#+BEGIN_SRC ruby       
+          <img src="<%= url_for :controller => "graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
+	#+END_SRC
