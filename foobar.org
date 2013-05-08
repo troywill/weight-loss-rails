@@ -166,114 +166,6 @@
          </body>
        </html>
      #+END_SRC
-
-* DONE [2/2] Create User model, controller, and view
-  1. [X] Generate a `user` scaffold
-     #+BEGIN_SRC sh
-       rails generate scaffold user name:string email:string
-     #+END_SRC
-  2. [X] Update the database
-     #+BEGIN_SRC sh
-       rake db:migrate
-     #+END_SRC
-  #+END_SRC
-* DONE [7/7] Identify the user
-  1. [X] Add a before filter to the application controller
-     - See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
-     - place the line after "class ApplicationController < ActionController::Base"
-     - file:../app/controllers/application_controller.rb
-       #+BEGIN_SRC ruby
-         before_filter :identify_user, :except => :login
-       #+END_SRC
-  2. [X] write a idenify_user method in application controller
-     - make the method private
-     - file:../app/controllers/application_controller.rb
-       #+BEGIN_SRC ruby
-         private
-         def identify_user
-           if cookies[:weight_loss_cookie]
-             if User.find_by_email(cookies[:weight_loss_cookie])
-               @user = User.find_by_email(cookies[:weight_loss_cookie])
-               session[:user_id] = @user.id
-               return
-             end
-           end
-           if User.find_by_id(session[:user_id])
-             @user = User.find_by_id(session[:user_id])
-           else
-             flash[:notice] = "Please log in"
-             redirect_to :controller => :welcome, :action => :login
-           end
-         end
-       #+END_SRC
-  3. [X] Add a form to the login page
-     - file:../app/views/welcome/login.html.erb
-       #+BEGIN_SRC html
-         <%= form_tag do %>
-         <fieldset>
-           <legend>Please Log In</legend>
-           <p>
-             <label for="email">Email:</label>
-             <%= text_field_tag :email, params[:email] %>
-           </p>
-           <p><%= submit_tag "Login" %></p>
-         </fieldset>
-         <% end %>
-       #+END_SRC
-  4. [X] Add a POST route for the login form
-     - file:../config/routes.rb
-       #+BEGIN_SRC ruby
-         Weight::Application.routes.draw do
-           resources :users
-         
-           get "welcome/index"
-           get "welcome/login"
-           post "welcome/login"
-           get "welcome/logout"
-           ...
-       #+END_SRC
-  5. [X] Add a login method to the welcome controller
-     - file:../app/controllers/welcome_controller.rb
-       #+BEGIN_SRC ruby
-         def login
-           session[:user_id] = nil
-           if request.post?
-             if user = User.authenticate(params[:email])
-               session[:user_id] = user.id
-               # http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html
-               cookies[:weight_loss_cookie] = { :value => user.email, :expires => 1.month.from_now }
-               redirect_to(:action => "index" )
-             else
-               flash.now[:notice] = "Unknown email"
-             end
-           end
-         end
-       #+END_SRC
-  6. [X] Add an authenticate method to the user model
-     - file:../app/models/user.rb
-       #+BEGIN_SRC ruby
-         # Agile book uses more elaborate method with more security
-         # def self.authenticate(username, password)
-         def self.authenticate(email)
-           #  user = self.find_by_username(username)
-           user = self.find_by_email(email)
-           if user
-             #    if user.password != password
-               if user.email != email
-                 user = nil
-               end
-           end
-           user
-         end
-       #+END_SRC
-  7. [X] Write the logout method in the welcome controller
-     - file:../app/controllers/welcome_controller.rb
-       #+BEGIN_SRC ruby
-         def logout
-           session[:user_id] = nil
-           cookies.delete :weight_loss_cookie
-         end
-       #+END_SRC
 * DONE [5/5] Create "Readings" model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
@@ -700,7 +592,6 @@
 	#+END_SRC
 	
 	
-
 * TODO [0/3] Display readings table on Welcome Page
   - @readings = Readings.all gives every user's readings; we only want the logged in user's readings
   - [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC') 
@@ -1046,3 +937,110 @@ end
 	#+BEGIN_SRC ruby       
           <img src="<%= url_for :controller => "graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
 	#+END_SRC
+** DONE [2/2] Create User model, controller, and view
+   1. [X] Generate a `user` scaffold
+      #+BEGIN_SRC sh
+       	rails generate scaffold user name:string email:string
+      #+END_SRC
+   2. [X] Update the database
+      #+BEGIN_SRC sh
+       	rake db:migrate
+      #+END_SRC
+   #+END_SRC
+** DONE [7/7] Identify the user
+   1. [X] Add a before filter to the application controller
+      - See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
+      - place the line after "class ApplicationController < ActionController::Base"
+      - file:../app/controllers/application_controller.rb
+       	#+BEGIN_SRC ruby
+          before_filter :identify_user, :except => :login
+       	#+END_SRC
+   2. [X] write a idenify_user method in application controller
+      - make the method private
+      - file:../app/controllers/application_controller.rb
+       	#+BEGIN_SRC ruby
+          private
+          def identify_user
+            if cookies[:weight_loss_cookie]
+              if User.find_by_email(cookies[:weight_loss_cookie])
+               	@user = User.find_by_email(cookies[:weight_loss_cookie])
+               	session[:user_id] = @user.id
+               	return
+              end
+            end
+            if User.find_by_id(session[:user_id])
+              @user = User.find_by_id(session[:user_id])
+            else
+              flash[:notice] = "Please log in"
+              redirect_to :controller => :welcome, :action => :login
+            end
+          end
+       	#+END_SRC
+   3. [X] Add a form to the login page
+      - file:../app/views/welcome/login.html.erb
+       	#+BEGIN_SRC html
+          <%= form_tag do %>
+          <fieldset>
+            <legend>Please Log In</legend>
+            <p>
+              <label for="email">Email:</label>
+              <%= text_field_tag :email, params[:email] %>
+            </p>
+            <p><%= submit_tag "Login" %></p>
+          </fieldset>
+          <% end %>
+       	#+END_SRC
+   4. [X] Add a POST route for the login form
+      - file:../config/routes.rb
+       	#+BEGIN_SRC ruby
+          Weight::Application.routes.draw do
+            resources :users
+          
+            get "welcome/index"
+            get "welcome/login"
+            post "welcome/login"
+            get "welcome/logout"
+            ...
+       	#+END_SRC
+   5. [X] Add a login method to the welcome controller
+      - file:../app/controllers/welcome_controller.rb
+       	#+BEGIN_SRC ruby
+          def login
+            session[:user_id] = nil
+            if request.post?
+              if user = User.authenticate(params[:email])
+               	session[:user_id] = user.id
+               	# http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html
+               	cookies[:weight_loss_cookie] = { :value => user.email, :expires => 1.month.from_now }
+               	redirect_to(:action => "index" )
+              else
+               	flash.now[:notice] = "Unknown email"
+              end
+            end
+          end
+       	#+END_SRC
+   6. [X] Add an authenticate method to the user model
+      - file:../app/models/user.rb
+       	#+BEGIN_SRC ruby
+          # Agile book uses more elaborate method with more security
+          # def self.authenticate(username, password)
+          def self.authenticate(email)
+            #  user = self.find_by_username(username)
+            user = self.find_by_email(email)
+            if user
+              #    if user.password != password
+               	if user.email != email
+                  user = nil
+               	end
+            end
+            user
+          end
+       	#+END_SRC
+   7. [X] Write the logout method in the welcome controller
+      - file:../app/controllers/welcome_controller.rb
+       	#+BEGIN_SRC ruby
+          def logout
+            session[:user_id] = nil
+            cookies.delete :weight_loss_cookie
+          end
+       	#+END_SRC
