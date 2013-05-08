@@ -8,41 +8,49 @@
        # See https://github.com/sstephenson/execjs#readme for more supported runtimes
        gem 'therubyracer', platforms: :ruby
      #+END_SRC
- 
-* [%] Create a User authentication system with Devise < see file:troy@usahealthscience.com:/home/troy/srv/
-  1. [ ] 
-* TODO [0/2] Welcome controller
-  1. [ ] generate the controller
-     #+BEGIN_SRC sh :tangle bin/generate-controller-welcome :shebang #!/bin/sh
-       rails generate controller welcome index login logout
+  3. [X] Create a “home” controller and a “home/index” page
+     #+BEGIN_SRC sh
+       rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
      #+END_SRC
-     #+BEGIN_EXAMPLE
-                  create  app/controllers/welcome_controller.rb
-              route  get "welcome/logout"
-              route  get "welcome/login"
-              route  get "welcome/index"
-             invoke  erb
-             create    app/views/welcome
-             create    app/views/welcome/index.html.erb
-             create    app/views/welcome/login.html.erb
-             create    app/views/welcome/logout.html.erb
-             invoke  test_unit
-             create    test/controllers/welcome_controller_test.rb
-             invoke  helper
-             create    app/helpers/welcome_helper.rb
-             invoke    test_unit
-             create      test/helpers/welcome_helper_test.rb
-             invoke  assets
-             invoke    coffee
-             create      app/assets/javascripts/welcome.js.coffee
-             invoke    scss
-             create      app/assets/stylesheets/welcome.css.scss
-     #+END_EXAMPLE
-  2. [ ] Set root route
-     - file:../config/routes.rb
+     - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
+  4. [X] Set the default route to home/index in file:../config/routes.rb
      #+BEGIN_SRC ruby
-       # You can have the root of your site routed with "root"
-       root 'welcome#index'
+       root 'home#index'
+     #+END_SRC
+* [85%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+  1. [X] Enable `devise` and `protected_attributes` gems in [[file:../Gemfile][Gemfile]]
+     #+BEGIN_SRC congf
+       gem 'devise'
+       gem 'protected_attributes'
+     #+END_SRC
+  2. [X] Run the Devise gem install generator
+     #+BEGIN_SRC sh
+       rails generate devise:install
+     #+END_SRC
+  3. [X] Generate a User Model and generate routes for user activities
+     #+BEGIN_SRC 
+       rails generate devise User
+     #+END_SRC
+  4. [X] Run the devise_create_users database migration the was created by in the previous command
+     #+BEGIN_SRC sh
+       rake db:migrate
+     #+END_SRC
+     #+BEGIN_SRC example
+==  DeviseCreateUsers: migrating ==============================================
+-- create_table(:users)
+   -> 0.0054s
+-- add_index(:users, :email, {:unique=>true})
+   -> 0.0141s
+-- add_index(:users, :reset_password_token, {:unique=>true})
+   -> 0.0007s
+==  DeviseCreateUsers: migrated (0.0204s) =====================================
+     #+END_SRC
+  5. [X] Restart the Rails server
+  6. [X] Place a sign up link on the home page file:../app/views/home/index.html.erb
+     #+BEGIN_SRC html
+       <h1>Home#index</h1>
+       <p>Find me in app/views/home/index.html.erb</p>
+       <li><%= link_to "Sign Up", new_user_registration_path %></li>
      #+END_SRC
 * TODO [0/6] Make pretty layout
   1. [ ] Update file:../app/views/layouts/application.html.erb
