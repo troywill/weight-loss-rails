@@ -1,5 +1,5 @@
-* DONE [2/2] Welcome controller
-  1. [X] generate the controller
+* TODO [0/2] Welcome controller
+  1. [ ] generate the controller
      #+BEGIN_SRC sh :tangle bin/generate-controller-welcome :shebang #!/bin/sh
        rails generate controller welcome index login logout
      #+END_SRC
@@ -25,14 +25,14 @@
              invoke    scss
              create      app/assets/stylesheets/welcome.css.scss
      #+END_EXAMPLE
-  2. [X] Set root route
+  2. [ ] Set root route
      - file:../config/routes.rb
      #+BEGIN_SRC ruby
        # You can have the root of your site routed with "root"
        root 'welcome#index'
      #+END_SRC
-* DONE [2/6] Make pretty layout
-  1. [X] Update file:../app/views/layouts/application.html.erb
+* TODO [0/6] Make pretty layout
+  1. [ ] Update file:../app/views/layouts/application.html.erb
      - The new application.html.erb, version 1
        #+BEGIN_SRC html
          <!DOCTYPE html>
@@ -91,7 +91,7 @@
          </body>
          </html>
        #+END_SRC
-  2. [X] Copy stylesheet from repo to 
+  2. [ ] Copy stylesheet from repo to 
      - file:../app/assets/stylesheets/fixed-positioning.css
      - V1
        #+BEGIN_SRC css
@@ -228,25 +228,25 @@
   4. [ ] Create graph method in welcome controller
   5. [ ] Add route
   6. [ ] Add link to graph view in layout
-* DONE [2/2] Create User model, controller, and view
-  1. [X] Generate a `user` scaffold
+* TODO [0/2] Create User model, controller, and view
+  1. [ ] Generate a `user` scaffold
      #+BEGIN_SRC sh
        rails generate scaffold user name:string email:string
      #+END_SRC
-  2. [X] Update the database
+  2. [ ] Update the database
      #+BEGIN_SRC sh
        rake db:migrate
      #+END_SRC
   #+END_SRC
-* DONE [7/7] Identify the user
-  1. [X] Add a before filter to the application controller
+* TODO [0/7] Identify the user
+  1. [ ] Add a before filter to the application controller
      - See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
      - place the line after "class ApplicationController < ActionController::Base"
      - file:../app/controllers/application_controller.rb
        #+BEGIN_SRC ruby
          before_filter :identify_user, :except => :login
        #+END_SRC
-  2. [X] write a idenify_user method in application controller
+  2. [ ] write a idenify_user method in application controller
      - make the method private
      - file:../app/controllers/application_controller.rb
        #+BEGIN_SRC ruby
@@ -267,7 +267,7 @@
            end
          end
        #+END_SRC
-  3. [X] Add a form to the login page
+  3. [ ] Add a form to the login page
      - file:../app/views/welcome/login.html.erb
        #+BEGIN_SRC html
          <%= form_tag do %>
@@ -281,7 +281,7 @@
          </fieldset>
          <% end %>
        #+END_SRC
-  4. [X] Add a POST route for the login form
+  4. [ ] Add a POST route for the login form
      - file:../config/routes.rb
        #+BEGIN_SRC ruby
          Weight::Application.routes.draw do
@@ -293,7 +293,7 @@
            get "welcome/logout"
            ...
        #+END_SRC
-  5. [X] Add a login method to the welcome controller
+  5. [ ] Add a login method to the welcome controller
      - file:../app/controllers/welcome_controller.rb
        #+BEGIN_SRC ruby
          def login
@@ -310,7 +310,7 @@
            end
          end
        #+END_SRC
-  6. [X] Add an authenticate method to the user model
+  6. [ ] Add an authenticate method to the user model
      - file:../app/models/user.rb
        #+BEGIN_SRC ruby
          # Agile book uses more elaborate method with more security
@@ -327,7 +327,7 @@
            user
          end
        #+END_SRC
-  7. [X] Write the logout method in the welcome controller
+  7. [ ] Write the logout method in the welcome controller
      - file:../app/controllers/welcome_controller.rb
        #+BEGIN_SRC ruby
          def logout
