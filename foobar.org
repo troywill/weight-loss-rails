@@ -19,7 +19,7 @@
      #+END_SRC
 * [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [X] Enable `devise` and `protected_attributes` gems in [[file:../Gemfile][Gemfile]]
-     #+BEGIN_SRC congf
+     #+BEGIN_SRC conf
        gem 'devise'
        gem 'protected_attributes'
      #+END_SRC
@@ -44,24 +44,23 @@
        <li><%= link_to "Sign In", new_user_session_path %></li>
        <li><%= link_to "Sign Out", destroy_user_session_path, :method => 'delete' %></li>
      #+END_SRC
-
 * [100%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
    1. [X] Install bootstrap-sass
 	#+BEGIN_SRC sh
 	  sudo gem install bootstrap-sass
 	#+END_SRC
-	- ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
+      - ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
    2. [X] Add `bootstap-sass` and `sass-rails` Gems in [[file:../Gemfile][Gemfile]]
 	#+BEGIN_SRC ruby
         gem 'bootstap-sass'
       #+END_SRC
-	- Note that `sass-rails` is already in your Gemfile
+      - Note that `sass-rails` is already in your Gemfile
    3. [X] Add the following line to file:../config/application.rb
 	#+BEGIN_SRC ruby
         config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
 	#+END_SRC
-	- Place after the `class Application < Rails::Application` line
-	- See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
+      - Place after the `class Application < Rails::Application` line
+      - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
    4. [X] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
 	#+BEGIN_SRC js
         ... 
@@ -79,9 +78,8 @@
         body { padding-top: 60px; }
         @import "bootstrap-responsive";
 	#+END_SRC
-	- bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
+      - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
    7. [X] Restart server
-     
 * [100%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
   1. [X] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
@@ -166,10 +164,10 @@
          </body>
        </html>
      #+END_SRC
-* DONE [5/5] Create "Readings" model, controller, and views
+* [40%] Create "Readings" model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
-       rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing:boolean --force
+       rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
   2. [X] Relationship to User, validations
      file:../app/models/reading.rb
@@ -178,7 +176,7 @@
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [X] Default clothing in values in Model
+  3. [ ] Default clothing in values in Model
      - file:../db/migrate/
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
@@ -187,29 +185,29 @@
                t.integer :user_id
                t.decimal :weight
                t.datetime :reading_time
-               t.boolean :clothing, :default => 0
+               t.decimal :clothing_wt, :default => 0
                
                t.timestamps
              end
            end
          end
        #+END_SRC
-  4. [X] Migrate the database, i.e. rake db:migrate
-  5. [X] Add to file:../app/views/layouts/application.html.erb
+  4. [ ] Migrate the database, i.e. rake db:migrate
+  5. [ ] Add to file:../app/views/layouts/application.html.erb
      #+BEGIN_SRC html
        <li><%= link_to "All readings", readings_path %></li>
      #+END_SRC
-* DONE [3/3] User ID on new Reading
-  1. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-  2. [X] Remove breaks in form
-  3. [X] Add user id to create method in readings controller
+* TODO [0/3] User ID on new Reading
+  1. [ ] Remove user id field from file:../app/views/readings/_form.html.erb
+  2. [ ] Remove breaks in form
+  3. [ ] Add user id to create method in readings controller
      file:../app/controllers/readings_controller.rb
      #+BEGIN_SRC ruby
        @reading.user_id = @user.id
      #+END_SRC
      - note that @user comes from application controller, identify_user method
-* DONE [10/11] Create "Settings" model, controller, and views, default values
-  1. [X] Generate scaffold
+* TODO [0/11] Create "Settings" model, controller, and views, default values
+  1. [ ] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
@@ -225,7 +223,7 @@
            locale:string \
            --force
      #+END_SRC
-  2. [X] Validations
+  2. [ ] Validations
      - file:../app/models/setting.rb
        #+BEGIN_SRC ruby
          validates :filter_rate_gain, :presence => true, :numericality => true
@@ -237,7 +235,7 @@
          validates :timezone, :presence => true, :numericality => true
          validates :locale,  :presence => true
        #+END_SRC
-  3. [X] Default values
+  3. [ ] Default values
      - file:../db/migrate 2013...._create_settings.rb
        #+BEGIN_SRC ruby
          t.integer :user_id
@@ -253,15 +251,15 @@
          t.integer :timezone, :default => -7
          t.string :locale, :default => "en_US.UTF-8"
        #+END_SRC
-  4. [X] Database migration
-  5. [X] Add @user.id to create method
+  4. [ ] Database migration
+  5. [ ] Add @user.id to create method
      - file:../app/controllers/settings_controller.rb
        #+BEGIN_SRC ruby
          def create
            @setting = Setting.new(setting_params)
            @setting.user_id = @user.id
        #+END_SRC
-  6. [X] Remove user_id from form
+  6. [ ] Remove user_id from form
      - file:../app/views/settings/_form.html.erb
        #+BEGIN_SRC ruby
          # Delete following div, user_id is supplied in the controller instead
@@ -270,23 +268,23 @@
            <%= f.number_field :user_id %>
          </div>
        #+END_SRC
-  7. [X] settings_path in application layout
+  7. [ ] settings_path in application layout
   8. [ ] Fix numeric fields snafu
-  9. [X] Remove link breaks from form
-  10. [X] Relationship between Setting and User
+  9. [ ] Remove link breaks from form
+  10. [ ] Relationship between Setting and User
       - file:../app/models/setting.rb
 	#+BEGIN_SRC ruby
 	  class Setting < ActiveRecord::Base
           belongs_to :user
           ...
         #+END_SRC
-  11. [X] Relationship between User and Setting
+  11. [ ] Relationship between User and Setting
       - file:../app/models/user.rb
 	#+BEGIN_SRC ruby
 	  class User < ActiveRecord::Base
             has_one :setting
 	#+END_SRC
-* DONE Add New Settings to be created when a new user is created
+* TODO Add New Settings to be created when a new user is created
   - file:../app/controllers/users_controller.rb
     #+BEGIN_SRC ruby
       def create
@@ -296,8 +294,8 @@
       if @user.save
         Setting.create(:user_id => @user.id)
     #+END_SRC
-* DONE [8/8] Create Goal model, controller, and views
-  1. [X] Generate scaffold
+* TODO [0/8] Create Goal model, controller, and views
+  1. [ ] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
@@ -305,33 +303,33 @@
            goal_loss_rate:integer \
            goal_finish_time:datetime
      #+END_SRC
-  2. [X] Relationship between Goal and User
+  2. [ ] Relationship between Goal and User
      - file:../app/models/goal.rb
        #+BEGIN_SRC ruby
 	 class Setting < ActiveRecord::Base
            belongs_to :user
          ...
        #+END_SRC
-  3. [X] Relationship between User and Goal
+  3. [ ] Relationship between User and Goal
      - file:../app/models/user.rb
        #+BEGIN_SRC ruby
 	 class User < ActiveRecord::Base
            has_one :setting
            has_many :goals
        #+END_SRC
-  4. [X] Default values
+  4. [ ] Default values
      - file:../db/migrate/ 2013xxx_create_goals.rb
        #+BEGIN_SRC ruby
          t.integer :goal_loss_rate, :default => 500
          t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
        #+END_SRC
-  5. [X] Validations
+  5. [ ] Validations
      - file:../app/models/goal.rb
        #+BEGIN_SRC ruby
          validates :user_id, :presence => true, :numericality => true
        #+END_SRC
-  6. [X] Migrate database
-  7. [X] user_id
+  6. [ ] Migrate database
+  7. [ ] user_id
      - file:../app/controllers/goals_controller.rb
      #+BEGIN_SRC ruby
          # POST /goals
@@ -340,10 +338,10 @@
            @goal = Goal.new(goal_params)
            @goal.user_id = @user.id
      #+END_SRC
-  8. [X] update form
+  8. [ ] update form
      - file:../app/views/goals/_form.html.erb
-* DONE [2/2] Display current goal
-** DONE goal_now in Goal model file:../app/models/goal.rb
+* TODO [0/2] Display current goal
+** TODO goal_now in Goal model file:../app/models/goal.rb
    #+BEGIN_SRC ruby   
      def self.goal_now(user_id)
        goal = Goal.where(:user_id => user_id).last
@@ -353,17 +351,17 @@
        return ( setting.goal_start_weight - lbs_per_second * elapsed_time )
      end
    #+END_SRC
-** DONE View file:../app/views/welcome/index.html.erb
+** TODO View file:../app/views/welcome/index.html.erb
    <%= number_with_precision(@goal_now, :precision => 3)%>
-* DONE [5/5] Weight as a function of time
-  1. [X] In Reading model, initial_reading function
+* TODO [0/5] Weight as a function of time
+  1. [ ] In Reading model, initial_reading function
      - file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.initial_reading( user_id )
          return Reading.order('reading_time ASC').where(:user_id => user_id).first
        end
      #+END_SRC
-  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
+  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
      - file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.get_readings_after( user_id, start_time, end_time )
@@ -373,7 +371,7 @@
            return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  3. [X] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+  3. [ ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
      - file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
@@ -394,7 +392,7 @@
 	 return  weight
        end
      #+END_SRC
-  4. [X] In Reading model, interpolate
+  4. [ ] In Reading model, interpolate
      - file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
@@ -405,7 +403,7 @@
 	 interpolated_weight = last_weight + percent * delta_weight
        end
      #+END_SRC
-  5. [X] In Reading model, weight_at_time function file:../app/models/reading.rb
+  5. [ ] In Reading model, weight_at_time function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.weight_at_time(user_id, time)
          setting = Setting.where(:user_id => user_id).last
@@ -434,22 +432,22 @@
          return weight
        end
      #+END_SRC
-* DONE Display weight now in file:../app/views/welcome/index.html.erb
+* TODO Display weight now in file:../app/views/welcome/index.html.erb
   #+BEGIN_SRC ruby
     <%= Reading.weight_at_time(@user.id, Time.now) %>
   #+END_SRC
-* TODO [3/7] Draw Google Graph
-  1. [X] Generate the controller for generating Graphs
+* TODO [0/7] Draw Google Graph
+  1. [ ] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
      #+END_SRC
   2. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
-  3. [X] Path for Google Graph three day in layout
+  3. [ ] Path for Google Graph three day in layout
      - file:../app/views/layouts/application.html.erb
      #+BEGIN_SRC html
         <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
      #+END_SRC
-  4. [X] Place a 3 day data array method in Readings controller
+  4. [ ] Place a 3 day data array method in Readings controller
      - Commentary: :: We will pass data into Google javascript in the view
      - file:../app/models/reading.rb
        #+BEGIN_SRC ruby
@@ -559,24 +557,24 @@
          goal = User.goal_at_time(user_id, time_at_point_in_past)
          weight_array.push(["", weight, goal])
        #+END_SRC
-* [2/2] Deploy to marv.usahealthscience.com
-  1. [X] weight.usahealthscience.com
-     1. [X] http://namecheap.com
-     2. [X] All Host Records
+* [0/2] Deploy to marv.usahealthscience.com
+  1. [ ] weight.usahealthscience.com
+     1. [ ] http://namecheap.com
+     2. [ ] All Host Records
         | SUB-DOMAIN | IP ADDRESS/URL  | RECORD TYPE |
         |------------+-----------------+-------------|
         | marv       | aaa.bbb.ccc.ddd | A(Address)  |
-  2. [X] /etc/httpd/conf/httpd.conf (CentOS 6.4)
-     1. [X] ServerName Directive
+  2. [ ] /etc/httpd/conf/httpd.conf (CentOS 6.4)
+     1. [ ] ServerName Directive
 	#+BEGIN_SRC example
 	  #ServerName www.example.com:80
 	  ServerName marv.usahealthscience.com:80
 	#+END_SRC
-     2. [X] Restart Apache server
+     2. [ ] Restart Apache server
 	#+BEGIN_SRC sh
 	  httpd -k restart
 	#+END_SRC
-     3. [X] Stop Apache server
+     3. [ ] Stop Apache server
 	#+BEGIN_SRC sh
 	  httpd -k stop
 	#+END_SRC
@@ -701,13 +699,12 @@
       order.save
     #+END_SRC
   - [ ] Write stand alone mailer application
-    #+BEGIN_SRC ruby :tangle stand_alone/stand-alone-mailer.rb :shebang #!/usr/bin/env ruby
+    - file:stand_alone/stand-alone-mailer.rb
+    #+BEGIN_SRC ruby :tangle bin/stand-alone-mailer.rb :shebang #!/usr/bin/env ruby
       require "../../../config/environment.rb"
       user_id = 1
       GoalReminder.goal.deliver
     #+END_SRC
-    - file:stand_alone/stand-alone-mailer.rb
-
 * TODO [0/2] Weight loss/gain over the last 28 days
   - [ ] Define a weight_loss_interval function 
     + I wasn't sure whether to put in reading or user model. I
@@ -937,25 +934,25 @@ end
 	#+BEGIN_SRC ruby       
           <img src="<%= url_for :controller => "graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
 	#+END_SRC
-** DONE [2/2] Create User model, controller, and view
-   1. [X] Generate a `user` scaffold
+** TODO [0/2] Create User model, controller, and view
+   1. [ ] Generate a `user` scaffold
       #+BEGIN_SRC sh
        	rails generate scaffold user name:string email:string
       #+END_SRC
-   2. [X] Update the database
+   2. [ ] Update the database
       #+BEGIN_SRC sh
        	rake db:migrate
       #+END_SRC
    #+END_SRC
-** DONE [7/7] Identify the user
-   1. [X] Add a before filter to the application controller
+** TODO [0/7] Identify the user
+   1. [ ] Add a before filter to the application controller
       - See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
       - place the line after "class ApplicationController < ActionController::Base"
       - file:../app/controllers/application_controller.rb
        	#+BEGIN_SRC ruby
           before_filter :identify_user, :except => :login
        	#+END_SRC
-   2. [X] write a idenify_user method in application controller
+   2. [ ] write a idenify_user method in application controller
       - make the method private
       - file:../app/controllers/application_controller.rb
        	#+BEGIN_SRC ruby
@@ -976,7 +973,7 @@ end
             end
           end
        	#+END_SRC
-   3. [X] Add a form to the login page
+   3. [ ] Add a form to the login page
       - file:../app/views/welcome/login.html.erb
        	#+BEGIN_SRC html
           <%= form_tag do %>
@@ -990,7 +987,7 @@ end
           </fieldset>
           <% end %>
        	#+END_SRC
-   4. [X] Add a POST route for the login form
+   4. [ ] Add a POST route for the login form
       - file:../config/routes.rb
        	#+BEGIN_SRC ruby
           Weight::Application.routes.draw do
@@ -1002,7 +999,7 @@ end
             get "welcome/logout"
             ...
        	#+END_SRC
-   5. [X] Add a login method to the welcome controller
+   5. [ ] Add a login method to the welcome controller
       - file:../app/controllers/welcome_controller.rb
        	#+BEGIN_SRC ruby
           def login
@@ -1019,7 +1016,7 @@ end
             end
           end
        	#+END_SRC
-   6. [X] Add an authenticate method to the user model
+   6. [ ] Add an authenticate method to the user model
       - file:../app/models/user.rb
        	#+BEGIN_SRC ruby
           # Agile book uses more elaborate method with more security
@@ -1036,7 +1033,7 @@ end
             user
           end
        	#+END_SRC
-   7. [X] Write the logout method in the welcome controller
+   7. [ ] Write the logout method in the welcome controller
       - file:../app/controllers/welcome_controller.rb
        	#+BEGIN_SRC ruby
           def logout
