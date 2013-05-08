@@ -198,15 +198,17 @@
          <li><%= link_to "New reading", new_reading_path %></li>
          <li><%= link_to "See all readings", readings_path %></li>
      #+END_SRC
-* TODO [0/3] User ID on new Reading
-  1. [ ] Remove user id field from file:../app/views/readings/_form.html.erb
-  2. [ ] Remove breaks in form
-  3. [ ] Add user id to create method in readings controller
-     file:../app/controllers/readings_controller.rb
-     #+BEGIN_SRC ruby
-       @reading.user_id = @user.id
-     #+END_SRC
-     - note that @user comes from application controller, identify_user method
+  6. [-] [1/3] User ID on new Reading
+     1. [ ] Add user id to create method in readings controller
+	file:../app/controllers/readings_controller.rb
+	#+BEGIN_SRC ruby
+          def create
+            @reading = Reading.new(reading_params)
+            @reading.user_id = current_user.id
+          
+        #+END_SRC
+        - note that @user comes from application controller, identify_user method
+     2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
 * TODO [0/11] Create "Settings" model, controller, and views, default values
   1. [ ] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
