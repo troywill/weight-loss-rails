@@ -1,3 +1,16 @@
+* [100%] Create a new rails application
+  1. [X] Run the 'rails' command
+     #+BEGIN_SRC sh
+       rails new weight_loss
+     #+END_SRC
+  2. [X] Enable a JavaScript runtime in file:../Gemfile
+     #+BEGIN_SRC ruby
+       # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+       gem 'therubyracer', platforms: :ruby
+     #+END_SRC
+ 
+* [%] Create a User authentication system with Devise < see file:troy@usahealthscience.com:/home/troy/srv/
+  1. [ ] 
 * TODO [0/2] Welcome controller
   1. [ ] generate the controller
      #+BEGIN_SRC sh :tangle bin/generate-controller-welcome :shebang #!/bin/sh
