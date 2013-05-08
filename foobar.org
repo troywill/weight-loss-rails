@@ -164,7 +164,7 @@
          </body>
        </html>
      #+END_SRC
-* [40%] Create "Readings" model, controller, and views
+* [83%] Create "Readings" model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
@@ -176,7 +176,7 @@
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [ ] Default clothing in values in Model
+  3. [X] Default clothing in values in Model
      - file:../db/migrate/
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
@@ -192,10 +192,11 @@
            end
          end
        #+END_SRC
-  4. [ ] Migrate the database, i.e. rake db:migrate
-  5. [ ] Add to file:../app/views/layouts/application.html.erb
+  4. [X] Migrate the database, i.e. rake db:migrate
+  5. [X] file:../app/views/_navigation.html.erb
      #+BEGIN_SRC html
-       <li><%= link_to "All readings", readings_path %></li>
+         <li><%= link_to "New reading", new_reading_path %></li>
+         <li><%= link_to "See all readings", readings_path %></li>
      #+END_SRC
 * TODO [0/3] User ID on new Reading
   1. [ ] Remove user id field from file:../app/views/readings/_form.html.erb
