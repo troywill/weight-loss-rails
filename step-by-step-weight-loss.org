@@ -17,33 +17,42 @@
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-* [0%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
-  1. [ ] Enable `devise` and `protected_attributes` gems in [[file:../Gemfile][Gemfile]]
+* [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+  1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
-       gem 'devise'
-       gem 'protected_attributes'
+       gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
      #+END_SRC
-  2. [ ] Run the Devise gem install generator
+  2. [X] Run the Devise gem install generator
      #+BEGIN_SRC sh
        rails generate devise:install
      #+END_SRC
-  3. [ ] Generate a User Model and generate routes for user activities
+  3. [X] Generate a User Model and generate routes for user activities
      #+BEGIN_SRC 
        rails generate devise User
      #+END_SRC
-  4. [ ] Run the devise_create_users database migration the was created by in the previous command
+  4. [X] Run the devise_create_users database migration the was created by in the previous command
      #+BEGIN_SRC sh
        rake db:migrate
      #+END_SRC
-  5. [ ] Restart the Rails server
-  6. [ ] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
+  5. [X] (Re)start the Rails server
+  6. [X] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <h1>Home#index</h1>
-       <p>Find me in app/views/home/index.html.erb</p>
+       <%= Time.now %>
        <li><%= link_to "Sign Up", new_user_registration_path %></li>
        <li><%= link_to "Sign In", new_user_session_path %></li>
        <li><%= link_to "Sign Out", destroy_user_session_path, :method => 'delete' %></li>
+       
+       <% if user_signed_in? %>
+       You are signed in, current_user.id = <%= current_user.id %><br />
+       user_session.keys => <%= user_session.keys %>
+       <% end %>
      #+END_SRC
+     - To verify if a user is signed in, use the following helper: user_signed_in?
+     - See https://github.com/plataformatec/devise#controller-filters-and-helpers
+     - file:../app/views/home/index.html.erb
+     - For the current signed-in user, this helper is available: current_user
+
 * [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
    1. [ ] Install bootstrap-sass
 	#+BEGIN_SRC sh

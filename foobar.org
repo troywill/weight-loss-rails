@@ -1,15 +1,4 @@
-* Identify the user
-  - To verify if a user is signed in, use the following helper: user_signed_in?
-  - See https://github.com/plataformatec/devise#controller-filters-and-helpers
-  - file:../app/views/home/index.html.erb
-  - For the current signed-in user, this helper is available: current_user
-  #+BEGIN_SRC html
-    <% if user_signed_in? %>
-    Current User: <%= current_user.id %><br />
-    user_session keys: <%= user_session.keys %>
-    <% end %>
-  #+END_SRC
-    
+   
 * TODO [/] Create "Settings" model, controller, and views
   - filter_rate_gain:integer
   - filter_rate_loss:integer
