@@ -444,7 +444,7 @@
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-* [42%] Draw Google Graph
+* [62%] Draw Google Graph
   1. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
@@ -455,67 +455,61 @@
         <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
      #+END_SRC
   4. [X] Place a 3 day data array method in Readings controller file:../app/models/reading.rb
-     - Commentary: :: We will pass data into Google javascript in the view
-       #+BEGIN_SRC ruby
-         def self.three_day_data_array(user)
-           weight = 0
-           time_at_point_in_past = 0
+     #+BEGIN_SRC ruby
+       def self.three_day_data_array(user)
+         weight = 0
+         time_at_point_in_past = 0
+         
+         initial_reading = Reading.initial_reading(user)
+         time_initial = initial_reading.reading_time
+         weight_initial = initial_reading.weight
+         
+         # Get weight values for last 3 days
+         weight_array = Array.new
+         weight_array.push(['Last 3 days','Weight'])
+         number_of_periods = 72
+         
+         (0..number_of_periods).each do |period_num|
+           time_at_point_in_past = Time.now-(number_of_periods-period_num).hour
            
-           initial_reading = Reading.initial_reading(user)
-           time_initial = initial_reading.reading_time
-           weight_initial = initial_reading.weight
-           
-           # Get weight values for last 3 days
-           weight_array = Array.new
-           weight_array.push(['Last 3 days','Weight'])
-           number_of_periods = 72
-           
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).hour
-             
-             if ( time_at_point_in_past < time_initial )
-               weight = weight_initial
-             else
-               weight = Reading.weight_at_time(user, time_at_point_in_past)
-             end
-             weight_array.push(["", weight.to_f])
+           if ( time_at_point_in_past < time_initial )
+             weight = weight_initial
+           else
+             weight = Reading.weight_at_time(user, time_at_point_in_past)
            end
-           return weight_array
+           weight_array.push(["", weight.to_f])
          end
-       #+END_SRC
-
-  5. [ ] Create a GoogleGraph layout
+         return weight_array
+       end
+     #+END_SRC
+     - Commentary: :: We will pass data into Google javascript in the view
+  5. [X] Put Google Graph javascript into view file:../app/views/google_graph/three_day.html.erb
+     #+BEGIN_SRC html
+       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+       <script type="text/javascript">
+         google.load("visualization", "1", {packages:["corechart"]});
+         google.setOnLoadCallback(drawChart);
+         
+         function drawChart() {
+         var data = google.visualization.arrayToDataTable(
+         [['Year','Sales','Expenses'],['2013',1000,400],['2005',1170,460],['2006',660,1120],['2007',1030,540]]
+         );
+         var options = { title: 'Weight 3 days' };
+                      
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+         chart.draw(data, options);
+         }
+       </script>
+       <div id="chart_div" style="width: 900px; height: 500px;"></div>
+     #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-     - Reference file:../app/views/layouts/google_graph.html.erb
-       #+BEGIN_SRC html
-         <html>
-           <head>
-             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-             <script type="text/javascript">
-               google.load("visualization", "1", {packages:["corechart"]});
-               google.setOnLoadCallback(drawChart);
-         
-               function drawChart() {
-               var data = google.visualization.arrayToDataTable(
-               [['Year','Sales','Expenses'],['2013',1000,400],['2005',1170,460],['2006',660,1120],['2007',1030,540]]
-               );
-               data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(session[:user_id]).to_json %> );
-         
-               var options = {
-               title: 'Weight 1 month'
-               };
-               
-               var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-               chart.draw(data, options);
-               }
-             </script>
-           </head>
-           <body>
-             <div id="chart_div" style="width: 900px; height: 500px;"></div>
-           </body>
-         </html>
-       #+END_SRC
-  6. [ ] Place a 28 day data array method in Readings controller
+  6. [X] Use three day data array  file:../app/views/google_graph/three_day.html.erb
+     #+BEGIN_SRC html
+       - TDW var data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(current_user).to_json %> );
+     #+END_SRC
+  6. [ ] Layout
+     
+  7. [ ] Place a 28 day data array method in Readings controller
      - Commentary: :: We will pass data into Google javascript in the view
      - file:../app/models/reading.rb
        #+BEGIN_SRC ruby
@@ -543,7 +537,7 @@
            return weight_array
          end
        #+END_SRC
-  7. [ ] Create a goal as a function of time method, place in User model
+  8. [ ] Create a goal as a function of time method, place in User model
      - file:../../app/models/user.rb
        #+BEGIN_SRC ruby
          def self.goal_at_time(user_id, time)
@@ -556,7 +550,7 @@
            return ( u.goal_start_weight - lbs_per_second * elapsed_time ).to_f
          end
        #+END_SRC
-  8. [ ] Add goal to month_array method in Reading model so it shows on the Google chart
+  9. [ ] Add goal to month_array method in Reading model so it shows on the Google chart
      - file:../../app/model/reading.rb
        #+BEGIN_SRC ruby
          weight_array.push(['Year','Weight', 'Goal'])
