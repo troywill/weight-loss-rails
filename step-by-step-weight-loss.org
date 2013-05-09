@@ -1,41 +1,41 @@
-* [100%] Create a new rails application
-  1. [X] Run the 'rails' command
+* [0%] Create a new rails application
+  1. [ ] Run the 'rails' command
      #+BEGIN_SRC sh
        rails new weight_loss
      #+END_SRC
-  2. [X] Enable a JavaScript runtime in file:../Gemfile
+  2. [ ] Enable a JavaScript runtime in file:../Gemfile
      #+BEGIN_SRC ruby
        # See https://github.com/sstephenson/execjs#readme for more supported runtimes
        gem 'therubyracer', platforms: :ruby
      #+END_SRC
-  3. [X] Create a “home” controller and a “home/index” page
+  3. [ ] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
        rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
      #+END_SRC
      - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  4. [X] Set the default route to home/index in file:../config/routes.rb
+  4. [ ] Set the default route to home/index in file:../config/routes.rb
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-* [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
-  1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
+* [0%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+  1. [ ] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
        gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
      #+END_SRC
-  2. [X] Run the Devise gem install generator
+  2. [ ] Run the Devise gem install generator
      #+BEGIN_SRC sh
        rails generate devise:install
      #+END_SRC
-  3. [X] Generate a User Model and generate routes for user activities
+  3. [ ] Generate a User Model and generate routes for user activities
      #+BEGIN_SRC 
        rails generate devise User
      #+END_SRC
-  4. [X] Run the devise_create_users database migration the was created by in the previous command
+  4. [ ] Run the devise_create_users database migration the was created by in the previous command
      #+BEGIN_SRC sh
        rake db:migrate
      #+END_SRC
-  5. [X] (Re)start the Rails server
-  6. [X] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
+  5. [ ] (Re)start the Rails server
+  6. [ ] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <h1>Home#index</h1>
        <%= Time.now %>
@@ -52,33 +52,33 @@
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
      - file:../app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
-* [100%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
-   1. [X] Install bootstrap-sass
+* [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+   1. [ ] Install bootstrap-sass
 	#+BEGIN_SRC sh
 	  sudo gem install bootstrap-sass
 	#+END_SRC
       - ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
-   2. [X] Add `bootstrap-sass` and `sass-rails` Gems in [[file:../Gemfile][Gemfile]]
+   2. [ ] Add `bootstrap-sass` and `sass-rails` Gems in [[file:../Gemfile][Gemfile]]
 	#+BEGIN_SRC ruby
         gem 'bootstrap-sass'
       #+END_SRC
       - Note that `sass-rails` is already in your Gemfile
-   3. [X] Add the following line to file:../config/application.rb
+   3. [ ] Add the following line to file:../config/application.rb
 	#+BEGIN_SRC ruby
         config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
 	#+END_SRC
       - Place after the `class Application < Rails::Application` line
       - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
-   4. [X] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
+   4. [ ] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
 	#+BEGIN_SRC js
         # place at end of file, after other require lines
         //= require bootstrap
 	#+END_SRC
-   5. [X] Rename application.css application.scss
+   5. [ ] Rename application.css application.scss
 	    #+BEGIN_SRC sh
             cd ../app/assets/stylesheets/ && mv -v application.css application.css.scss
           #+END_SRC
-   6. [X] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
+   6. [ ] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
 	#+BEGIN_SRC css
         /* import twitter bootstrap */
         @import "bootstrap";
@@ -86,9 +86,9 @@
         @import "bootstrap-responsive";
 	#+END_SRC
       - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
-   7. [X] Restart server
-* [100%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
-  1. [X] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
+   7. [ ] Restart server
+* [0%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+  1. [ ] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <%= link_to "Home", root_path, :class => 'brand' %>
        <ul class="nav">
@@ -120,7 +120,7 @@
          <li><%= link_to "4 year graph", root_path %></li>
        </ul>
      #+END_SRC
-  2. [X] Create a Messages partial in file:../app/views/layouts/_messages.html.erb
+  2. [ ] Create a Messages partial in file:../app/views/layouts/_messages.html.erb
      #+BEGIN_SRC html
        <% flash.each do |name, msg| %>
          <% if msg.is_a?(String) %>
@@ -131,7 +131,7 @@
          <% end %>
        <% end %>
      #+END_SRC
-  3. [X] New Application Layout with Twitter Bootstrap file:../app/views/layouts/application.html.erb
+  3. [ ] New Application Layout with Twitter Bootstrap file:../app/views/layouts/application.html.erb
      #+BEGIN_SRC html
        <!doctype html>
        <html>
@@ -171,19 +171,19 @@
          </body>
        </html>
      #+END_SRC
-* [100%] Create "Readings" model, controller, and views
-  1. [X] Generate reading scaffold
+* [0%] Create "Readings" model, controller, and views
+  1. [ ] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [X] Relationship to User, validations
+  2. [ ] Relationship to User, validations
      file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [X] Default clothing in values in Model
+  3. [ ] Default clothing in values in Model
      - file:../db/migrate/
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
@@ -199,14 +199,14 @@
            end
          end
        #+END_SRC
-  4. [X] Migrate the database, i.e. rake db:migrate
-  5. [X] file:../app/views/layouts/_navigation.html.erb
+  4. [ ] Migrate the database, i.e. rake db:migrate
+  5. [ ] file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
          <li><%= link_to "New reading", new_reading_path %></li>
          <li><%= link_to "See all readings", readings_path %></li>
      #+END_SRC
-  6. [X] [100%] User ID on new Reading
-     1. [X] Add user id to create method in readings controller
+  6. [ ] [100%] User ID on new Reading
+     1. [ ] Add user id to create method in readings controller
 	file:../app/controllers/readings_controller.rb
 	#+BEGIN_SRC ruby
           def create
@@ -215,9 +215,9 @@
           
         #+END_SRC
         - note that @user comes from application controller, identify_user method
-     2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-* [100%] Create "Settings" model, controller, and views, default values
-  1. [X] Generate setting scaffold
+     2. [ ] Remove user id field from file:../app/views/readings/_form.html.erb
+* [0%] Create "Settings" model, controller, and views, default values
+  1. [ ] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
@@ -233,7 +233,7 @@
            locale:string \
            --force
      #+END_SRC
-  2. [X] Validations file:../app/models/setting.rb
+  2. [ ] Validations file:../app/models/setting.rb
 	#+BEGIN_SRC ruby
           validates :filter_rate_gain, :presence => true, :numericality => true
           validates :filter_rate_loss, :presence => true, :numericality => true
@@ -244,7 +244,7 @@
           validates :timezone, :presence => true, :numericality => true
           validates :locale,  :presence => true
 	 #+END_SRC
-  3. [X] Set default values in file:../db/migrate 2013...._create_settings.rb
+  3. [ ] Set default values in file:../db/migrate 2013...._create_settings.rb
      #+BEGIN_SRC ruby
        t.integer :user_id
        t.integer :filter_rate_gain, :default => 500
@@ -259,14 +259,14 @@
        t.integer :timezone, :default => -7
        t.string :locale, :default => "en_US.UTF-8"
      #+END_SRC
-  4. [X] Database migration
-  5. [X] Add current_user.id to create method file:../app/controllers/settings_controller.rb
+  4. [ ] Database migration
+  5. [ ] Add current_user.id to create method file:../app/controllers/settings_controller.rb
      #+BEGIN_SRC ruby
        def create
          @setting = Setting.new(setting_params)
          @setting.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  6. [X] Remove user_id from form file:../app/views/settings/_form.html.erb
+  6. [ ] Remove user_id from form file:../app/views/settings/_form.html.erb
      #+BEGIN_SRC ruby
        # Delete following div, user_id is supplied in the controller instead
        <div class="field">
@@ -274,19 +274,19 @@
          <%= f.number_field :user_id %>
        </div>
      #+END_SRC
-  7. [X] settings_path in application layout file:../app/views/layouts/_navigation.html.erb
-  8. [X] Relationship between Setting and User file:../app/models/setting.rb
+  7. [ ] settings_path in application layout file:../app/views/layouts/_navigation.html.erb
+  8. [ ] Relationship between Setting and User file:../app/models/setting.rb
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
          ...
      #+END_SRC
-  9. [X] Relationship between User and Setting file:../app/models/user.rb
+  9. [ ] Relationship between User and Setting file:../app/models/user.rb
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
      #+END_SRC
-  10. [X] Add New Settings to be created when a new user is created file:../app/models/user.rb
+  10. [ ] Add New Settings to be created when a new user is created file:../app/models/user.rb
       - No user controller with Devise
       - Use the standard after_create callback provided by Rails.
 	#+BEGIN_SRC ruby
@@ -305,8 +305,8 @@
             end
           end
 	#+END_SRC
-* [100%] Create Goal model, controller, and views
-  1. [X] Generate scaffold
+* [0%] Create Goal model, controller, and views
+  1. [ ] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
@@ -314,29 +314,29 @@
            goal_loss_rate:integer \
            goal_finish_time:datetime
      #+END_SRC
-  2. [X] Relationship between Goal and User file:../app/models/goal.rb
+  2. [ ] Relationship between Goal and User file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
        ...
      #+END_SRC
-  3. [X] Relationship between User and Goal file:../app/models/user.rb
+  3. [ ] Relationship between User and Goal file:../app/models/user.rb
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
          has_many :goals
      #+END_SRC
-  4. [X] Default values file:../db/migrate/ 2013xxx_create_goals.rb
+  4. [ ] Default values file:../db/migrate/ 2013xxx_create_goals.rb
      #+BEGIN_SRC ruby
        t.integer :goal_loss_rate, :default => 500
        t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
      #+END_SRC
-  5. [X] Validations file:../app/models/goal.rb
+  5. [ ] Validations file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        validates :user_id, :presence => true, :numericality => true
      #+END_SRC
-  6. [X] Migrate database
-  7. [X] user_id file:../app/controllers/goals_controller.rb
+  6. [ ] Migrate database
+  7. [ ] user_id file:../app/controllers/goals_controller.rb
      #+BEGIN_SRC ruby
        # POST /goals
        # POST /goals.json
@@ -344,13 +344,13 @@
          @goal = Goal.new(goal_params)
          @goal.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  8. [X] update form file:../app/views/goals/_form.html.erb
-  9. [X] navigation file:../app/views/layouts/_navigation.html.erb
+  8. [ ] update form file:../app/views/goals/_form.html.erb
+  9. [ ] navigation file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <li><%= link_to "Goals", goals_path %></li>
      #+END_SRC
-* [100%] Display current goal
-  1. [X] goal_now in Goal model file:../app/models/goal.rb
+* [0%] Display current goal
+  1. [ ] goal_now in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        def self.goal_now(user)
          goal = Goal.where(:user_id => user.id).last
@@ -360,18 +360,18 @@
          return ( goal.goal_start_weight - lbs_per_second * elapsed_time )
        end
      #+END_SRC
-  2. [X] View file:../app/views/home/index.html.erb
+  2. [ ] View file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%>
      #+END_SRC
-* [100%] Weight as a function of time
-  1. [X] In Reading model, initial_reading function file:../app/models/reading.rb
+* [0%] Weight as a function of time
+  1. [ ] In Reading model, initial_reading function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
          return Reading.order('reading_time ASC').where(:user_id => user.id).first
        end
      #+END_SRC
-  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
+  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.get_readings_after( user, start_time, end_time )
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
@@ -380,7 +380,7 @@
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  3. [X] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight ) file:../app/models/reading.rb
+  3. [ ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight ) file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
          if ( weight == initial_time )
@@ -400,7 +400,7 @@
          return  weight
        end
      #+END_SRC
-  4. [X] In Reading model, interpolate file:../app/models/reading.rb
+  4. [ ] In Reading model, interpolate file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
          filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
@@ -410,7 +410,7 @@
          interpolated_weight = last_weight + percent * delta_weight
        end
      #+END_SRC
-  5. [X] In Reading model, weight_at_time function file:../app/models/reading.rb
+  5. [ ] In Reading model, weight_at_time function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.weight_at_time(user, time)
          setting = Setting.where(:user_id => user.id).last
@@ -439,22 +439,22 @@
          return weight
        end
      #+END_SRC
-  6. [X] Display weight now in file:../app/views/home/index.html.erb
+  6. [ ] Display weight now in file:../app/views/home/index.html.erb
      #+BEGIN_SRC ruby
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-* [62%] Draw Google Graph
-  1. [X] Generate the controller for generating Graphs
+* [0%] Draw Google Graph
+  1. [ ] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
      #+END_SRC
   2. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
-  3. [X] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
+  3. [ ] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
      #+BEGIN_SRC html
         <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
      #+END_SRC
-  4. [X] Place a 3 day data array method in Readings controller file:../app/models/reading.rb
+  4. [ ] Place a 3 day data array method in Readings controller file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.three_day_data_array(user)
          weight = 0
@@ -483,7 +483,7 @@
        end
      #+END_SRC
      - Commentary: :: We will pass data into Google javascript in the view
-  5. [X] Put Google Graph javascript into view file:../app/views/google_graph/three_day.html.erb
+  5. [ ] Put Google Graph javascript into view file:../app/views/google_graph/three_day.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -503,7 +503,7 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  6. [X] Use three day data array  file:../app/views/google_graph/three_day.html.erb
+  6. [ ] Use three day data array  file:../app/views/google_graph/three_day.html.erb
      #+BEGIN_SRC html
        - TDW var data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(current_user).to_json %> );
      #+END_SRC
