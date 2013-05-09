@@ -455,14 +455,13 @@
         <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
      #+END_SRC
   4. [ ] Place a 3 day data array method in Readings controller
-     - Commentary: :: We will pass data into Google javascript in the view
-     - file:../app/models/reading.rb
+     - Commentary: :: We will pass data into Google javascript in the view file:../app/models/reading.rb
        #+BEGIN_SRC ruby
-         def self.three_day_data_array(user_id)
+         def self.three_day_data_array(user)
            weight = 0
            time_at_point_in_past = 0
            
-           initial_reading = Reading.initial_reading(user_id)
+           initial_reading = Reading.initial_reading(user)
            time_initial = initial_reading.reading_time
            weight_initial = initial_reading.weight
            
@@ -477,7 +476,7 @@
              if ( time_at_point_in_past < time_initial )
                weight = weight_initial
              else
-               weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+               weight = Reading.weight_at_time(user, time_at_point_in_past)
              end
              weight_array.push(["", weight.to_f])
            end
