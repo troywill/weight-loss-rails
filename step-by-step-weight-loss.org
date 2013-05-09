@@ -216,8 +216,8 @@
         #+END_SRC
         - note that @user comes from application controller, identify_user method
      2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-* [0%] Create "Settings" model, controller, and views, default values
-  1. [ ] Generate setting scaffold
+* [100%] Create "Settings" model, controller, and views, default values
+  1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
@@ -233,33 +233,31 @@
            locale:string \
            --force
      #+END_SRC
-  ] Validations
-  file:../app/models/setting.rb
-  #+BEGIN_SRC ruby
-    validates :filter_rate_gain, :presence => true, :numericality => true
-    validates :filter_rate_loss, :presence => true, :numericality => true
-    validates :graph_upper, :presence => true, :numericality => true
-    validates :graph_lower, :presence => true, :numericality => true
-    validates :graph_lines, :presence => true, :numericality => true
-    validates :clothing_wt, :presence => true, :numericality => true
-    validates :timezone, :presence => true, :numericality => true
-    validates :locale,  :presence => true
-  #+END_SRC
-  ] Default values
-  file:../db/migrate 2013...._create_settings.rb
-  #+BEGIN_SRC ruby
-    t.integer :user_id
-    t.integer :filter_rate_gain, :default => 500
-    t.integer :filter_rate_loss, :default => 1000
-    t.boolean :custom_graph, :default => 0
-    t.integer :graph_upper, :default => 300
-    t.integer :graph_lower, :default => 0
-    t.integer :graph_lines, :default => 5
-    t.boolean :si, :default => 0
-    t.boolean :clothing, :default => 0
-    t.decimal :clothing_wt, :default => 5
-    t.integer :timezone, :default => -7
-    t.string :locale, :default => "en_US.UTF-8"
+  2. [X] Validations file:../app/models/setting.rb
+	#+BEGIN_SRC ruby
+          validates :filter_rate_gain, :presence => true, :numericality => true
+          validates :filter_rate_loss, :presence => true, :numericality => true
+          validates :graph_upper, :presence => true, :numericality => true
+          validates :graph_lower, :presence => true, :numericality => true
+          validates :graph_lines, :presence => true, :numericality => true
+          validates :clothing_wt, :presence => true, :numericality => true
+          validates :timezone, :presence => true, :numericality => true
+          validates :locale,  :presence => true
+	 #+END_SRC
+  3. [X] Set default values in file:../db/migrate 2013...._create_settings.rb
+     #+BEGIN_SRC ruby
+       t.integer :user_id
+       t.integer :filter_rate_gain, :default => 500
+       t.integer :filter_rate_loss, :default => 7000
+       t.boolean :custom_graph, :default => 0
+       t.integer :graph_upper, :default => 300
+       t.integer :graph_lower, :default => 0
+       t.integer :graph_lines, :default => 5
+       t.boolean :si, :default => 0
+       t.boolean :clothing, :default => 0
+       t.decimal :clothing_wt, :default => 5
+       t.integer :timezone, :default => -7
+       t.string :locale, :default => "en_US.UTF-8"
   #+END_SRC
   ] Database migration
   ] Add @user.id to create method
