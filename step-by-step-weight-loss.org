@@ -171,19 +171,19 @@
          </body>
        </html>
      #+END_SRC
-* [0%] Create "Readings" model, controller, and views
-  1. [ ] Generate scaffold
+* [100%] Create "Readings" model, controller, and views
+  1. [X] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [ ] Relationship to User, validations
+  2. [X] Relationship to User, validations
      file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [ ] Default clothing in values in Model
+  3. [X] Default clothing in values in Model
      - file:../db/migrate/
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
@@ -199,14 +199,14 @@
            end
          end
        #+END_SRC
-  4. [ ] Migrate the database, i.e. rake db:migrate
-  5. [ ] file:../app/views/_navigation.html.erb
+  4. [X] Migrate the database, i.e. rake db:migrate
+  5. [X] file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
          <li><%= link_to "New reading", new_reading_path %></li>
          <li><%= link_to "See all readings", readings_path %></li>
      #+END_SRC
-  6. [-] [0\/$1] User ID on new Reading
-     1. [ ] Add user id to create method in readings controller
+  6. [X] [100%] User ID on new Reading
+     1. [X] Add user id to create method in readings controller
 	file:../app/controllers/readings_controller.rb
 	#+BEGIN_SRC ruby
           def create
@@ -215,24 +215,24 @@
           
         #+END_SRC
         - note that @user comes from application controller, identify_user method
-     2. [ ] Remove user id field from file:../app/views/readings/_form.html.erb
+     2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
 * [0%] Create "Settings" model, controller, and views, default values
-  ] Generate scaffold
-  BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
-  rails generate scaffold setting user_id:integer \
-      filter_rate_gain:integer \
-      filter_rate_loss:integer \
-      custom_graph:boolean \
-      graph_upper:integer \
-      graph_lower:integer \
-      graph_lines:integer \
-      si:boolean \
-      clothing:boolean \
-      clothing_wt:decimal\
-      timezone:integer \
-      locale:string \
-      --force
-  END_SRC
+  1. [ ] Generate setting scaffold
+     #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
+       rails generate scaffold setting user_id:integer \
+           filter_rate_gain:integer \
+           filter_rate_loss:integer \
+           custom_graph:boolean \
+           graph_upper:integer \
+           graph_lower:integer \
+           graph_lines:integer \
+           si:boolean \
+           clothing:boolean \
+           clothing_wt:decimal\
+           timezone:integer \
+           locale:string \
+           --force
+     #+END_SRC
   ] Validations
   file:../app/models/setting.rb
   #+BEGIN_SRC ruby
