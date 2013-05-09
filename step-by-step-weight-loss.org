@@ -216,7 +216,7 @@
         #+END_SRC
         - note that @user comes from application controller, identify_user method
      2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-* [100%] Create "Settings" model, controller, and views, default values
+* [25%] Create "Settings" model, controller, and views, default values
   1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
@@ -258,96 +258,85 @@
        t.decimal :clothing_wt, :default => 5
        t.integer :timezone, :default => -7
        t.string :locale, :default => "en_US.UTF-8"
-  #+END_SRC
-  ] Database migration
-  ] Add @user.id to create method
-  file:../app/controllers/settings_controller.rb
-  #+BEGIN_SRC ruby
-    def create
-      @setting = Setting.new(setting_params)
-      @setting.user_id = @user.id
-  #+END_SRC
-  ] Remove user_id from form
-  file:../app/views/settings/_form.html.erb
-  #+BEGIN_SRC ruby
-    # Delete following div, user_id is supplied in the controller instead
-    <div class="field">
-      <%= f.label :user_id %><br>
-      <%= f.number_field :user_id %>
-    </div>
-  #+END_SRC
-  ] settings_path in application layout
-  ] Fix numeric fields snafu
-  ] Remove link breaks from form
-   ] Relationship between Setting and User
-   file:../app/models/setting.rb
-  	#+BEGIN_SRC ruby
-  	  class Setting < ActiveRecord::Base
-     belongs_to :user
-     ...
-   #+END_SRC
-   ] Relationship between User and Setting
-   file:../app/models/user.rb
-  	#+BEGIN_SRC ruby
-  	  class User < ActiveRecord::Base
-       has_one :setting
-  	#+END_SRC
-* Add New Settings to be created when a new user is created
-  e:../app/controllers/users_controller.rb
-  EGIN_SRC ruby
-  ef create
-  er = User.new(user_params)
-
-  pond_to do |format|
-  f @user.save
-   Setting.create(:user_id => @user.id)
-  ND_SRC
+     #+END_SRC
+  4. [ ] Database migration
+  5. [ ] Add @user.id to create method file:../app/controllers/settings_controller.rb
+     #+BEGIN_SRC ruby
+       def create
+         @setting = Setting.new(setting_params)
+         @setting.user_id = @user.id
+     #+END_SRC
+  6. [ ] Remove user_id from form file:../app/views/settings/_form.html.erb
+     #+BEGIN_SRC ruby
+       # Delete following div, user_id is supplied in the controller instead
+       <div class="field">
+         <%= f.label :user_id %><br>
+         <%= f.number_field :user_id %>
+       </div>
+     #+END_SRC
+  7. [ ] settings_path in application layout
+  8. [ ] Fix numeric fields snafu
+  9. [ ] Remove link breaks from form
+  10. [ ] Relationship between Setting and User file:../app/models/setting.rb
+      #+BEGIN_SRC ruby
+        class Setting < ActiveRecord::Base
+          belongs_to :user
+          ...
+      #+END_SRC
+  11. [ ] Relationship between User and Setting file:../app/models/user.rb
+      #+BEGIN_SRC ruby
+        class User < ActiveRecord::Base
+          has_one :setting
+      #+END_SRC
+  12. [ ] Add New Settings to be created when a new user is created file:../app/controllers/users_controller.rb
+      #+BEGIN_SRC ruby
+        def create
+          user = User.new(user_params)
+        
+          respond_to do |format|
+            if @user.save
+              Setting.create(:user_id => @user.id)
+      #+END_SRC
 * [0%] Create Goal model, controller, and views
-  ] Generate scaffold
-  BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
-  rails generate scaffold goal user_id:integer \
-      goal_start_weight:decimal \
-      goal_start_time:datetime \
-      goal_loss_rate:integer \
-      goal_finish_time:datetime
-  END_SRC
-  ] Relationship between Goal and User
-  file:../app/models/goal.rb
-  #+BEGIN_SRC ruby
-  	 class Setting < ActiveRecord::Base
-      belongs_to :user
-    ...
-  #+END_SRC
-  ] Relationship between User and Goal
-  file:../app/models/user.rb
-  #+BEGIN_SRC ruby
-  	 class User < ActiveRecord::Base
-      has_one :setting
-      has_many :goals
-  #+END_SRC
-  ] Default values
-  file:../db/migrate/ 2013xxx_create_goals.rb
-  #+BEGIN_SRC ruby
-    t.integer :goal_loss_rate, :default => 500
-    t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
-  #+END_SRC
-  ] Validations
-  file:../app/models/goal.rb
-  #+BEGIN_SRC ruby
-    validates :user_id, :presence => true, :numericality => true
-  #+END_SRC
-  ] Migrate database
-  ] user_id
-  file:../app/controllers/goals_controller.rb
-  BEGIN_SRC ruby
-    # POST /goals
-    # POST /goals.json
-    def create
-      @goal = Goal.new(goal_params)
-      @goal.user_id = @user.id
-  END_SRC
-  ] update form
-  file:../app/views/goals/_form.html.erb
+  1. [ ] Generate scaffold
+     #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
+       rails generate scaffold goal user_id:integer \
+           goal_start_weight:decimal \
+           goal_start_time:datetime \
+           goal_loss_rate:integer \
+           goal_finish_time:datetime
+     #+END_SRC
+  2. [ ] Relationship between Goal and User file:../app/models/goal.rb
+     #+BEGIN_SRC ruby
+       class Setting < ActiveRecord::Base
+         belongs_to :user
+       ...
+     #+END_SRC
+  3. [ ] Relationship between User and Goal file:../app/models/user.rb
+     #+BEGIN_SRC ruby
+       class User < ActiveRecord::Base
+         has_one :setting
+         has_many :goals
+     #+END_SRC
+  4. [ ] Default values file:../db/migrate/ 2013xxx_create_goals.rb
+     #+BEGIN_SRC ruby
+       t.integer :goal_loss_rate, :default => 500
+       t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
+     #+END_SRC
+  5. [ ] Validations file:../app/models/goal.rb
+     #+BEGIN_SRC ruby
+       validates :user_id, :presence => true, :numericality => true
+     #+END_SRC
+  6. [ ] Migrate database
+  7. [ ] user_id file:../app/controllers/goals_controller.rb
+     #+BEGIN_SRC ruby
+       # POST /goals
+       # POST /goals.json
+       def create
+         @goal = Goal.new(goal_params)
+         @goal.user_id = @user.id
+     #+END_SRC
+  8. [ ] update form file:../app/views/goals/_form.html.erb
 * [0%] Display current goal
 ** goal_now in Goal model file:../app/models/goal.rb
   GIN_SRC ruby   
@@ -441,9 +430,9 @@
   end
   END_SRC
 * Display weight now in file:../app/views/welcome/index.html.erb
-  IN_SRC ruby
-   Reading.weight_at_time(@user.id, Time.now) %>
-  _SRC
+  #+BEGIN_SRC ruby
+    Reading.weight_at_time(@user.id, Time.now) %>
+  #+END_SRC
 * [0%] Draw Google Graph
   1. [ ] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
@@ -596,7 +585,6 @@
 	#+BEGIN_SRC sh
 	  yum install httpd-devel
 	#+END_SRC
-	
 	
 * TODO [0%] Display readings table on Welcome Page
   - @readings = Readings.all gives every user's readings; we only want the logged in user's readings
