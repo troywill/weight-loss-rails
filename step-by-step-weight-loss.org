@@ -305,7 +305,7 @@
             end
           end
 	#+END_SRC
-* [75%] Create Goal model, controller, and views
+* [88%] Create Goal model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
@@ -336,15 +336,21 @@
        validates :user_id, :presence => true, :numericality => true
      #+END_SRC
   6. [X] Migrate database
-  7. [ ] user_id file:../app/controllers/goals_controller.rb
+  7. [X] user_id file:../app/controllers/goals_controller.rb
      #+BEGIN_SRC ruby
        # POST /goals
        # POST /goals.json
        def create
          @goal = Goal.new(goal_params)
-         @goal.user_id = TDW
+         @goal.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  8. [ ] update form file:../app/views/goals/_form.html.erb
+  8. [X] update form file:../app/views/goals/_form.html.erb
+  9. [ ] navigation file:../app/views/layouts/_navigation.html.erb
+     #+BEGIN_SRC html
+       <li><%= link_to "Goals", goals_path %></li>
+     #+END_SRC
+     
+     
 * [0%] Display current goal
 ** goal_now in Goal model file:../app/models/goal.rb
   GIN_SRC ruby   
