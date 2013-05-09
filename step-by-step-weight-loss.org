@@ -364,7 +364,7 @@
      #+BEGIN_SRC html
        <%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%>
      #+END_SRC
-* [80%] Weight as a function of time
+* [100%] Weight as a function of time
   1. [X] In Reading model, initial_reading function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
@@ -410,11 +410,11 @@
          interpolated_weight = last_weight + percent * delta_weight
        end
      #+END_SRC
-  5. [ ] In Reading model, weight_at_time function file:../app/models/reading.rb
+  5. [X] In Reading model, weight_at_time function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
-       def self.weight_at_time(user_id, time)
-         setting = Setting.where(:user_id => user_id).last
-         initial_reading = Reading.initial_reading(user_id)
+       def self.weight_at_time(user, time)
+         setting = Setting.where(:user_id => user.id).last
+         initial_reading = Reading.initial_reading(user)
          time_initial = initial_reading.reading_time
          weight_initial = initial_reading.weight
          if ( time < time_initial )
@@ -422,14 +422,14 @@
          end
          max_gain_rate = setting.filter_rate_gain
          max_loss_rate = setting.filter_rate_loss
-         readings = Reading.get_readings_after( user_id, time_initial, time )
+         readings = Reading.get_readings_after( user, time_initial, time )
          for reading in readings
            w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
                             weight_initial, reading.reading_time, reading.weight)
            time_initial = reading.reading_time
            weight_initial = w
          end
-         next_reading = Reading.get_next_reading_after(user_id, time)
+         next_reading = Reading.get_next_reading_after(user, time)
          if next_reading
            weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
                                  next_reading.reading_time, next_reading.weight, time )
