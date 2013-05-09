@@ -480,8 +480,8 @@
              end
              weight_array.push(["", weight.to_f])
            end
-             return "#{weight_array}"
-         end  
+           return weight_array
+         end
        #+END_SRC
   5. [ ] Place a 28 day data array method in Readings controller
      - Commentary: :: We will pass data into Google javascript in the view
