@@ -305,7 +305,7 @@
             end
           end
 	#+END_SRC
-* [88%] Create Goal model, controller, and views
+* [100%] Create Goal model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
@@ -345,25 +345,25 @@
          @goal.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
   8. [X] update form file:../app/views/goals/_form.html.erb
-  9. [ ] navigation file:../app/views/layouts/_navigation.html.erb
+  9. [X] navigation file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <li><%= link_to "Goals", goals_path %></li>
      #+END_SRC
-     
-     
-* [0%] Display current goal
-** goal_now in Goal model file:../app/models/goal.rb
-  GIN_SRC ruby   
-  f self.goal_now(user_id)
-  goal = Goal.where(:user_id => user_id).last
-  return 0 if 
-  elapsed_time = Time.now - setting.goal_start_time
-  lbs_per_second = ( setting.goal_loss_rate / 86400.0 / 3500.0 )
-  return ( setting.goal_start_weight - lbs_per_second * elapsed_time )
-  d
-  D_SRC
-** View file:../app/views/welcome/index.html.erb
-  number_with_precision(@goal_now, :precision => 3)%>
+* TODO [0%] Display current goal
+  1. goal_now in Goal model file:../app/models/goal.rb
+     #+BEGIN_SRC ruby
+       def self.goal_now(user_id)
+         goal = Goal.where(:user_id => user_id).last
+         # return 0 if ??
+         elapsed_time = Time.now - goal.goal_start_time
+         lbs_per_second = ( goal.goal_loss_rate / 86400.0 / 3500.0 )
+         return ( goal.goal_start_weight - lbs_per_second * elapsed_time )
+       end
+     #+END_SRC
+  2. [ ] View file:../app/views/home/index.html.erb
+     #+BEGIN_SRC html
+       <%= number_with_precision(@goal_now, :precision => 3)%>
+     #+END_SRC
 * [0%] Weight as a function of time
   ] In Reading model, initial_reading function
   file:../app/models/reading.rb
