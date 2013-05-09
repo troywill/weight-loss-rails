@@ -439,10 +439,12 @@
          return weight
        end
      #+END_SRC
-* Display weight now in file:../app/views/welcome/index.html.erb
-  #+BEGIN_SRC ruby
-    Reading.weight_at_time(@user.id, Time.now) %>
-  #+END_SRC
+  6. [X] Display weight now in file:../app/views/home/index.html.erb
+     #+BEGIN_SRC ruby
+       <%= Reading.weight_at_time(current_user, Time.now) %>
+     #+END_SRC
+
+
 * [0%] Draw Google Graph
   1. [ ] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
