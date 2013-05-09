@@ -216,7 +216,7 @@
         #+END_SRC
         - note that @user comes from application controller, identify_user method
      2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-* [90%] Create "Settings" model, controller, and views, default values
+* [100%] Create "Settings" model, controller, and views, default values
   1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
@@ -286,7 +286,8 @@
        class User < ActiveRecord::Base
          has_one :setting
      #+END_SRC
-  10. [ ] Add New Settings to be created when a new user is created file:../app/models/user.rb
+  10. [X] Add New Settings to be created when a new user is created file:../app/models/user.rb
+      - No user controller with Devise
       - Use the standard after_create callback provided by Rails.
 	#+BEGIN_SRC ruby
           class User < ActiveRecord::Base
@@ -304,17 +305,8 @@
             end
           end
 	#+END_SRC
-
-      #+BEGIN_SRC ruby
-        def create
-          user = User.new(user_params)
-        
-          respond_to do |format|
-            if @user.save
-              Setting.create(:user_id => @user.id)
-      #+END_SRC
-* [0%] Create Goal model, controller, and views
-  1. [ ] Generate scaffold
+* [75%] Create Goal model, controller, and views
+  1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
@@ -322,35 +314,35 @@
            goal_loss_rate:integer \
            goal_finish_time:datetime
      #+END_SRC
-  2. [ ] Relationship between Goal and User file:../app/models/goal.rb
+  2. [X] Relationship between Goal and User file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
        ...
      #+END_SRC
-  3. [ ] Relationship between User and Goal file:../app/models/user.rb
+  3. [X] Relationship between User and Goal file:../app/models/user.rb
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
          has_many :goals
      #+END_SRC
-  4. [ ] Default values file:../db/migrate/ 2013xxx_create_goals.rb
+  4. [X] Default values file:../db/migrate/ 2013xxx_create_goals.rb
      #+BEGIN_SRC ruby
        t.integer :goal_loss_rate, :default => 500
        t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
      #+END_SRC
-  5. [ ] Validations file:../app/models/goal.rb
+  5. [X] Validations file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        validates :user_id, :presence => true, :numericality => true
      #+END_SRC
-  6. [ ] Migrate database
+  6. [X] Migrate database
   7. [ ] user_id file:../app/controllers/goals_controller.rb
      #+BEGIN_SRC ruby
        # POST /goals
        # POST /goals.json
        def create
          @goal = Goal.new(goal_params)
-         @goal.user_id = @user.id
+         @goal.user_id = TDW
      #+END_SRC
   8. [ ] update form file:../app/views/goals/_form.html.erb
 * [0%] Display current goal
