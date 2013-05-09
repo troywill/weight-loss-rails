@@ -8,6 +8,8 @@ my $backup_file = $file . '.bak';
 do_replacement( '\* DONE', '* TODO' );
 do_replacement( '\[X\]', '[ ]' );
 do_replacement( '\[\d+\/(\d+)\]', '[0\/$1]' );
+do_replacement( '\[100%\]', '[0%]' );
+do_replacement( '\[\d+%\]', '[0%]' );
 
 sub do_replacement {
     my ( $regexp, $replacement ) = @_;
