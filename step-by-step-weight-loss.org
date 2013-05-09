@@ -444,7 +444,7 @@
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-* [28%] Draw Google Graph
+* [42%] Draw Google Graph
   1. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
@@ -454,8 +454,8 @@
      #+BEGIN_SRC html
         <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
      #+END_SRC
-  4. [ ] Place a 3 day data array method in Readings controller
-     - Commentary: :: We will pass data into Google javascript in the view file:../app/models/reading.rb
+  4. [X] Place a 3 day data array method in Readings controller file:../app/models/reading.rb
+     - Commentary: :: We will pass data into Google javascript in the view
        #+BEGIN_SRC ruby
          def self.three_day_data_array(user)
            weight = 0
@@ -483,35 +483,8 @@
            return weight_array
          end
        #+END_SRC
-  5. [ ] Place a 28 day data array method in Readings controller
-     - Commentary: :: We will pass data into Google javascript in the view
-     - file:../app/models/reading.rb
-       #+BEGIN_SRC ruby
-         def self.month_array(user_id)
-           weight = 0
-           time_at_point_in_past = 0
-           time_first_reading = Reading.time_initial(user_id)
-           weight_first_reading = Reading.weight_initial(user_id).to_f
-           # Get weight values for last 28 days
-           weight_array = Array.new
-           weight_array.push(['Year','Weight'])
-           number_of_periods = 28
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
-             
-             if ( time_at_point_in_past < time_first_reading )
-               weight = weight_first_reading
-             else
-               weight = Reading.weight_at_time(user_id, time_at_point_in_past)
-             end
-             # Three significant digits to stop Gruff graph library from acting strangely                                            
-             weight = ((weight * 10000).to_i)/10000.0
-             weight_array.push(["", weight])
-           end
-           return weight_array
-         end
-       #+END_SRC
-  6. [ ] Create a GoogleGraph layout
+
+  5. [ ] Create a GoogleGraph layout
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
      - Reference file:../app/views/layouts/google_graph.html.erb
        #+BEGIN_SRC html
@@ -541,6 +514,34 @@
              <div id="chart_div" style="width: 900px; height: 500px;"></div>
            </body>
          </html>
+       #+END_SRC
+  6. [ ] Place a 28 day data array method in Readings controller
+     - Commentary: :: We will pass data into Google javascript in the view
+     - file:../app/models/reading.rb
+       #+BEGIN_SRC ruby
+         def self.month_array(user_id)
+           weight = 0
+           time_at_point_in_past = 0
+           time_first_reading = Reading.time_initial(user_id)
+           weight_first_reading = Reading.weight_initial(user_id).to_f
+           # Get weight values for last 28 days
+           weight_array = Array.new
+           weight_array.push(['Year','Weight'])
+           number_of_periods = 28
+           (0..number_of_periods).each do |period_num|
+             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+             
+             if ( time_at_point_in_past < time_first_reading )
+               weight = weight_first_reading
+             else
+               weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+             end
+             # Three significant digits to stop Gruff graph library from acting strangely                                            
+             weight = ((weight * 10000).to_i)/10000.0
+             weight_array.push(["", weight])
+           end
+           return weight_array
+         end
        #+END_SRC
   7. [ ] Create a goal as a function of time method, place in User model
      - file:../../app/models/user.rb
