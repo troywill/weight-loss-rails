@@ -364,43 +364,42 @@
      #+BEGIN_SRC html
        <%= number_with_precision(Goal.TDW, :precision => 3)%>
      #+END_SRC
-* [50%] Weight as a function of time
+* [66%] Weight as a function of time
   1. [X] In Reading model, initial_reading function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
          return Reading.order('reading_time ASC').where(:user_id => user.id).first
        end
      #+END_SRC
-  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
+  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.get_readings_after( user, start_time, end_time )
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
        end
        def self.get_next_reading_after( user, time )
-         return Reading.order('reading_time ASC').where(:user_id => user).where('reading_time > ?', time).first
+         return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
-  file:../app/models/reading.rb
-  BEGIN_SRC ruby
-  def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
-  	 if ( weight == initial_time )
-      return weight
-  	 else
-      delta_time = ( time - initial_time ).to_i
-      cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
-      max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
-      min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
-      if ( weight > max_allowable_weight )
-        return max_allowable_weight
-      end
-      if ( weight < min_allowable_weight )
-        return min_allowable_weight
-      end
-  	 end
-  	 return  weight
-  end
-  END_SRC
+  3. [ ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight ) file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+         if ( weight == initial_time )
+           return weight
+         else
+           delta_time = ( time - initial_time ).to_i
+           cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+           max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+           min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+           if ( weight > max_allowable_weight )
+             return max_allowable_weight
+           end
+           if ( weight < min_allowable_weight )
+             return min_allowable_weight
+           end
+         end
+         return  weight
+       end
+     #+END_SRC
   ] In Reading model, interpolate
   file:../app/models/reading.rb
   BEGIN_SRC ruby
