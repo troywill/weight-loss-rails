@@ -352,8 +352,8 @@
 * TODO [0%] Display current goal
   1. goal_now in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
-       def self.goal_now(user_id)
-         goal = Goal.where(:user_id => user_id).last
+       def self.goal_now(user)
+         goal = Goal.where(:user_id => user.id).last
          # return 0 if ??
          elapsed_time = Time.now - goal.goal_start_time
          lbs_per_second = ( goal.goal_loss_rate / 86400.0 / 3500.0 )
@@ -362,7 +362,7 @@
      #+END_SRC
   2. [ ] View file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
-       <%= number_with_precision(@goal_now, :precision => 3)%>
+       <%= number_with_precision(Goal.TDW, :precision => 3)%>
      #+END_SRC
 * [0%] Weight as a function of time
   ] In Reading model, initial_reading function
