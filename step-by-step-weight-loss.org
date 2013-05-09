@@ -444,15 +444,13 @@
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-
-* [0%] Draw Google Graph
-  1. [ ] Generate the controller for generating Graphs
+* [28%] Draw Google Graph
+  1. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
      #+END_SRC
   2. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
-  3. [ ] Path for Google Graph three day in layout
-     - file:../app/views/layouts/application.html.erb
+  3. [X] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
      #+BEGIN_SRC html
         <li><%= link_to "3 day graph", google_graph_three_day_path %></li>
      #+END_SRC
