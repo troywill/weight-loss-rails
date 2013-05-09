@@ -1,41 +1,41 @@
-* [0%] Create a new rails application
-  1. [ ] Run the 'rails' command
+* [100%] Create a new rails application
+  1. [X] Run the 'rails' command
      #+BEGIN_SRC sh
        rails new weight_loss
      #+END_SRC
-  2. [ ] Enable a JavaScript runtime in file:../Gemfile
+  2. [X] Enable a JavaScript runtime in file:../Gemfile
      #+BEGIN_SRC ruby
        # See https://github.com/sstephenson/execjs#readme for more supported runtimes
        gem 'therubyracer', platforms: :ruby
      #+END_SRC
-  3. [ ] Create a “home” controller and a “home/index” page
+  3. [X] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
        rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
      #+END_SRC
      - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  4. [ ] Set the default route to home/index in file:../config/routes.rb
+  4. [X] Set the default route to home/index in file:../config/routes.rb
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-* [0%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
-  1. [ ] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
+* [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+  1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
        gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
      #+END_SRC
-  2. [ ] Run the Devise gem install generator
+  2. [X] Run the Devise gem install generator
      #+BEGIN_SRC sh
        rails generate devise:install
      #+END_SRC
-  3. [ ] Generate a User Model and generate routes for user activities
+  3. [X] Generate a User Model and generate routes for user activities
      #+BEGIN_SRC 
        rails generate devise User
      #+END_SRC
-  4. [ ] Run the devise_create_users database migration the was created by in the previous command
+  4. [X] Run the devise_create_users database migration the was created by in the previous command
      #+BEGIN_SRC sh
        rake db:migrate
      #+END_SRC
-  5. [ ] (Re)start the Rails server
-  6. [ ] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
+  5. [X] (Re)start the Rails server
+  6. [X] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <h1>Home#index</h1>
        <%= Time.now %>
@@ -52,43 +52,8 @@
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
      - file:../app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
-* [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
-   1. [ ] Install bootstrap-sass
-	#+BEGIN_SRC sh
-	  sudo gem install bootstrap-sass
-	#+END_SRC
-      - ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
-   2. [ ] Add `bootstrap-sass` and `sass-rails` Gems in [[file:../Gemfile][Gemfile]]
-	#+BEGIN_SRC ruby
-        gem 'bootstrap-sass'
-      #+END_SRC
-      - Note that `sass-rails` is already in your Gemfile
-   3. [ ] Add the following line to file:../config/application.rb
-	#+BEGIN_SRC ruby
-        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
-	#+END_SRC
-      - Place after the `class Application < Rails::Application` line
-      - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
-   4. [ ] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
-	#+BEGIN_SRC js
-        # place at end of file, after other require lines
-        //= require bootstrap
-	#+END_SRC
-   5. [ ] Rename application.css application.scss
-	    #+BEGIN_SRC sh
-            cd ../app/assets/stylesheets/ && mv -v application.css application.css.scss
-          #+END_SRC
-   6. [ ] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
-	#+BEGIN_SRC css
-        /* import twitter bootstrap */
-        @import "bootstrap";
-        body { padding-top: 60px; }
-        @import "bootstrap-responsive";
-	#+END_SRC
-      - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
-   7. [ ] Restart server
-* [0%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
-  1. [ ] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
+* [100%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+  1. [X] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <%= link_to "Home", root_path, :class => 'brand' %>
        <ul class="nav">
@@ -120,7 +85,7 @@
          <li><%= link_to "4 year graph", root_path %></li>
        </ul>
      #+END_SRC
-  2. [ ] Create a Messages partial in file:../app/views/layouts/_messages.html.erb
+  2. [X] Create a Messages partial in file:../app/views/layouts/_messages.html.erb
      #+BEGIN_SRC html
        <% flash.each do |name, msg| %>
          <% if msg.is_a?(String) %>
@@ -131,7 +96,7 @@
          <% end %>
        <% end %>
      #+END_SRC
-  3. [ ] New Application Layout with Twitter Bootstrap file:../app/views/layouts/application.html.erb
+  3. [X] New Application Layout with Twitter Bootstrap file:../app/views/layouts/application.html.erb
      #+BEGIN_SRC html
        <!doctype html>
        <html>
@@ -171,20 +136,19 @@
          </body>
        </html>
      #+END_SRC
-* [0%] Create "Readings" model, controller, and views
-  1. [ ] Generate reading scaffold
+* [83%] Create "Readings" model, controller, and views
+  1. [X] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [ ] Relationship to User, validations
+  2. [X] Relationship to User, validations
      file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [ ] Default clothing in values in Model
-     - file:../db/migrate/
+  3. [X] Default clothing in values in Model file:../db/migrate/ 2012..._created_readings.rb
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
            def change
@@ -199,15 +163,14 @@
            end
          end
        #+END_SRC
-  4. [ ] Migrate the database, i.e. rake db:migrate
-  5. [ ] file:../app/views/layouts/_navigation.html.erb
+  4. [X] Migrate the database, i.e. rake db:migrate
+  5. [X] file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
          <li><%= link_to "New reading", new_reading_path %></li>
          <li><%= link_to "See all readings", readings_path %></li>
      #+END_SRC
-  6. [ ] [100%] User ID on new Reading
-     1. [ ] Add user id to create method in readings controller
-	file:../app/controllers/readings_controller.rb
+  6. [ ] [0%] User ID on new Reading
+     1. [ ] Add user id to create method in readings controller file:../app/controllers/readings_controller.rb
 	#+BEGIN_SRC ruby
           def create
             @reading = Reading.new(reading_params)
@@ -558,6 +521,41 @@
          goal = User.goal_at_time(user_id, time_at_point_in_past)
          weight_array.push(["", weight, goal])
        #+END_SRC
+* [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+   1. [ ] Install bootstrap-sass
+	#+BEGIN_SRC sh
+	  sudo gem install bootstrap-sass
+	#+END_SRC
+      - ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
+   2. [ ] Add `bootstrap-sass` and `sass-rails` Gems in [[file:../Gemfile][Gemfile]]
+	#+BEGIN_SRC ruby
+        gem 'bootstrap-sass'
+      #+END_SRC
+      - Note that `sass-rails` is already in your Gemfile
+   3. [ ] Add the following line to file:../config/application.rb
+	#+BEGIN_SRC ruby
+        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
+	#+END_SRC
+      - Place after the `class Application < Rails::Application` line
+      - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
+   4. [ ] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
+	#+BEGIN_SRC js
+        # place at end of file, after other require lines
+        //= require bootstrap
+	#+END_SRC
+   5. [ ] Rename application.css application.scss
+	    #+BEGIN_SRC sh
+            cd ../app/assets/stylesheets/ && mv -v application.css application.css.scss
+          #+END_SRC
+   6. [ ] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
+	#+BEGIN_SRC css
+        /* import twitter bootstrap */
+        @import "bootstrap";
+        body { padding-top: 60px; }
+        @import "bootstrap-responsive";
+	#+END_SRC
+      - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
+   7. [ ] Restart server
 * [0%] Deploy to marv.usahealthscience.com
   1. [ ] weight.usahealthscience.com
      1. [ ] http://namecheap.com
