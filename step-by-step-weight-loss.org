@@ -349,8 +349,8 @@
      #+BEGIN_SRC html
        <li><%= link_to "Goals", goals_path %></li>
      #+END_SRC
-* TODO [0%] Display current goal
-  1. goal_now in Goal model file:../app/models/goal.rb
+* [100%] Display current goal
+  1. [X] goal_now in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        def self.goal_now(user)
          goal = Goal.where(:user_id => user.id).last
@@ -360,28 +360,26 @@
          return ( goal.goal_start_weight - lbs_per_second * elapsed_time )
        end
      #+END_SRC
-  2. [ ] View file:../app/views/home/index.html.erb
+  2. [X] View file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <%= number_with_precision(Goal.TDW, :precision => 3)%>
      #+END_SRC
-* [0%] Weight as a function of time
-  ] In Reading model, initial_reading function
-  file:../app/models/reading.rb
-  BEGIN_SRC ruby
-  def self.initial_reading( user_id )
-    return Reading.order('reading_time ASC').where(:user_id => user_id).first
-  end
-  END_SRC
-  ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time )
-  file:../app/models/reading.rb
-  BEGIN_SRC ruby
-  def self.get_readings_after( user_id, start_time, end_time )
-  	 return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
-  end
-  def self.get_next_reading_after( user_id, time )
-      return Reading.order('reading_time ASC').where(:user_id => user_id).where('reading_time > ?', time).first
-  end
-  END_SRC
+* [50%] Weight as a function of time
+  1. [X] In Reading model, initial_reading function file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.initial_reading( user )
+         return Reading.order('reading_time ASC').where(:user_id => user.id).first
+       end
+     #+END_SRC
+  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.get_readings_after( user, start_time, end_time )
+         return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
+       end
+       def self.get_next_reading_after( user, time )
+         return Reading.order('reading_time ASC').where(:user_id => user).where('reading_time > ?', time).first
+       end
+     #+END_SRC
   ] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
   file:../app/models/reading.rb
   BEGIN_SRC ruby
