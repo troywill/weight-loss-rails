@@ -474,7 +474,6 @@
        def self.month_array(user)
          weight = 0
          time_at_point_in_past = 0
-TDW
          initial_reading = Reading.initial_reading(user)
          time_initial = initial_reading.reading_time
          weight_initial = initial_reading.weight
@@ -505,7 +504,7 @@ TDW
          
          function drawChart() {
          var data = google.visualization.arrayToDataTable(<%= raw Reading.month_array(current_user).to_json %> );
-         var options = { title: 'Weight 28 days' };
+         var options = { title: 'Weight 28 days', pointSize:2 };
                       
          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
          chart.draw(data, options);
