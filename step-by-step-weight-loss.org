@@ -406,7 +406,7 @@
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-* [55%] Draw Google Graph
+* [66%] Draw Google Graph
   1. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
@@ -467,36 +467,57 @@
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
   6. [X] Use three day data array  file:../app/views/google_graph/three_day.html.erb
      #+BEGIN_SRC html
-       - TDW var data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(current_user).to_json %> );
+       - var data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(current_user).to_json %> );
      #+END_SRC
-  8. [ ] Place a 28 day data array method in Readings controller
-     - Commentary: :: We will pass data into Google javascript in the view
-     - file:../app/models/reading.rb
-       #+BEGIN_SRC ruby
-         def self.month_array(user)
-           weight = 0
-           time_at_point_in_past = 0
-           time_first_reading = Reading.time_initial(user)
-           weight_first_reading = Reading.weight_initial(user).to_f
-           # Get weight values for last 28 days
-           weight_array = Array.new
-           weight_array.push(['Year','Weight'])
-           number_of_periods = 28
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
-             
-             if ( time_at_point_in_past < time_first_reading )
-               weight = weight_first_reading
-             else
-               weight = Reading.weight_at_time(user, time_at_point_in_past)
-             end
-             # Three significant digits to stop Gruff graph library from acting strangely                                            
-             weight = ((weight * 10000).to_i)/10000.0
-             weight_array.push(["", weight])
+  7. [X] Place a 28 day data array method in Readings model file:../app/models/reading.rb
+     #+BEGIN_SRC ruby
+       def self.month_array(user)
+         weight = 0
+         time_at_point_in_past = 0
+TDW
+         initial_reading = Reading.initial_reading(user)
+         time_initial = initial_reading.reading_time
+         weight_initial = initial_reading.weight
+         
+         weight_array = Array.new
+         weight_array.push(['Year','Weight'])
+         number_of_periods = 28
+         (0..number_of_periods).each do |period_num|
+           time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+           
+           if ( time_at_point_in_past < time_initial )
+             weight = weight_initial
+           else
+             weight = Reading.weight_at_time(user, time_at_point_in_past)
            end
-           return weight_array
+           weight_array.push(["", weight.to_f])
          end
-       #+END_SRC
+         return weight_array
+       end
+     #+END_SRC
+     - Commentary: :: We will pass data into Google javascript in the view
+  5. [X] Put 28 day Google Graph javascript into view file:../app/views/google_graph/month.html.erb
+     #+BEGIN_SRC html
+       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+       <script type="text/javascript">
+         google.load("visualization", "1", {packages:["corechart"]});
+         google.setOnLoadCallback(drawChart);
+         
+         function drawChart() {
+         var data = google.visualization.arrayToDataTable(<%= raw Reading.month_array(current_user).to_json %> );
+         var options = { title: 'Weight 28 days' };
+                      
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+         chart.draw(data, options);
+         }
+       </script>
+       <div id="chart_div" style="width: 900px; height: 500px;"></div>
+     #+END_SRC
+     - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
+  8. [ ] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
+     #+BEGIN_SRC html
+       <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "3 day graph", google_graph_three_day_path %></div></li>
+     #+END_SRC
   9. [ ] Create a goal as a function of time method, place in User model
      - file:../../app/models/user.rb
        #+BEGIN_SRC ruby
