@@ -515,46 +515,31 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  7. [X] Put google chart data array into controller  file:../app/controllers/google_graph_controller.rb
+  7. [X] Put google chart data array into controller file:../app/controllers/google_graph_controller.rb
      #+BEGIN_SRC ruby
        class GoogleGraphController < ApplicationController
          def three_day
            @google_chart_data_array = Reading.chart_array(current_user,'day').to_json
+           @chart_options = "title: 'Weight 3 days', pointSize:2"
          end
-       
-         def week
-         end
-       
          def month
            @google_chart_data_array = Reading.chart_array(current_user,'month').to_json
+           @chart_options = "title:'Weight 1 month',pointSize:2"
          end
-       
          def year
            @google_chart_data_array = Reading.chart_array(current_user,'year').to_json
+           @chart_options = "title:'Weight 1 year',pointSize:2"
          end
-       
          def four_year
+         end
+         def week
          end
        end
      #+END_SRC
-  8. [X] Put 1 year Google Graph javascript into view file:../app/views/google_graph/year.html.erb
+  8. [X] Call partial from 3 day, month, and 1 year views file:../app/views/google_graph/year.html.erb
      #+BEGIN_SRC html
-       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-       <script type="text/javascript">
-         google.load("visualization", "1", {packages:["corechart"]});
-         google.setOnLoadCallback(drawChart);
-         
-         function drawChart() {
-         var data = google.visualization.arrayToDataTable(<%= raw Reading.chart_array(current_user,'year').to_json %> );
-         var options = { title: 'Weight 1 year', pointSize:2 };
-                      
-         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-         chart.draw(data, options);
-         }
-       </script>
-       <div id="chart_div" style="width: 900px; height: 500px;"></div>
+       <%= render 'layouts/google_graph' %>
      #+END_SRC
-     - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
 * [85%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
    1. [X] Install bootstrap-sass
 	#+BEGIN_SRC sh
