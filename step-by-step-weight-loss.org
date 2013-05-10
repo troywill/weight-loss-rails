@@ -518,14 +518,15 @@
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
      #+END_SRC
   10. [ ] Create a goal as a function of time method, place in User model file:../../app/models/user.rb
+      TDW
       #+BEGIN_SRC ruby
         def self.goal_at_time(user, time)
-          if ( time < u.goal_start_time )
-            return u.goal_start_weight.to_f
+          if ( time < user.goal_start_time )
+            return user.goal_start_weight.to_f
           end
-          elapsed_time = time - u.goal_start_time
-          lbs_per_second = ( u.goal_loss_rate / 86400.0 / 3500.0 )
-          return ( u.goal_start_weight - lbs_per_second * elapsed_time ).to_f
+          elapsed_time = time - user.goal_start_time
+          lbs_per_second = ( user.goal_loss_rate / 86400.0 / 3500.0 )
+          return ( user.goal_start_weight - lbs_per_second * elapsed_time ).to_f
         end
       #+END_SRC
   11. [ ] Add goal to month_array method in Reading model so it shows on the Google chart
