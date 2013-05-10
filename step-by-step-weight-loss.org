@@ -406,7 +406,7 @@
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-* [80%] Draw Google Graph
+* [90%] Draw Google Graph
   1. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
@@ -517,7 +517,7 @@
      #+BEGIN_SRC html
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
      #+END_SRC
-  10. [ ] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
+  10. [X] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
       #+BEGIN_SRC ruby
         def self.goal_at_time(user, time)
           goal = Goal.where(:user_id => user.id).last
@@ -533,14 +533,13 @@
         end
         
       #+END_SRC
-  11. [ ] Add goal to month_array method in Reading model so it shows on the Google chart
-      - file:../../app/model/reading.rb
-	#+BEGIN_SRC ruby
-          weight_array.push(['Year','Weight', 'Goal'])
-          ...
-          goal = User.goal_at_time(user_id, time_at_point_in_past)
-          weight_array.push(["", weight, goal])
-	#+END_SRC
+  11. [ ] Add goal to month_array method in Reading model so it shows on the Google chart file:../app/model/reading.rb
+      #+BEGIN_SRC ruby
+        weight_array.push(['Year','Weight', 'Goal'])
+        ...
+        goal = User.goal_at_time(user_id, time_at_point_in_past)
+        weight_array.push(["", weight, goal])
+      #+END_SRC
 * [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
    1. [ ] Install bootstrap-sass
 	#+BEGIN_SRC sh
