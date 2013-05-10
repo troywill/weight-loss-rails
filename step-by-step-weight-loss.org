@@ -519,8 +519,7 @@
      #+END_SRC
   10. [ ] Create a goal as a function of time method, place in User model file:../../app/models/user.rb
       #+BEGIN_SRC ruby
-        def self.goal_at_time(user_id, time)
-          u = User.find(user_id)
+        def self.goal_at_time(user, time)
           if ( time < u.goal_start_time )
             return u.goal_start_weight.to_f
           end
