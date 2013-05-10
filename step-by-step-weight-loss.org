@@ -406,7 +406,7 @@
        <%= Reading.weight_at_time(current_user, Time.now) %>
      #+END_SRC
 
-* [40%] Draw Google Graph
+* [100%] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
   2. [X] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
@@ -431,45 +431,24 @@
   4. [X] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
      #+BEGIN_SRC html
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "3 day graph", google_graph_three_day_path %></div></li>
+       <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
+       <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "1 year graph", google_graph_year_path %></div></li>
      #+END_SRC
   5. [X] Place a chart_array method in Readings model file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.chart_array(user,period)
-         if ( period == 'month' )
-           weight = 0
-           time_at_point_in_past = 0
-           initial_reading = Reading.initial_reading(user)
-           time_initial = initial_reading.reading_time
-           weight_initial = initial_reading.weight
-           
-           weight_array = Array.new
-           weight_array.push(['Year','Weight','Goal'])
-           number_of_periods = 28
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
-             
-             if ( time_at_point_in_past < time_initial )
-               weight = weight_initial
-             else
-               weight = Reading.weight_at_time(user, time_at_point_in_past)
-             end
-             goal = Goal.goal_at_time(user, time_at_point_in_past)
-             weight_array.push(["", weight.to_f, goal.to_f])
-           end
-           return weight_array
-         end
+         weight_array = Array.new
+         weight = 0
+         time_at_point_in_past = 0
+       
+         initial_reading = Reading.initial_reading(user)
+         time_initial = initial_reading.reading_time
+         weight_initial = initial_reading.weight
        
          if ( period == 'day' )
-           weight = 0
-           time_at_point_in_past = 0
-           
-           initial_reading = Reading.initial_reading(user)
-           time_initial = initial_reading.reading_time
-           weight_initial = initial_reading.weight
-           
            # Get weight values for last 3 days
            weight_array = Array.new
-           weight_array.push(['Last 3 days','Weight'])
+           weight_array.push(['Last 3 days','Weight','Goal'])
            number_of_periods = 72
            
            (0..number_of_periods).each do |period_num|
@@ -480,15 +459,45 @@
              else
                weight = Reading.weight_at_time(user, time_at_point_in_past)
              end
-             weight_array.push(["", weight.to_f])
+             goal = Goal.goal_at_time(user, time_at_point_in_past)
+             weight_array.push(["", weight.to_f, goal.to_f])
            end
-           return weight_array
+         elsif ( period == 'month' )
+           weight_array.push(['Year','Weight','Goal'])
+           number_of_periods = 28
+           (0..number_of_periods).each do |period_num|
+             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+             if ( time_at_point_in_past < time_initial )
+               weight = weight_initial
+             else
+               weight = Reading.weight_at_time(user, time_at_point_in_past)
+             end
+             goal = Goal.goal_at_time(user, time_at_point_in_past)
+             weight_array.push(["", weight.to_f, goal.to_f])
+           end
+         elsif ( period == 'year' )
+           # Get weight values for last year
+           weight_array.push(['Last Year','Weight','Goal'])
+           number_of_periods = 12
+       
+           (0..number_of_periods).each do |period_num|
+             time_at_point_in_past = Time.now-(number_of_periods-period_num).month
+             
+             if ( time_at_point_in_past < time_initial )
+               weight = weight_initial
+             else
+               weight = Reading.weight_at_time(user, time_at_point_in_past)
+             end
+             goal = Goal.goal_at_time(user, time_at_point_in_past)
+             weight_array.push(["", weight.to_f, goal.to_f])
+           end
          end
+         return weight_array
        end
      #+END_SRC
      - Commentary: :: We will pass data into Google javascript in the view
      - Commentary: :: We will pass data into Google javascript in the view
-  7. [ ] Put Google Graph javascript into view file:../app/views/google_graph/three_day.html.erb
+  6. [X] Put Google Graph javascript into view three day file:../app/views/google_graph/three_day.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -508,11 +517,7 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  8. [ ] Use three day data array  file:../app/views/google_graph/three_day.html.erb
-     #+BEGIN_SRC html
-       - var data = google.visualization.arrayToDataTable(<%= raw Reading.three_day_data_array(current_user).to_json %> );
-     #+END_SRC
-  9. [ ] Put 28 day Google Graph javascript into view file:../app/views/google_graph/month.html.erb
+  7. [X] Put 28 day Google Graph javascript into view file:../app/views/google_graph/month.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -530,18 +535,24 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  10. [ ] Path for 28 day Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
-      #+BEGIN_SRC html
-	<li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
-      #+END_SRC
-  11. [ ] Add goal to month_array method in Reading model so it shows on the Google chart file:../app/models/reading.rb
-      #+BEGIN_SRC ruby
-        ...
-        weight_array.push(['Year','Weight','Goal'])
-        ...
-        goal = Goal.goal_at_time(user, time_at_point_in_past)
-        weight_array.push(["", weight, goal])
-      #+END_SRC
+  8. [X] Put 1 year Google Graph javascript into view file:../app/views/google_graph/year.html.erb
+     #+BEGIN_SRC html
+       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+       <script type="text/javascript">
+         google.load("visualization", "1", {packages:["corechart"]});
+         google.setOnLoadCallback(drawChart);
+         
+         function drawChart() {
+         var data = google.visualization.arrayToDataTable(<%= raw Reading.chart_array(current_user,'year').to_json %> );
+         var options = { title: 'Weight 1 year', pointSize:2 };
+                      
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+         chart.draw(data, options);
+         }
+       </script>
+       <div id="chart_div" style="width: 900px; height: 500px;"></div>
+     #+END_SRC
+     - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
 * [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
    1. [ ] Install bootstrap-sass
 	#+BEGIN_SRC sh
