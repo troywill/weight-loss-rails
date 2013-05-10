@@ -537,7 +537,7 @@
       #+BEGIN_SRC ruby
         weight_array.push(['Year','Weight', 'Goal'])
         ...
-        goal = User.goal_at_time(user_id, time_at_point_in_past)
+        goal = Goal.goal_at_time(current_user, time_at_point_in_past)
         weight_array.push(["", weight, goal])
       #+END_SRC
 * [0%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
