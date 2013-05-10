@@ -444,11 +444,11 @@
          initial_reading = Reading.initial_reading(user)
          time_initial = initial_reading.reading_time
          weight_initial = initial_reading.weight
-       
+
          if ( period == 'day' )
            # Get weight values for last 3 days
            weight_array = Array.new
-           weight_array.push(['Last 3 days','Weight','Goal'])
+           weight_array.push(['Last 3 days','Goal','Weight'])
            number_of_periods = 72
            
            (0..number_of_periods).each do |period_num|
@@ -459,8 +459,8 @@
              else
                weight = Reading.weight_at_time(user, time_at_point_in_past)
              end
-             goal = Goal.goal_at_time(user, time_at_point_in_past)
              weight_array.push(["", weight.to_f, goal.to_f])
+             goal = Goal.goal_at_time(user, time_at_point_in_past)
            end
          elsif ( period == 'month' )
            weight_array.push(['Year','Weight','Goal'])
@@ -497,19 +497,17 @@
      #+END_SRC
      - Commentary: :: We will pass data into Google javascript in the view
      - Commentary: :: We will pass data into Google javascript in the view
-  6. [X] Put Google Graph javascript into view three day file:../app/views/google_graph/three_day.html.erb
+  6. [X] Put Google Graph javascript into view a view partial three day file:../app/views/layouts/_google_graph.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
          google.load("visualization", "1", {packages:["corechart"]});
          google.setOnLoadCallback(drawChart);
-         
+                
          function drawChart() {
-         var data = google.visualization.arrayToDataTable(
-         [['Year','Sales','Expenses'],['2013',1000,400],['2005',1170,460],['2006',660,1120],['2007',1030,540]]
-         );
-         var options = { title: 'Weight 3 days' };
-                      
+         var data = google.visualization.arrayToDataTable(<%= raw @google_chart_data_array %>);
+         var options = { title: 'Weight 3 days', pointSize:2 };
+                             
          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
          chart.draw(data, options);
          }
@@ -517,24 +515,28 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  7. [X] Put 28 day Google Graph javascript into view file:../app/views/google_graph/month.html.erb
-     #+BEGIN_SRC html
-       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-       <script type="text/javascript">
-         google.load("visualization", "1", {packages:["corechart"]});
-         google.setOnLoadCallback(drawChart);
-         
-         function drawChart() {
-         var data = google.visualization.arrayToDataTable(<%= raw Reading.chart_array(current_user,'month').to_json %> );
-         var options = { title: 'Weight 28 days', pointSize:2 };
-                      
-         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-         chart.draw(data, options);
-         }
-       </script>
-       <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  7. [X] Put google chart data array into controller  file:../app/controllers/google_graph_controller.rb
+     #+BEGIN_SRC ruby
+       class GoogleGraphController < ApplicationController
+         def three_day
+           @google_chart_data_array = Reading.chart_array(current_user,'day').to_json
+         end
+       
+         def week
+         end
+       
+         def month
+           @google_chart_data_array = Reading.chart_array(current_user,'month').to_json
+         end
+       
+         def year
+           @google_chart_data_array = Reading.chart_array(current_user,'year').to_json
+         end
+       
+         def four_year
+         end
+       end
      #+END_SRC
-     - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
   8. [X] Put 1 year Google Graph javascript into view file:../app/views/google_graph/year.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
