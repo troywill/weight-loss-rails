@@ -27,7 +27,7 @@
        rails generate devise:install
      #+END_SRC
   3. [X] Generate a User Model and generate routes for user activities
-     #+BEGIN_SRC 
+     #+BEGIN_SRC sh
        rails generate devise User
      #+END_SRC
   4. [X] Run the devise_create_users database migration the was created by in the previous command

@@ -1,0 +1,2150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>step-by-step-weight-loss</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="step-by-step-weight-loss"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-05-10T22:23+0400"/>
+<meta name="author" content=""/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">step-by-step-weight-loss</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 [100%] Create a new rails application</a></li>
+<li><a href="#sec-2">2 [100%] Create a User authentication system with Devise &lt; see step-by-step-devise.org &gt;</a></li>
+<li><a href="#sec-3">3 [100%] Layout see  ~/srv/bootstrap/128/kehoe/emacs/</a></li>
+<li><a href="#sec-4">4 [100%] Create "Readings" model, controller, and views</a></li>
+<li><a href="#sec-5">5 [100%] Create "Settings" model, controller, and views, default values</a></li>
+<li><a href="#sec-6">6 [100%] Create Goal model, controller, and views</a></li>
+<li><a href="#sec-7">7 [100%] Display current goal</a></li>
+<li><a href="#sec-8">8 [100%] Weight as a function of time</a></li>
+<li><a href="#sec-9">9 [100%] Draw Google Graph</a></li>
+<li><a href="#sec-10">10 [85%] Incorporate Twitter Bootstrap see  ~/srv/bootstrap/128/kehoe/emacs/</a></li>
+<li><a href="#sec-11">11 [0%] Deploy to marv.usahealthscience.com</a></li>
+<li><a href="#sec-12">12 [0%] Display readings table on Welcome Page</a></li>
+<li><a href="#sec-13">13 [0%] Build a mailer to send messages to users</a></li>
+<li><a href="#sec-14">14 [0%] Weight loss/gain over the last 28 days</a></li>
+<li><a href="#sec-15">15 [0%] Change time zone</a></li>
+<li><a href="#sec-16">16 [0%] Graph last 28 days</a></li>
+<li><a href="#sec-17">17 Revisit analysis</a></li>
+<li><a href="#sec-18">18 Add last weight reading as words helper</a></li>
+<li><a href="#sec-19">19 Figure out when we can achieve goal</a></li>
+<li><a href="#sec-20">20 Graph last two years</a></li>
+<li><a href="#sec-21">21 Footer</a></li>
+<li><a href="#sec-22">22 About your last reading</a></li>
+<li><a href="#sec-23">23 Emacs Org Mode Cheat Table</a>
+<ul>
+<li><a href="#sec-23-1">23.1 Emacs termology</a></li>
+<li><a href="#sec-23-2">23.2 Window splitting</a></li>
+</ul>
+</li>
+<li><a href="#sec-24">24 CSS Resources</a></li>
+<li><a href="#sec-25">25 Attic</a>
+<ul>
+<li><a href="#sec-25-1">25.1 [0\/$1] Add New Reading to Welcome Page</a></li>
+<li><a href="#sec-25-2">25.2 [0\/$1] Draw a graph</a></li>
+<li><a href="#sec-25-3">25.3 [0\/$1] Create User model, controller, and view</a></li>
+<li><a href="#sec-25-4">25.4 [0\/$1] Identify the user</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> [100%] Create a new rails application</h2>
+<div class="outline-text-2" id="text-1">
+
+<ol>
+<li><code>[X]</code> Run the 'rails' command
+
+
+
+<pre class="example">rails new weight_loss
+</pre>
+
+</li>
+<li><code>[X]</code> Enable a JavaScript runtime in <a href="../Gemfile">../Gemfile</a>
+
+
+
+<pre class="example"># See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer', platforms: :ruby
+</pre>
+
+</li>
+<li><code>[X]</code> Create a “home” controller and a “home/index” page
+
+
+
+<pre class="example">rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
+</pre>
+
+<ul>
+<li>&ndash;skip-stylesheets &ndash;skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Set the default route to home/index in <a href="../config/routes.rb">../config/routes.rb</a>
+
+
+
+<pre class="example">root 'home#index'
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> [100%] Create a User authentication system with Devise &lt; see <a href="file:///scpc:troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.html">step-by-step-devise.org</a> &gt;</h2>
+<div class="outline-text-2" id="text-2">
+
+<ol>
+<li><code>[X]</code> Enable `devise` gem in <a href="../Gemfile">Gemfile</a>
+
+
+
+<pre class="example">gem 'devise', '~&gt; 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
+</pre>
+
+</li>
+<li><code>[X]</code> Run the Devise gem install generator
+
+
+
+<pre class="example">rails generate devise:install
+</pre>
+
+</li>
+<li><code>[X]</code> Generate a User Model and generate routes for user activities
+
+
+
+<pre class="example">rails generate devise User
+</pre>
+
+</li>
+<li><code>[X]</code> Run the devise<sub>create</sub><sub>users</sub> database migration the was created by in the previous command
+
+
+
+<pre class="example">rake db:migrate
+</pre>
+
+</li>
+<li><code>[X]</code> (Re)start the Rails server
+</li>
+<li><code>[X]</code> Place sign up and sign out links on the home page <a href="../app/views/home/index.html.erb">../app/views/home/index.html.erb</a>
+
+
+
+<pre class="example">&lt;h1&gt;Home#index&lt;/h1&gt;
+&lt;%= Time.now %&gt;
+&lt;li&gt;&lt;%= link_to "Sign Up", new_user_registration_path %&gt;&lt;/li&gt;
+&lt;li&gt;&lt;%= link_to "Sign In", new_user_session_path %&gt;&lt;/li&gt;
+&lt;li&gt;&lt;%= link_to "Sign Out", destroy_user_session_path, :method =&gt; 'delete' %&gt;&lt;/li&gt;
+
+&lt;% if user_signed_in? %&gt;
+You are signed in, current_user.id = &lt;%= current_user.id %&gt;&lt;br /&gt;
+user_session.keys =&gt; &lt;%= user_session.keys %&gt;
+&lt;% end %&gt;
+</pre>
+
+<ul>
+<li>To verify if a user is signed in, use the following helper: user<sub>signed</sub><sub>in</sub>?
+</li>
+<li>See <a href="https://github.com/plataformatec/devise#controller-filters-and-helpers">https://github.com/plataformatec/devise#controller-filters-and-helpers</a>
+</li>
+<li><a href="../app/views/home/index.html.erb">../app/views/home/index.html.erb</a>
+</li>
+<li>For the current signed-in user, this helper is available: current<sub>user</sub>
+</li>
+</ul>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> [100%] Layout see  <a href="file:///scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/">~/srv/bootstrap/128/kehoe/emacs/</a></h2>
+<div class="outline-text-2" id="text-3">
+
+<ol>
+<li><code>[X]</code> Create a Navigation partial in <a href="../app/views/layouts/_navigation.html.erb">../app/views/layouts/_navigation.html.erb</a>
+
+
+
+<pre class="example">&lt;%= link_to "Home", root_path, :class =&gt; 'brand' %&gt;
+&lt;ul class="nav"&gt;
+  &lt;% if user_signed_in? %&gt;
+  &lt;li&gt;
+    &lt;%= link_to('Logout', destroy_user_session_path, :method=&gt;'delete') %&gt;
+  &lt;/li&gt;
+  &lt;% else %&gt;
+  &lt;li&gt;
+    &lt;%= link_to('Login', new_user_session_path)  %&gt;
+  &lt;/li&gt;
+  &lt;% end %&gt;
+  &lt;% if user_signed_in? %&gt;
+  &lt;li&gt;
+    &lt;%= link_to('Edit account', edit_user_registration_path) %&gt;
+  &lt;/li&gt;
+  &lt;% else %&gt;
+  &lt;li&gt;
+    &lt;%= link_to('Sign up', new_user_registration_path)  %&gt;
+  &lt;/li&gt;
+  &lt;% end %&gt;
+         &lt;li&gt;&lt;%= link_to "Overview", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "New reading", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "See all readings", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "Goal", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "3 day graph", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "28 day graph", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "1 year graph", root_path %&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;%= link_to "4 year graph", root_path %&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+</li>
+<li><code>[X]</code> Create a Messages partial in <a href="../app/views/layouts/_messages.html.erb">../app/views/layouts/_messages.html.erb</a>
+
+
+
+<pre class="example">&lt;% flash.each do |name, msg| %&gt;
+  &lt;% if msg.is_a?(String) %&gt;
+  &lt;div class="alert alert-&lt;%= name == :notice ? "success" : "error" %&gt;"&gt;
+    &lt;a class="close" data-dismiss="alert"&gt;&amp;#215;&lt;/a&gt;
+    &lt;%= content_tag :div, msg, :id =&gt; "flash_#{name}" %&gt;
+  &lt;/div&gt;
+  &lt;% end %&gt;
+&lt;% end %&gt;
+</pre>
+
+</li>
+<li><code>[X]</code> New Application Layout with Twitter Bootstrap <a href="../app/views/layouts/application.html.erb">../app/views/layouts/application.html.erb</a>
+
+
+
+<pre class="example">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;&lt;%= content_for?(:title) ? yield(:title) : "Myapp" %&gt;&lt;/title&gt;
+    &lt;meta name="description" content=""&gt;
+    &lt;meta name="author" content=""&gt;
+    &lt;%= stylesheet_link_tag "application", :media =&gt; "all" %&gt;
+    &lt;%= javascript_include_tag "application" %&gt;
+    &lt;%= csrf_meta_tags %&gt;
+    &lt;%= yield(:head) %&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header class="navbar navbar-fixed-top"&gt;
+      &lt;nav class="navbar-inner"&gt;
+        &lt;div class="container"&gt;
+          &lt;%= render 'layouts/navigation' %&gt;
+        &lt;/div&gt;
+      &lt;/nav&gt;
+    &lt;/header&gt;
+    &lt;div id="main" role="main"&gt;
+      &lt;div class="container"&gt;
+        &lt;div class="content"&gt;
+          &lt;div class="row"&gt;
+            &lt;div class="span12"&gt;
+              &lt;%= render 'layouts/messages' %&gt;
+              &lt;%= yield %&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;footer&gt;
+          &lt;/footer&gt;
+        &lt;/div&gt;
+      &lt;/div&gt; &lt;!--! end of .container --&gt;
+    &lt;/div&gt; &lt;!--! end of #main --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> [100%] Create "Readings" model, controller, and views</h2>
+<div class="outline-text-2" id="text-4">
+
+<ol>
+<li><code>[X]</code> Generate reading scaffold
+
+
+
+<pre class="example">rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
+</pre>
+
+</li>
+<li><code>[X]</code> Relationship to User, validations
+     <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">belongs_to :user
+validates :user_id, :numericality =&gt; true
+validates :weight, :numericality =&gt; true
+</pre>
+
+</li>
+<li><code>[X]</code> Default clothing in values in Model <a href="../db/migrate/">../db/migrate/</a> 2012&hellip;<sub>created</sub><sub>readings</sub>.rb
+
+
+
+<pre class="example">class CreateReadings &lt; ActiveRecord::Migration
+  def change
+    create_table :readings do |t|
+      t.integer :user_id
+      t.decimal :weight
+      t.datetime :reading_time
+      t.decimal :clothing_wt, :default =&gt; 0
+
+      t.timestamps
+    end
+  end
+end
+</pre>
+
+</li>
+<li><code>[X]</code> Migrate the database, i.e. rake db:migrate
+</li>
+<li><code>[X]</code> <a href="../app/views/layouts/_navigation.html.erb">../app/views/layouts/_navigation.html.erb</a>
+
+
+
+<pre class="example">&lt;li&gt;&lt;%= link_to "New reading", new_reading_path %&gt;&lt;/li&gt;
+&lt;li&gt;&lt;%= link_to "See all readings", readings_path %&gt;&lt;/li&gt;
+</pre>
+
+</li>
+<li><code>[X]</code> [100%] User ID on new Reading
+<ol>
+<li><code>[X]</code> Add user id to create method in readings controller <a href="../app/controllers/readings_controller.rb">../app/controllers/readings_controller.rb</a>
+
+
+
+<pre class="example">def create
+  @reading = Reading.new(reading_params)
+  @reading.user_id = current_user.id
+</pre>
+
+<ul>
+<li>note that @user comes from application controller, identify<sub>user</sub> method
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Remove user id field from <a href="../app/views/readings/_form.html.erb">../app/views/readings/_form.html.erb</a>
+</li>
+</ol>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> [100%] Create "Settings" model, controller, and views, default values</h2>
+<div class="outline-text-2" id="text-5">
+
+<ol>
+<li><code>[X]</code> Generate setting scaffold
+
+
+
+<pre class="example">rails generate scaffold setting user_id:integer \
+    filter_rate_gain:integer \
+    filter_rate_loss:integer \
+    custom_graph:boolean \
+    graph_upper:integer \
+    graph_lower:integer \
+    graph_lines:integer \
+    si:boolean \
+    clothing:boolean \
+    clothing_wt:decimal\
+    timezone:integer \
+    locale:string \
+    --force
+</pre>
+
+</li>
+<li><code>[X]</code> Validations <a href="../app/models/setting.rb">../app/models/setting.rb</a>
+
+
+
+<pre class="example">validates :filter_rate_gain, :presence =&gt; true, :numericality =&gt; true
+validates :filter_rate_loss, :presence =&gt; true, :numericality =&gt; true
+validates :graph_upper, :presence =&gt; true, :numericality =&gt; true
+validates :graph_lower, :presence =&gt; true, :numericality =&gt; true
+validates :graph_lines, :presence =&gt; true, :numericality =&gt; true
+validates :clothing_wt, :presence =&gt; true, :numericality =&gt; true
+validates :timezone, :presence =&gt; true, :numericality =&gt; true
+validates :locale,  :presence =&gt; true
+</pre>
+
+</li>
+<li><code>[X]</code> Set default values in <a href="../db/migrate">../db/migrate</a> 2013&hellip;.<sub>create</sub><sub>settings</sub>.rb
+
+
+
+<pre class="example">t.integer :user_id
+t.integer :filter_rate_gain, :default =&gt; 500
+t.integer :filter_rate_loss, :default =&gt; 7000
+t.boolean :custom_graph, :default =&gt; 0
+t.integer :graph_upper, :default =&gt; 300
+t.integer :graph_lower, :default =&gt; 0
+t.integer :graph_lines, :default =&gt; 5
+t.boolean :si, :default =&gt; 0
+t.boolean :clothing, :default =&gt; 0
+t.decimal :clothing_wt, :default =&gt; 5
+t.integer :timezone, :default =&gt; -7
+t.string :locale, :default =&gt; "en_US.UTF-8"
+</pre>
+
+</li>
+<li><code>[X]</code> Database migration
+</li>
+<li><code>[X]</code> Add current<sub>user</sub>.id to create method <a href="../app/controllers/settings_controller.rb">../app/controllers/settings_controller.rb</a>
+
+
+
+<pre class="example">def create
+  @setting = Setting.new(setting_params)
+  @setting.user_id = current_user.id # current_user provided by Devise
+</pre>
+
+</li>
+<li><code>[X]</code> Remove user<sub>id</sub> from form <a href="../app/views/settings/_form.html.erb">../app/views/settings/_form.html.erb</a>
+
+
+
+<pre class="example"># Delete following div, user_id is supplied in the controller instead
+&lt;div class="field"&gt;
+  &lt;%= f.label :user_id %&gt;&lt;br&gt;
+  &lt;%= f.number_field :user_id %&gt;
+&lt;/div&gt;
+</pre>
+
+</li>
+<li><code>[X]</code> settings<sub>path</sub> in application layout <a href="../app/views/layouts/_navigation.html.erb">../app/views/layouts/_navigation.html.erb</a>
+</li>
+<li><code>[X]</code> Relationship between Setting and User <a href="../app/models/setting.rb">../app/models/setting.rb</a>
+
+
+
+<pre class="example">class Setting &lt; ActiveRecord::Base
+  belongs_to :user
+  ...
+</pre>
+
+</li>
+<li><code>[X]</code> Relationship between User and Setting <a href="../app/models/user.rb">../app/models/user.rb</a>
+
+
+
+<pre class="example">class User &lt; ActiveRecord::Base
+  has_one :setting
+</pre>
+
+</li>
+<li><code>[X]</code> Add New Settings to be created when a new user is created <a href="../app/models/user.rb">../app/models/user.rb</a>
+<ul>
+<li>No user controller with Devise
+</li>
+<li>Use the standard after<sub>create</sub> callback provided by Rails.
+
+
+
+<pre class="example">class User &lt; ActiveRecord::Base
+  has_one :setting
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+  :recoverable, :rememberable, :trackable, :validatable
+
+  after_create :create_new_settings
+
+  def create_new_settings
+    Setting.create(:user_id =&gt; id)
+  end
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> [100%] Create Goal model, controller, and views</h2>
+<div class="outline-text-2" id="text-6">
+
+<ol>
+<li><code>[X]</code> Generate scaffold
+
+
+
+<pre class="example">rails generate scaffold goal user_id:integer \
+    goal_start_weight:decimal \
+    goal_start_time:datetime \
+    goal_loss_rate:integer \
+    goal_finish_time:datetime
+</pre>
+
+</li>
+<li><code>[X]</code> Relationship between Goal and User <a href="../app/models/goal.rb">../app/models/goal.rb</a>
+
+
+
+<pre class="example">class Setting &lt; ActiveRecord::Base
+  belongs_to :user
+...
+</pre>
+
+</li>
+<li><code>[X]</code> Relationship between User and Goal <a href="../app/models/user.rb">../app/models/user.rb</a>
+
+
+
+<pre class="example">class User &lt; ActiveRecord::Base
+  has_one :setting
+  has_many :goals
+</pre>
+
+</li>
+<li><code>[X]</code> Default values <a href="../db/migrate/">../db/migrate/</a> 2013xxx<sub>create</sub><sub>goals</sub>.rb
+
+
+
+<pre class="example">t.integer :goal_loss_rate, :default =&gt; 500
+t.datetime :goal_finish_time, :default =&gt; (Time.now + 86400*7)
+</pre>
+
+</li>
+<li><code>[X]</code> Validations <a href="../app/models/goal.rb">../app/models/goal.rb</a>
+
+
+
+<pre class="example">validates :user_id, :presence =&gt; true, :numericality =&gt; true
+</pre>
+
+</li>
+<li><code>[X]</code> Migrate database
+</li>
+<li><code>[X]</code> user<sub>id</sub> <a href="../app/controllers/goals_controller.rb">../app/controllers/goals_controller.rb</a>
+
+
+
+<pre class="example"># POST /goals
+# POST /goals.json
+def create
+  @goal = Goal.new(goal_params)
+  @goal.user_id = current_user.id # current_user provided by Devise
+</pre>
+
+</li>
+<li><code>[X]</code> update form <a href="../app/views/goals/_form.html.erb">../app/views/goals/_form.html.erb</a>
+</li>
+<li><code>[X]</code> navigation <a href="../app/views/layouts/_navigation.html.erb">../app/views/layouts/_navigation.html.erb</a>
+
+
+
+<pre class="example">&lt;li&gt;&lt;%= link_to "Goals", goals_path %&gt;&lt;/li&gt;
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> [100%] Display current goal</h2>
+<div class="outline-text-2" id="text-7">
+
+<ol>
+<li><code>[X]</code> goal<sub>now</sub> in Goal model <a href="../app/models/goal.rb">../app/models/goal.rb</a>
+
+
+
+<pre class="example">def self.goal_now(user)
+  goal = Goal.where(:user_id =&gt; user.id).last
+  # return 0 if ??
+  elapsed_time = Time.now - goal.goal_start_time
+  lbs_per_second = ( goal.goal_loss_rate / 86400.0 / 3500.0 )
+  return ( goal.goal_start_weight - lbs_per_second * elapsed_time )
+end
+</pre>
+
+</li>
+<li><code>[X]</code> View <a href="../app/views/home/index.html.erb">../app/views/home/index.html.erb</a>
+
+
+
+<pre class="example">&lt;%= number_with_precision(Goal.goal_now(current_user), :precision =&gt; 3)%&gt;
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> [100%] Weight as a function of time</h2>
+<div class="outline-text-2" id="text-8">
+
+<ol>
+<li><code>[X]</code> In Reading model, initial<sub>reading</sub> function <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.initial_reading( user )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user.id).first
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, self.get<sub>readings</sub><sub>after</sub>, self.get<sub>next</sub><sub>reading</sub><sub>after</sub>( user<sub>id</sub>, time ) <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.get_readings_after( user, start_time, end_time )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user.id).where('reading_time &gt;= ? AND reading_time &lt;= ?', start_time, end_time)
+end
+def self.get_next_reading_after( user, time )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user.id).where('reading_time &gt; ?', time).first
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, apply<sub>filter</sub>( max<sub>gain</sub><sub>rate</sub>, max<sub>loss</sub><sub>rate</sub>, initial<sub>time</sub>, initial<sub>weight</sub>, time, weight ) <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
+  if ( weight == initial_time )
+    return weight
+  else
+    delta_time = ( time - initial_time ).to_i
+    cals_day_pounds_second = 1.0 / 86400.0 / 3500.0
+    max_allowable_weight = initial_weight + ( max_gain_rate * cals_day_pounds_second * delta_time )
+    min_allowable_weight = initial_weight - ( max_loss_rate * cals_day_pounds_second * delta_time )
+    if ( weight &gt; max_allowable_weight )
+      return max_allowable_weight
+    end
+    if ( weight &lt; min_allowable_weight )
+      return min_allowable_weight
+    end
+  end
+  return  weight
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, interpolate <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+  filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+  delta_time = next_time - last_time
+  delta_weight = ( filtered_next_weight - last_weight )
+  percent = ( time - last_time ) / delta_time.to_f
+  interpolated_weight = last_weight + percent * delta_weight
+end
+</pre>
+
+</li>
+<li><code>[X]</code> In Reading model, weight<sub>at</sub><sub>time</sub> function <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.weight_at_time(user, time)
+  setting = Setting.where(:user_id =&gt; user.id).last
+  initial_reading = Reading.initial_reading(user)
+  time_initial = initial_reading.reading_time
+  weight_initial = initial_reading.weight
+  if ( time &lt; time_initial )
+    return weight_initial
+  end
+  max_gain_rate = setting.filter_rate_gain
+  max_loss_rate = setting.filter_rate_loss
+  readings = Reading.get_readings_after( user, time_initial, time )
+  for reading in readings
+    w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
+                     weight_initial, reading.reading_time, reading.weight)
+    time_initial = reading.reading_time
+    weight_initial = w
+  end
+  next_reading = Reading.get_next_reading_after(user, time)
+  if next_reading
+    weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
+                          next_reading.reading_time, next_reading.weight, time )
+  else
+    weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+  end
+  return weight
+end
+</pre>
+
+</li>
+<li><code>[X]</code> Display weight now in <a href="../app/views/home/index.html.erb">../app/views/home/index.html.erb</a>
+
+
+
+<pre class="example">&lt;%= Reading.weight_at_time(current_user, Time.now) %&gt;
+</pre>
+
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> [100%] Draw Google Graph</h2>
+<div class="outline-text-2" id="text-9">
+
+<ol>
+<li>(Optional) See <a href="http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way">http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way</a>
+</li>
+<li><code>[X]</code> Create a goal as a function of time method, place in Goal model <a href="../app/models/goal.rb">../app/models/goal.rb</a>
+
+
+
+<pre class="example">def self.goal_at_time(user, time)
+  goal = Goal.where(:user_id =&gt; user.id).last
+  goal_start_time = goal.goal_start_time
+  goal_start_weight = goal.goal_start_weight
+  goal_loss_rate = goal.goal_loss_rate
+  if ( time &lt;  goal_start_time )
+    return goal_start_weight.to_f
+  end
+  elapsed_time = time - goal_start_time
+  lbs_per_second = ( goal_loss_rate / 86400.0 / 3500.0 )
+  return ( goal_start_weight - lbs_per_second * elapsed_time ).to_f
+end
+
+</pre>
+
+</li>
+<li><code>[X]</code> Generate the controller for generating Graphs
+
+
+
+<pre class="example">rails generate controller GoogleGraph three_day week month year four_year
+</pre>
+
+</li>
+<li><code>[X]</code> Path for Google Graph three day in navigation <a href="../app/views/layouts/_navigation.html.erb">../app/views/layouts/_navigation.html.erb</a> layout
+
+
+
+<pre class="example">&lt;li&gt;&lt;div id="fuck-turbolinks" data-no-turbolink&gt;&lt;%= link_to "3 day graph", google_graph_three_day_path %&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;div id="fuck-turbolinks" data-no-turbolink&gt;&lt;%= link_to "28 day graph", google_graph_month_path %&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;div id="fuck-turbolinks" data-no-turbolink&gt;&lt;%= link_to "1 year graph", google_graph_year_path %&gt;&lt;/div&gt;&lt;/li&gt;
+</pre>
+
+</li>
+<li><code>[X]</code> Place a chart<sub>array</sub> method in Readings model <a href="../app/models/reading.rb">../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.chart_array(user,period)
+  weight_array = Array.new
+  weight = 0
+  time_at_point_in_past = 0
+
+  initial_reading = Reading.initial_reading(user)
+  time_initial = initial_reading.reading_time
+  weight_initial = initial_reading.weight
+
+  if ( period == 'day' )
+    # Get weight values for last 3 days
+    weight_array = Array.new
+    weight_array.push(['Last 3 days','Weight','Goal'])
+    number_of_periods = 72
+
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).hour
+
+      if ( time_at_point_in_past &lt; time_initial )
+        weight = weight_initial
+      else
+        weight = Reading.weight_at_time(user, time_at_point_in_past)
+      end
+      goal = Goal.goal_at_time(user, time_at_point_in_past)
+      weight_array.push(["", weight.to_f, goal.to_f])
+    end
+  elsif ( period == 'month' )
+    weight_array.push(['Year','Weight','Goal'])
+    number_of_periods = 28
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+      if ( time_at_point_in_past &lt; time_initial )
+        weight = weight_initial
+      else
+        weight = Reading.weight_at_time(user, time_at_point_in_past)
+      end
+      goal = Goal.goal_at_time(user, time_at_point_in_past)
+      weight_array.push(["", weight.to_f, goal.to_f])
+    end
+  elsif ( period == 'year' )
+    # Get weight values for last year
+    weight_array.push(['Last Year','Weight','Goal'])
+    number_of_periods = 12
+
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).month
+
+      if ( time_at_point_in_past &lt; time_initial )
+        weight = weight_initial
+      else
+        weight = Reading.weight_at_time(user, time_at_point_in_past)
+      end
+      goal = Goal.goal_at_time(user, time_at_point_in_past)
+      weight_array.push(["", weight.to_f, goal.to_f])
+    end
+  end
+  return weight_array
+end
+</pre>
+
+<dl>
+<dt>Commentary:</dt><dd>We will pass data into Google javascript in the view
+</dd>
+<dt>Commentary:</dt><dd>We will pass data into Google javascript in the view
+</dd>
+</dl>
+
+</li>
+<li><code>[X]</code> Put Google Graph javascript into view three day <a href="../app/views/google_graph/three_day.html.erb">../app/views/google_graph/three_day.html.erb</a>
+
+
+
+<pre class="example">&lt;script type="text/javascript" src="https://www.google.com/jsapi"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+  var data = google.visualization.arrayToDataTable(
+  [['Year','Sales','Expenses'],['2013',1000,400],['2005',1170,460],['2006',660,1120],['2007',1030,540]]
+  );
+  var options = { title: 'Weight 3 days' };
+
+  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+  }
+&lt;/script&gt;
+&lt;div id="chart_div" style="width: 900px; height: 500px;"&gt;&lt;/div&gt;
+</pre>
+
+<ul>
+<li>var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Put 28 day Google Graph javascript into view <a href="../app/views/google_graph/month.html.erb">../app/views/google_graph/month.html.erb</a>
+
+
+
+<pre class="example">&lt;script type="text/javascript" src="https://www.google.com/jsapi"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+  var data = google.visualization.arrayToDataTable(&lt;%= raw Reading.chart_array(current_user,'month').to_json %&gt; );
+  var options = { title: 'Weight 28 days', pointSize:2 };
+
+  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+  }
+&lt;/script&gt;
+&lt;div id="chart_div" style="width: 900px; height: 500px;"&gt;&lt;/div&gt;
+</pre>
+
+<ul>
+<li>var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Put 1 year Google Graph javascript into view <a href="../app/views/google_graph/year.html.erb">../app/views/google_graph/year.html.erb</a>
+
+
+
+<pre class="example">&lt;script type="text/javascript" src="https://www.google.com/jsapi"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+  var data = google.visualization.arrayToDataTable(&lt;%= raw Reading.chart_array(current_user,'year').to_json %&gt; );
+  var options = { title: 'Weight 1 year', pointSize:2 };
+
+  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+  }
+&lt;/script&gt;
+&lt;div id="chart_div" style="width: 900px; height: 500px;"&gt;&lt;/div&gt;
+</pre>
+
+<ul>
+<li>var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
+</li>
+</ul>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> [85%] Incorporate Twitter Bootstrap see  <a href="file:///scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/">~/srv/bootstrap/128/kehoe/emacs/</a></h2>
+<div class="outline-text-2" id="text-10">
+
+<ol>
+<li><code>[X]</code> Install bootstrap-sass
+
+
+
+<pre class="example">sudo gem install bootstrap-sass
+</pre>
+
+<ul>
+<li>( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Add `bootstrap-sass` gems in <a href="../Gemfile">Gemfile</a>
+
+
+
+<pre class="example">gem 'bootstrap-sass'
+</pre>
+
+<ul>
+<li>Note: See <a href="http://rubygems.org/gems/bootstrap-sass">http://rubygems.org/gems/bootstrap-sass</a> for latest version
+</li>
+<li>Note: `sass-rails` is already in your Gemfile
+</li>
+<li>Note: Can specify version in Gemfile: e.g., gem "bootstrap-sass", "~&gt; 2.3.1.0"
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Add the following line to <a href="../config/application.rb">../config/application.rb</a>
+
+
+
+<pre class="example">config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)          
+</pre>
+
+<ul>
+<li>Place after the `class Application &lt; Rails::Application` line
+</li>
+<li>See <a href="https://github.com/thomas-mcdonald/bootstrap-sass#rails-4">bootstrap-sass#rails-4</a> if curious
+</li>
+</ul>
+
+</li>
+<li><code>[X]</code> Include the Twitter Bootstrap Javascript ( see <a href="https://github.com/thomas-mcdonald/bootstrap-sass#javascripts">bootstrap-sass#javascripts</a> ) in <a href="../app/assets/javascripts/application.js">app/assets/javascripts/application.js</a>
+
+
+
+<pre class="example"># place at end of file, after other require lines
+//= require bootstrap
+</pre>
+
+</li>
+<li><code>[X]</code> Rename application.css application.scss
+
+
+
+<pre class="example">cd ../app/assets/stylesheets/ &amp;&amp; mv -v application.css application.css.scss
+</pre>
+
+</li>
+<li><code>[X]</code> Import Bootstrap in an SCSS file with a new <a href="../app/assets/stylesheets/bootstrap_and_overrides.css.scss">app/assets/stylesheets/bootstrap<sub>and</sub><sub>overrides</sub>.css.scss</a> file
+
+
+
+<pre class="example">/* import twitter bootstrap */
+@import "bootstrap";
+body { padding-top: 60px; }
+@import "bootstrap-responsive";
+</pre>
+
+<ul>
+<li>bootstrap<sub>and</sub><sub>overrides</sub>.css.scss is automatically included and compiled by the `*= require<sub>tree</sub> .` statement in application.css.scss
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Restart server
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> [0%] Deploy to marv.usahealthscience.com</h2>
+<div class="outline-text-2" id="text-11">
+
+<ol>
+<li><code>[&nbsp;]</code> weight.usahealthscience.com
+<ol>
+<li><code>[&nbsp;]</code> <a href="http://namecheap.com">http://namecheap.com</a>
+</li>
+<li><code>[&nbsp;]</code> All Host Records
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">SUB-DOMAIN</th><th scope="col" class="left">IP ADDRESS/URL</th><th scope="col" class="left">RECORD TYPE</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">marv</td><td class="left">aaa.bbb.ccc.ddd</td><td class="left">A(Address)</td></tr>
+</tbody>
+</table>
+
+</li>
+</ol>
+
+</li>
+<li><code>[&nbsp;]</code> /etc/httpd/conf/httpd.conf (CentOS 6.4)
+<ol>
+<li><code>[&nbsp;]</code> ServerName Directive
+
+
+
+<pre class="example">#ServerName www.example.com:80
+ServerName marv.usahealthscience.com:80
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Restart Apache server
+
+
+
+<pre class="example">httpd -k restart
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Stop Apache server
+
+
+
+<pre class="example">httpd -k stop
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Backup httpd.conf
+</li>
+<li><code>[&nbsp;]</code> Remove apache
+
+
+
+<pre class="example">yum remove httpd
+# removes httpd-devel
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Install apache
+
+
+
+<pre class="example">yum install httpd-devel
+</pre>
+
+</li>
+</ol>
+
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> <span class="todo TODO">TODO</span> [0%] Display readings table on Welcome Page</h2>
+<div class="outline-text-2" id="text-12">
+
+<ul>
+<li>@readings = Readings.all gives every user's readings; we only want the logged in user's readings
+</li>
+<li><code>[&nbsp;]</code> Controller: @readings = Reading.by<sub>user</sub>(session[:user<sub>id]</sub>).order('reading<sub>time</sub> DESC') 
+<ul>
+<li><a href="../../app/controllers/welcome_controller.rb">../../app/controllers/welcome_controller.rb</a> ( welcome controller, index method )
+
+
+
+<pre class="example">@readings = Reading.by_user(session[:user_id]).order('reading_time DESC')
+</pre>
+
+</li>
+<li>Since we've introduced the by<sub>user</sub> method we need to define it. See next step.
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Model: scope :by<sub>user</sub>, lambda { |user<sub>id|</sub> where('user<sub>id</sub> = ?', user<sub>id</sub>) } 
+<ul>
+<li><a href="../../app/models/reading.rb">../../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.by_user (user_id)
+  scope :by_user, lambda { |user_id| where('user_id = ?', user_id) }
+end
+</pre>
+
+</li>
+<li>See <a href="http://asciicasts.com/episodes/215-advanced-queries-in-rails-3">http://asciicasts.com/episodes/215-advanced-queries-in-rails-3</a>
+</li>
+<li>See Agile book, active record
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> View
+<ul>
+<li><a href="../../app/views/welcome/index.html.erb">../../app/views/welcome/index.html.erb</a>
+
+
+
+<pre class="example">&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;User&lt;/th&gt;
+      &lt;th&gt;Weight&lt;/th&gt;
+      &lt;th&gt;Reading time&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+
+  &lt;tbody&gt;
+  &lt;% @readings.each do |reading| %&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;%= reading.user_id %&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;%= reading.weight %&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;%= reading.reading_time %&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;%= link_to 'Show', reading %&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;%= link_to 'Edit', edit_reading_path(reading) %&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;% end %&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> <span class="todo TODO">TODO</span> [0%] Build a mailer to send messages to users</h2>
+<div class="outline-text-2" id="text-13">
+
+<ul>
+<li>see Chapter 13: Task H: Sending Mail
+</li>
+<li><code>[&nbsp;]</code> environment.rb
+<ul>
+<li><a href="../../config/environments/development.rb">../../config/environments/development.rb</a>
+
+
+
+<pre class="example">config.action_mailer.delivery_method = :smtp | :sendmail | :test
+
+Depot::Application.configure do
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "usahealthscience.com",
+    authentication: "plain",
+    user_name: "username",
+    password: "secret",
+    enable_starttls_auto: true
+  }
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> restart server
+</li>
+<li><code>[&nbsp;]</code> rails generate mailer GoalReminder goal calculation
+
+
+
+<pre class="example">rails generate mailer GoalReminder goal calculation
+</pre>
+
+
+<pre class="example">create  app/mailers/goal_reminder.rb
+invoke  erb
+create    app/views/goal_reminder
+create    app/views/goal_reminder/goal.text.erb
+create    app/views/goal_reminder/calculation.text.erb
+invoke  test_unit
+create    test/functional/goal_reminder_test.rb
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Edit to, subject
+<ul>
+<li>Change into app/mailers and edit goal<sub>reminder</sub>.rb
+<ul>
+<li><a href="../../app/mailers/goal_reminder.rb">../../app/mailers/goal_reminder.rb</a> 
+
+
+
+<pre class="example">def goal
+  @greeting = "Hi at 2:53:29"
+  @user = User.find(1)
+  @goal = User.goal_now(@user.id)
+  subject = "#{@goal}"
+  mail( :to =&gt; "troydwill@gmail.com", :subject =&gt; "#{subject}" )
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Edit the message text
+<ul>
+<li><a href="../../app/views/goal_reminder/goal.text.erb">../../app/views/goal_reminder/goal.text.erb</a>
+
+
+
+<pre class="example">&lt;%= number_to_human(@goal, :units =&gt; {:unit =&gt; "pounds"}, :precision =&gt; 4, :significant =&gt; 4) %&gt;
+GoalReminder#goal
+&lt;%= @greeting %&gt;, http://usahealthscience.com:3000/readings/new
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> In console =&gt; GoalReminder.goal.deliver
+</li>
+<li><code>[&nbsp;]</code> 24.1 A Stand-Alone Application Using Active Record
+
+
+
+<pre class="example">require "config/environment.rb"
+order = Order.find(1)
+order.name = "Dave Thomas"
+order.save
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Write stand alone mailer application
+<ul>
+<li><a href="stand_alone/stand-alone-mailer.rb">stand_alone/stand-alone-mailer.rb</a>
+
+
+
+<pre class="example">require "../../../config/environment.rb"
+user_id = 1
+GoalReminder.goal.deliver
+</pre>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> <span class="todo TODO">TODO</span> [0%] Weight loss/gain over the last 28 days</h2>
+<div class="outline-text-2" id="text-14">
+
+<ul>
+<li><code>[&nbsp;]</code> Define a weight<sub>loss</sub><sub>interval</sub> function 
+<ul>
+<li>I wasn't sure whether to put in reading or user model. I
+      decided to put in reading model because that's where the
+      weight<sub>at</sub><sub>time</sub> function is
+</li>
+<li>TDW Note to self: check if session hash is defined in model
+</li>
+<li><a href="../../app/models/reading.rb">../../app/models/reading.rb</a>
+
+
+
+<pre class="example">def self.weight_loss_interval(user_id, start_time, finish_time )
+  user_id = session[:user_id]
+  start_weight = Reading.weight_at_time(user_id, start_time)
+  finish_weight = Reading.weight_at_time(user_id, finish_time)
+  return (finish_weight-start_weight)
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Put in welcome/index
+<ul>
+<li><a href="../../app/views/welcome/index.html.erb">../../app/views/welcome/index.html.erb</a>
+
+
+
+<pre class="example">&lt;h1&gt;28 days: &lt;%= Reading.weight_loss_interval(session[:user_id],Time.now.ago(86400*28), Time.now) %&gt;&lt;/h1&gt;
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> <span class="todo TODO">TODO</span> [0%] Change time zone</h2>
+<div class="outline-text-2" id="text-15">
+
+<ul>
+<li>rake -D time
+</li>
+<li>rake time:zones:us
+</li>
+<li><code>[&nbsp;]</code> <a href="../../config/application.rb">../../config/application.rb</a>
+
+
+
+<pre class="example"># config.time_zone = 'Central Time (US &amp; Canada)'
+config.time_zone = 'Pacific Time (US &amp; Canada)'
+</pre>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-16" class="outline-2">
+<h2 id="sec-16"><span class="section-number-2">16</span> <span class="todo TODO">TODO</span> [0%] Graph last 28 days</h2>
+<div class="outline-text-2" id="text-16">
+
+<ol>
+<li><code>[&nbsp;]</code> <a href="../../app/controllers/graph_controller.rb">../../app/controllers/graph_controller.rb</a>
+
+
+
+<pre class="example">def month
+  g = Gruff::Line.new
+  weight = 0
+  time_at_point_in_past = 0
+  user_id = session[:user_id]
+  time_first_reading = Reading.time_initial(user_id)
+  weight_first_reading = Reading.weight_initial(user_id).to_f
+  # Get weight values for last 28 days
+  weight_array = Array.new
+  number_of_periods = 28
+  (0..number_of_periods).each do |period_num|
+    time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+    if ( time_at_point_in_past &lt; time_first_reading )
+      weight = weight_first_reading
+    else
+      weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+    end
+    # Three significant digits to stop Gruff graph library from acting strangely                                            
+    weight = ((weight * 10000).to_i)/10000.0
+    weight_array.push(weight)
+  end
+
+  g.data "28 days", weight_array
+  send_data(g.to_blob, :type =&gt; 'image/png', :filename =&gt; "28days.png", :disposition =&gt; 'inline' )
+  # this writes the file to the hard drive for caching
+  # and then writes it to the screen.
+  # g.write("/tmp/month.png")
+  # send_file "/tmp/month.png", :type =&gt; 'image/png', :disposition =&gt; 'inline'
+end
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> <a href="../../app/views/graph/month.html.erb">../../app/views/graph/month.html.erb</a>
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-17" class="outline-2">
+<h2 id="sec-17"><span class="section-number-2">17</span> Revisit analysis</h2>
+<div class="outline-text-2" id="text-17">
+
+<ol>
+<li><code>[&nbsp;]</code> Link welcome.html.erb
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-18" class="outline-2">
+<h2 id="sec-18"><span class="section-number-2">18</span> Add last weight reading as words helper</h2>
+<div class="outline-text-2" id="text-18">
+
+<ol>
+<li><code>[&nbsp;]</code> add method to welcome controller  
+</li>
+</ol>
+
+
+
+
+<pre class="example">def self.get_last_reading( user_id )
+  return Reading.order('reading_time ASC').where(:user_id =&gt; user_id).last
+end
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-19" class="outline-2">
+<h2 id="sec-19"><span class="section-number-2">19</span> Figure out when we can achieve goal</h2>
+<div class="outline-text-2" id="text-19">
+
+
+
+
+<pre class="example"># welcome_helper.rb
+user_id = session[:user_id]
+goal_loss_rate = User.goal_loss_rate(user_id)
+lbs_per_second = goal_loss_rate / 3500 / 86400
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-20" class="outline-2">
+<h2 id="sec-20"><span class="section-number-2">20</span> Graph last two years</h2>
+<div class="outline-text-2" id="text-20">
+
+
+
+
+<pre class="example">  def month
+    g = Gruff::Line.new
+    weight = 0
+    time_at_point_in_past = 0
+    user_id = session[:user_id]
+    time_first_reading = Reading.time_initial(user_id)
+    weight_first_reading = Reading.weight_initial(user_id).to_f
+    # Get weight values for last 28 days
+    weight_array = Array.new
+    number_of_periods = 28
+    (0..number_of_periods).each do |period_num|
+      time_at_point_in_past = Time.now-(number_of_periods-period_num).day
+
+      if ( time_at_point_in_past &lt; time_first_reading )
+        weight = weight_first_reading
+      else
+        weight = Reading.weight_at_time(user_id, time_at_point_in_past)
+      end
+      weight_array.push(weight)
+    end
+
+    g.data "28 days", weight_array
+    send_data(g.to_blob, :type =&gt; 'image/png', :filename =&gt; "28days.png")
+
+  end
+
+  def year
+  end
+end
+</pre>
+
+<ol>
+<li><code>[&nbsp;]</code> Add view
+</li>
+<li><code>[&nbsp;]</code> Add route
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-21" class="outline-2">
+<h2 id="sec-21"><span class="section-number-2">21</span> Footer</h2>
+<div class="outline-text-2" id="text-21">
+
+<ol>
+<li><code>[&nbsp;]</code> Put function to find goal difference in the Reading model
+</li>
+</ol>
+
+
+
+
+<pre class="example">def self.goal_difference( user_id )
+  goal_now = User.goal_now(user_id)
+  weight_now = Reading.weight_at_time(user_id, Time.now)
+  return goal_now - weight_now
+end
+</pre>
+
+<ol>
+<li><code>[&nbsp;]</code> in application helper, footer method
+</li>
+</ol>
+
+
+
+
+<pre class="example">def footer
+  if session[:user_id]
+    user_id = session[:user_id]
+    lbs = number_with_precision(@diff, :precision =&gt; 1, :significant =&gt; true)
+    goal_difference = Reading.goal_difference(user_id)
+    # cals = @diff * 3500
+    # cals = number_with_precision(cals, :precision =&gt; 2, :significant =&gt; true)
+    #      return "#{lbs} lbs (#{cals} cal)"
+    return "#{lbs} lbs"
+  else
+    return "nil"
+  end
+end
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-22" class="outline-2">
+<h2 id="sec-22"><span class="section-number-2">22</span> About your last reading</h2>
+<div class="outline-text-2" id="text-22">
+
+<ol>
+<li><code>[&nbsp;]</code> Refactor     last<sub>reading</sub> = Reading.get<sub>last</sub><sub>reading</sub>(user<sub>id</sub>) helper to @last<sub>reading</sub> in controller
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-23" class="outline-2">
+<h2 id="sec-23"><span class="section-number-2">23</span> Emacs Org Mode Cheat Table</h2>
+<div class="outline-text-2" id="text-23">
+
+
+</div>
+
+<div id="outline-container-23-1" class="outline-3">
+<h3 id="sec-23-1"><span class="section-number-3">23.1</span> Emacs termology</h3>
+<div class="outline-text-3" id="text-23-1">
+
+<ul>
+<li>M-x means hold Alt key and tap x
+</li>
+<li>C-c means hold Ctrl key and then tap c key
+</li>
+</ul>
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Key</th><th scope="col" class="left">Function</th><th scope="col" class="left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C-j</td><td class="left"></td><td class="left"></td></tr>
+<tr><td class="left">&lt;s + TAB</td><td class="left"></td><td class="left">#+BEGIN<sub>SRC</sub> / #+END<sub>SRC</sub> macro expansion</td></tr>
+<tr><td class="left">C-'</td><td class="left"></td><td class="left"></td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div id="outline-container-23-2" class="outline-3">
+<h3 id="sec-23-2"><span class="section-number-3">23.2</span> Window splitting</h3>
+<div class="outline-text-3" id="text-23-2">
+
+<dl>
+<dt>C-x 2</dt><dd>Split window in two
+</dd>
+<dt>C-o</dt><dd>Switch to the other window
+</dd>
+</dl>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-24" class="outline-2">
+<h2 id="sec-24"><span class="section-number-2">24</span> CSS Resources</h2>
+<div class="outline-text-2" id="text-24">
+
+<ul>
+<li><a href="http://designshack.net/articles/css/715-awesomely-simple-and-free-css-layouts/">http://designshack.net/articles/css/715-awesomely-simple-and-free-css-layouts/</a>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-25" class="outline-2">
+<h2 id="sec-25"><span class="section-number-2">25</span> Attic</h2>
+<div class="outline-text-2" id="text-25">
+
+
+</div>
+
+<div id="outline-container-25-1" class="outline-3">
+<h3 id="sec-25-1"><span class="section-number-3">25.1</span> <span class="todo TODO">TODO</span> [0\/$1] Add New Reading to Welcome Page</h3>
+<div class="outline-text-3" id="text-25-1">
+
+<ol>
+<li><code>[&nbsp;]</code> Add a <sub>form</sub> partial by copyingreading/<sub>form</sub> 
+<ul>
+<li>Note: we will have an error because @reading is not defined. Fix in next step.
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add  @reading = Reading.new to index method in welcome controller
+</li>
+<li><code>[&nbsp;]</code> Put embeded Ruby in index
+
+
+
+<pre class="example">&lt;%= render 'form' %&gt;
+</pre>
+
+<ul>
+<li><a href="../../app/views/welcome/index.html.erb">../../app/views/welcome/index.html.erb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add hidden field
+<ul>
+<li>See <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field">http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field</a>
+
+
+
+<pre class="example">&lt;%= f.hidden_field(:user_id, :value =&gt; session[:user_id]) %&gt;
+</pre>
+
+<ul>
+<li><a href="../../app/views/welcome/_form.html.erb">../../app/views/welcome/_form.html.erb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Delete &lt;%= f.label :user<sub>id</sub> %&gt;&lt;br /&gt;
+
+
+
+<pre class="example">&lt;%= f.label :user_id %&gt;&lt;br /&gt;
+&lt;%= f.number_field :user_id %&gt;
+</pre>
+
+<ul>
+<li><a href="../../app/views/welcome/_form.html.erb">../../app/views/welcome/_form.html.erb</a>
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add @reading.user<sub>id</sub> = session[:user<sub>id]</sub> in create method in readings controller
+<ul>
+<li>We do this because can create a new reading from reading scaffold
+</li>
+<li><a href="../../app/controllers">../../app/controllers</a>
+
+
+
+<pre class="example">@reading.user_id = session[:user_id]
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Remove the user field
+<ul>
+<li><a href="../../app/views/readings/_form.html.erb">../../app/views/readings/_form.html.erb</a>
+
+
+
+<pre class="example">&lt;div class="field"&gt;
+  &lt;%= f.label :user_id %&gt;&lt;br /&gt;
+  &lt;%= f.number_field :user_id %&gt;
+&lt;/div&gt;
+</pre>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-25-2" class="outline-3">
+<h3 id="sec-25-2"><span class="section-number-3">25.2</span> <span class="todo TODO">TODO</span> [0\/$1] Draw a graph</h3>
+<div class="outline-text-3" id="text-25-2">
+
+<ol>
+<li><a href="http://nubyonrails.com/pages/gruff">http://nubyonrails.com/pages/gruff</a>
+</li>
+<li><a href="https://github.com/topfunky/gruff">https://github.com/topfunky/gruff</a>
+</li>
+<li><a href="http://www.undefined.com/ia/archives/2005/12/gruff_graph_007.html">http://www.undefined.com/ia/archives/2005/12/gruff_graph_007.html</a>
+</li>
+<li><code>[&nbsp;]</code> Build and Install RMagick
+<ol>
+<li><code>[&nbsp;]</code> Download <a href="http://rubyforge.org/frs/download.php/70067/RMagick-2.13.2.tar.bz2">http://rubyforge.org/frs/download.php/70067/RMagick-2.13.2.tar.bz2</a> or from <a href="https://github.com/rmagick/rmagick">https://github.com/rmagick/rmagick</a>
+</li>
+<li><code>[&nbsp;]</code> Run "ruby setup.rb"
+</li>
+<li><code>[&nbsp;]</code> Run "sudo ruby setup.rb install"
+</li>
+</ol>
+
+</li>
+<li><code>[&nbsp;]</code> sudo gem install gruff
+</li>
+<li><code>[&nbsp;]</code> add gruff to Gem file
+</li>
+<li><code>[&nbsp;]</code> Generate the controller for generating Graphs
+
+
+
+<pre class="example">rails generate controller Graph generate week month year
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> (Optional) See <a href="http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/">http://www.igvita.com/2007/01/05/dynamic-stat-graphs-in-rails/</a>
+</li>
+<li><code>[&nbsp;]</code> (Optional) See <a href="http://api.rubyonrails.org/classes/ActionController/DataStreaming.html">http://api.rubyonrails.org/classes/ActionController/DataStreaming.html</a>
+</li>
+<li><code>[&nbsp;]</code> In weight<sub>graph</sub><sub>controller</sub>.rb:
+<ul>
+<li><a href="../../app/controllers/graph_controller.rb">../../app/controllers/graph_controller.rb</a>
+
+
+
+<pre class="example">def month
+  g = Gruff::Line.new
+  # Next line is transient bug fix; see http://stackoverflow.com/questions/10881173/gruff-is-not-working-well-what-to-do ( troydwill@gmail.com )
+  g.marker_count = 4 #explicitly assign value to @marker_count
+  g.title = "My Graph" 
+  g.data("Apples", [1, 2, 3, 4, 4, 3])
+  g.data("Oranges", [4, 8, 7, 9, 8, 9])
+  g.data("Watermelon", [2, 3, 1, 5, 6, 8])
+  g.data("Peaches", [9, 9, 10, 8, 7, 9])
+  g.labels = {0 =&gt; '2003', 2 =&gt; '2004', 4 =&gt; '2012'}
+  send_data(g.to_blob, :disposition =&gt; 'inline', :type =&gt; 'image/png', :filename =&gt; "1week.png")
+end
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> In View:
+<ul>
+<li><a href="../../app/views/graph/month.html.erb">../../app/views/graph/month.html.erb</a>
+
+
+
+<pre class="example">&lt;img src="&lt;%= url_for :controller =&gt; "graph", :action=&gt; "month" %&gt;" style="border:10px solid #aabcca;" /&gt;
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-25-3" class="outline-3">
+<h3 id="sec-25-3"><span class="section-number-3">25.3</span> <span class="todo TODO">TODO</span> [0\/$1] Create User model, controller, and view</h3>
+<div class="outline-text-3" id="text-25-3">
+
+<ol>
+<li><code>[&nbsp;]</code> Generate a `user` scaffold
+
+
+
+<pre class="example">rails generate scaffold user name:string email:string
+</pre>
+
+</li>
+<li><code>[&nbsp;]</code> Update the database
+
+
+
+<pre class="example">rake db:migrate
+</pre>
+
+</li>
+</ol>
+
+<p>   #+END<sub>SRC</sub>
+</p></div>
+
+</div>
+
+<div id="outline-container-25-4" class="outline-3">
+<h3 id="sec-25-4"><span class="section-number-3">25.4</span> <span class="todo TODO">TODO</span> [0\/$1] Identify the user</h3>
+<div class="outline-text-3" id="text-25-4">
+
+<ol>
+<li><code>[&nbsp;]</code> Add a before filter to the application controller
+<ul>
+<li>See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
+</li>
+<li>place the line after "class ApplicationController &lt; ActionController::Base"
+</li>
+<li><a href="../app/controllers/application_controller.rb">../app/controllers/application_controller.rb</a>
+
+
+
+<pre class="example">before_filter :identify_user, :except =&gt; :login
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> write a idenify<sub>user</sub> method in application controller
+<ul>
+<li>make the method private
+</li>
+<li><a href="../app/controllers/application_controller.rb">../app/controllers/application_controller.rb</a>
+
+
+
+<pre class="example">private
+def identify_user
+  if cookies[:weight_loss_cookie]
+    if User.find_by_email(cookies[:weight_loss_cookie])
+      @user = User.find_by_email(cookies[:weight_loss_cookie])
+      session[:user_id] = @user.id
+      return
+    end
+  end
+  if User.find_by_id(session[:user_id])
+    @user = User.find_by_id(session[:user_id])
+  else
+    flash[:notice] = "Please log in"
+    redirect_to :controller =&gt; :welcome, :action =&gt; :login
+  end
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add a form to the login page
+<ul>
+<li><a href="../app/views/welcome/login.html.erb">../app/views/welcome/login.html.erb</a>
+
+
+
+<pre class="example">&lt;%= form_tag do %&gt;
+&lt;fieldset&gt;
+  &lt;legend&gt;Please Log In&lt;/legend&gt;
+  &lt;p&gt;
+    &lt;label for="email"&gt;Email:&lt;/label&gt;
+    &lt;%= text_field_tag :email, params[:email] %&gt;
+  &lt;/p&gt;
+  &lt;p&gt;&lt;%= submit_tag "Login" %&gt;&lt;/p&gt;
+&lt;/fieldset&gt;
+&lt;% end %&gt;
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add a POST route for the login form
+<ul>
+<li><a href="../config/routes.rb">../config/routes.rb</a>
+
+
+
+<pre class="example">Weight::Application.routes.draw do
+  resources :users
+
+  get "welcome/index"
+  get "welcome/login"
+  post "welcome/login"
+  get "welcome/logout"
+  ...
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add a login method to the welcome controller
+<ul>
+<li><a href="../app/controllers/welcome_controller.rb">../app/controllers/welcome_controller.rb</a>
+
+
+
+<pre class="example">def login
+  session[:user_id] = nil
+  if request.post?
+    if user = User.authenticate(params[:email])
+      session[:user_id] = user.id
+      # http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html
+      cookies[:weight_loss_cookie] = { :value =&gt; user.email, :expires =&gt; 1.month.from_now }
+      redirect_to(:action =&gt; "index" )
+    else
+      flash.now[:notice] = "Unknown email"
+    end
+  end
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Add an authenticate method to the user model
+<ul>
+<li><a href="../app/models/user.rb">../app/models/user.rb</a>
+
+
+
+<pre class="example"># Agile book uses more elaborate method with more security
+# def self.authenticate(username, password)
+def self.authenticate(email)
+  #  user = self.find_by_username(username)
+  user = self.find_by_email(email)
+  if user
+    #    if user.password != password
+      if user.email != email
+        user = nil
+      end
+  end
+  user
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+<li><code>[&nbsp;]</code> Write the logout method in the welcome controller
+<ul>
+<li><a href="../app/controllers/welcome_controller.rb">../app/controllers/welcome_controller.rb</a>
+
+
+
+<pre class="example">def logout
+  session[:user_id] = nil
+  cookies.delete :weight_loss_cookie
+end
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ol>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2013-05-10T22:23+0400</p>
+<p class="author">Author: </p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
