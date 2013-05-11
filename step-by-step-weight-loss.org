@@ -17,6 +17,15 @@
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
+  5. [X] Set the time zone file:../config/application.rb
+     #+BEGIN_SRC sh
+       rake -D time
+       rake time:zones:us
+     #+END_SRC
+     #+BEGIN_SRC ruby
+       config.time_zone = 'Pacific Time (US & Canada)'
+     #+END_SRC
+     
 * [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
@@ -52,6 +61,7 @@
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
      - file:../app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
+
 * [100%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
   1. [X] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
@@ -577,6 +587,12 @@
 	#+END_SRC
       - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
    7. [ ] Restart server
+* [100%] Display readings latest first
+  1. [X] file:../app/controllers/readings_controller.rb ( welcome controller, index method )
+     #+BEGIN_SRC ruby
+        @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
+     #+END_SRC
+     + Since we've introduced the by_user method we need to define it. See next step.
 * [0%] Deploy to marv.usahealthscience.com
   1. [ ] weight.usahealthscience.com
      1. [ ] http://namecheap.com
