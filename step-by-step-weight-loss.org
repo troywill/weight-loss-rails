@@ -1,23 +1,83 @@
-* [100%] Create a new rails application
-  1. [X] Run the 'rails' command
-     #+BEGIN_SRC sh
-       rails new weight_loss
-     #+END_SRC
-  2. [X] Enable a JavaScript runtime in file:../Gemfile
+* [5/5] Create a new rails application
+  1. [8/8] Install Ruby on Rails 4
+     1. [X] Install ruby 2.0.0p0 (2013-02-24 revision 39474)
+     2. [X] sudo gem update (1m30s)
+     3. [X] sprockets
+	#+BEGIN_SRC sh
+	  sudo gem install sprockets --prerelease --no-ri --no-rdoc
+	#+END_SRC
+     4. [X] sprockets-rails (17 gems installed)
+	#+BEGIN_SRC sh
+	  sudo gem install sprockets-rails --prerelease --no-ri --no-rdoc
+	#+END_SRC
+     5. [X] rails
+	#+BEGIN_SRC sh
+          sudo gem install rails --prerelease --no-ri --no-rdoc
+	#+END_SRC
+     6. [X] therubyracer
+	1. [X] cd /usr/bin && unlink python && ln -s python3 python	
+	2. [X] ref
+           #+BEGIN_SRC sh
+             sudo gem install ref --no-ri --no-rdoc  
+           #+END_SRC
+	3. [X] libv8
+           1. libv8 fails to compile with GCC-4.8
+	   2. https://github.com/cowboyd/libv8/issues/90
+           3. fixed with patch http://portage.perestoroniny.ru/dev-ruby/libv8/files/libv8-cf-gcc-4.8.0.patch
+           4. [X] git clone git://github.com/cowboyd/libv8.git
+           5. [X] cd libv8
+           6. [X] wget http://portage.perestoroniny.ru/dev-ruby/libv8/files/libv8-cf-gcc-4.8.0.patch
+           7. [X] sudo pacman --sync svn
+	   8. [X] sudo bundle install
+           9. [X] bundle exec rake checkout
+           10. [X] patch -p0 -i libv8-cf-gcc-4.8.0.patch
+           11. [X] bundle exec rake compile
+	   12. [X] bundle exec rake binary
+	   13. [X] sudo gem install --local pkg/libv8-3.16.14.1-x86-linux.gem
+     7. [0/6] theruby racer
+	1. [ ] git clone git://github.com/cowboyd/therubyracer.git
+	2. [ ] cd therubyracer
+	3. [ ] sudo bundle install
+	4. [ ] rake compile
+	5. [ ] rake build
+	6. [ ] sudo gem install --local pkg/therubyracer-0.12.0beta1.gem
+     8. [X] sudo gem install devise --version 3.0.0.rc
+     9. [X] Run the 'rails' command as root
+	#+BEGIN_SRC sh
+          sudo rails new throwaway
+        #+END_SRC
+     10. Stuff that didn't work
+	 - gem fetch libv8 # Fetching: libv8-3.11.8.17-x86-linux.gem (100%)
+	 - gem unpack libv8 #
+	 - sudo gem install libv8 --version 3.16.14.1 ( FAIL )
+	 - sudo gem install libv8 --version 3.11.8.17
+	 - cd /stow/ruby-2.0.0-p0/usr/local/lib/ruby/gems/2.0.0/gems/libv8-3.16.14.1
+	 - patch -p0 -i libv8-cf-gcc-4.8.0.patch
+	 - bundle exec rake compile
+	 - rake --tasks
+	 - rake binary
+	 - gem install --local libv8-3.16.14.1-x86-linux.gem
+	 - sudo gem install libv8 --version 3.11.8.12
+	 - sudo pacman --sync v8
+	 - sudo gem install libv8 -- --with-system-v8 --version 3.11.8.12
+	 - sudo gem install libv8 --version 3.11.8.12 -- --with-system-v8
+	 - sudo gem install therubyracer => no matching function for call to ‘v8::Context::SetData(rr::String)
+  2. [X] Create an new rails application structure
+  3. [X] Enable a JavaScript runtime in file:../Gemfile
      #+BEGIN_SRC ruby
        # See https://github.com/sstephenson/execjs#readme for more supported runtimes
        gem 'therubyracer', platforms: :ruby
      #+END_SRC
-  3. [X] Create a “home” controller and a “home/index” page
+  4. [X] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
        rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
      #+END_SRC
      - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  4. [X] Set the default route to home/index in file:../config/routes.rb
+  5. [X] Set the default route to home/index in file:../config/routes.rb
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-  5. [X] Set the time zone file:../config/application.rb
+  6. [X] Set the time zone file:../config/application.rb
      #+BEGIN_SRC sh
        rake -D time
        rake time:zones:us
@@ -25,8 +85,7 @@
      #+BEGIN_SRC ruby
        config.time_zone = 'Pacific Time (US & Canada)'
      #+END_SRC
-     
-* [100%] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+* [6/6] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
        gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
@@ -44,6 +103,9 @@
        rake db:migrate
      #+END_SRC
   5. [X] (Re)start the Rails server
+     #+BEGIN_SRC 
+       kill -USR1 `cat ../tmp/pids/server.pid `; rails server --daemon
+     #+END_SRC
   6. [X] Place sign up and sign out links on the home page file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <h1>Home#index</h1>
@@ -61,8 +123,54 @@
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
      - file:../app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
+** (Optional) create a user from console
+   #+BEGIN_SRC ruby
+     User.new(:email => "user@name.com", :password => 'password', :password_confirmation => 'password').save
+   #+END_SRC
 
-* [100%] Layout see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+* [9/9] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
+   1. [X] Install bootstrap-sass
+	#+BEGIN_SRC sh
+	  sudo gem install bootstrap-sass
+	#+END_SRC
+      - ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
+   2. [X] Add `bootstrap-sass` gems in [[file:../Gemfile][Gemfile]]
+      #+BEGIN_SRC ruby
+        gem 'bootstrap-sass'
+      #+END_SRC
+      - Note: See http://rubygems.org/gems/bootstrap-sass for latest version
+      - Note: `sass-rails` is already in your Gemfile
+      - Note: Can specify version in Gemfile: e.g., gem "bootstrap-sass", "~> 2.3.1.0"
+   3. [X] Add the following line to file:../config/application.rb
+	#+BEGIN_SRC ruby
+        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
+	#+END_SRC
+      - Place after the `class Application < Rails::Application` line
+      - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
+   4. [X] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
+	#+BEGIN_SRC js
+        # place at end of file, after other require lines
+        //= require bootstrap
+	#+END_SRC
+   5. [X] Rename application.css application.scss
+	    #+BEGIN_SRC sh
+            cd ../app/assets/stylesheets/ && mv -v application.css application.css.scss
+          #+END_SRC
+   6. [X] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
+	#+BEGIN_SRC css
+        /* import twitter bootstrap */
+        @import "bootstrap";
+        body { padding-top: 60px; }
+        @import "bootstrap-responsive";
+	#+END_SRC
+      - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
+   7. [X] Restart server
+       kill -USR1 `cat ../tmp/pids/server.pid `; rails server --daemon
+   8. [X] Narrow select class width from 220px to 110px file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss
+      #+BEGIN_SRC css
+        select { width: 110px; }
+      #+END_SRC
+* [3/3] Layout to work with boostrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
   1. [X] Create a Navigation partial in file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <%= link_to "Home", root_path, :class => 'brand' %>
@@ -146,7 +254,7 @@
          </body>
        </html>
      #+END_SRC
-* [100%] Create "Readings" model, controller, and views
+* [6/6] Create "Readings" model, controller, and views
   1. [X] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
@@ -166,7 +274,7 @@
                t.integer :user_id
                t.decimal :weight
                t.datetime :reading_time
-               t.decimal :clothing_wt, :default => 0
+               t.decimal :clothing_wt, :default => 5
                
                t.timestamps
              end
@@ -188,7 +296,7 @@
         #+END_SRC
         - note that @user comes from application controller, identify_user method
      2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-* [100%] Create "Settings" model, controller, and views, default values
+* [10/10] Create "Settings" model, controller, and views, default values
   1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
@@ -247,6 +355,9 @@
        </div>
      #+END_SRC
   7. [X] settings_path in application layout file:../app/views/layouts/_navigation.html.erb
+     #+BEGIN_SRC html
+       <li><%= link_to "Settings", settings_path %></li>
+     #+END_SRC
   8. [X] Relationship between Setting and User file:../app/models/setting.rb
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
@@ -277,7 +388,7 @@
             end
           end
 	#+END_SRC
-* [100%] Create Goal model, controller, and views
+* [9/9] Create Goal model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
@@ -300,12 +411,12 @@
      #+END_SRC
   4. [X] Default values file:../db/migrate/ 2013xxx_create_goals.rb
      #+BEGIN_SRC ruby
-       t.integer :goal_loss_rate, :default => 500
-       t.datetime :goal_finish_time, :default => (Time.now + 86400*7)
+       t.integer :goal_loss_rate, :default => 0
      #+END_SRC
   5. [X] Validations file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        validates :user_id, :presence => true, :numericality => true
+       validates :goal_loss_rate, :presence => true, :numericality => true
      #+END_SRC
   6. [X] Migrate database
   7. [X] user_id file:../app/controllers/goals_controller.rb
@@ -326,7 +437,6 @@
      #+BEGIN_SRC ruby
        def self.goal_now(user)
          goal = Goal.where(:user_id => user.id).last
-         # return 0 if ??
          elapsed_time = Time.now - goal.goal_start_time
          lbs_per_second = ( goal.goal_loss_rate / 86400.0 / 3500.0 )
          return ( goal.goal_start_weight - lbs_per_second * elapsed_time )
@@ -334,7 +444,8 @@
      #+END_SRC
   2. [X] View file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
-       <%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%>
+       <h1>Goal loss rate: <%= Goal.where(:user_id => current_user.id).last.goal_loss_rate %>
+       <h1><%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%></h1>
      #+END_SRC
 * [100%] Weight as a function of time
   1. [X] In Reading model, initial_reading function file:../app/models/reading.rb
@@ -352,7 +463,7 @@
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  3. [X] In Reading model, apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight ) file:../app/models/reading.rb
+  3. [X] In Reading model, apply_filter file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
          if ( weight == initial_time )
@@ -374,48 +485,47 @@
      #+END_SRC
   4. [X] In Reading model, interpolate file:../app/models/reading.rb
      #+BEGIN_SRC ruby
-       def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
-         filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
-         delta_time = next_time - last_time
-         delta_weight = ( filtered_next_weight - last_weight )
-         percent = ( time - last_time ) / delta_time.to_f
-         interpolated_weight = last_weight + percent * delta_weight
-       end
-     #+END_SRC
+	def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
+	  filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
+	  delta_time = next_time - last_time
+	  delta_weight = ( filtered_next_weight - last_weight )
+	  percent = ( time - last_time ) / delta_time.to_f
+	  interpolated_weight = last_weight + percent * delta_weight
+	end
+      #+END_SRC
   5. [X] In Reading model, weight_at_time function file:../app/models/reading.rb
-     #+BEGIN_SRC ruby
-       def self.weight_at_time(user, time)
-         setting = Setting.where(:user_id => user.id).last
-         initial_reading = Reading.initial_reading(user)
-         time_initial = initial_reading.reading_time
-         weight_initial = initial_reading.weight
-         if ( time < time_initial )
-           return weight_initial
-         end
-         max_gain_rate = setting.filter_rate_gain
-         max_loss_rate = setting.filter_rate_loss
-         readings = Reading.get_readings_after( user, time_initial, time )
-         for reading in readings
-           w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
-                            weight_initial, reading.reading_time, reading.weight)
-           time_initial = reading.reading_time
-           weight_initial = w
-         end
-         next_reading = Reading.get_next_reading_after(user, time)
-         if next_reading
-           weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
-                                 next_reading.reading_time, next_reading.weight, time )
-         else
-           weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
-         end
-         return weight
-       end
-     #+END_SRC
+      #+BEGIN_SRC ruby
+	def self.weight_at_time(user, time)
+	  setting = Setting.where(:user_id => user.id).last
+	  initial_reading = Reading.initial_reading(user)
+	  time_initial = initial_reading.reading_time
+	  weight_initial = initial_reading.weight
+	  if ( time < time_initial )
+	    return weight_initial
+	  end
+	  max_gain_rate = setting.filter_rate_gain
+	  max_loss_rate = setting.filter_rate_loss
+	  readings = Reading.get_readings_after( user, time_initial, time )
+	  for reading in readings
+	    w = apply_filter(max_gain_rate, max_loss_rate, time_initial,
+			     weight_initial, reading.reading_time, reading.weight)
+	    time_initial = reading.reading_time
+	    weight_initial = w
+	  end
+	  next_reading = Reading.get_next_reading_after(user, time)
+	  if next_reading
+	    weight = interpolate( max_gain_rate, max_loss_rate, time_initial, weight_initial,
+				  next_reading.reading_time, next_reading.weight, time )
+	  else
+	    weight = apply_filter(max_gain_rate, max_loss_rate, time_initial, weight_initial, time, reading.weight)
+	  end
+	  return weight
+	end
+      #+END_SRC
   6. [X] Display weight now in file:../app/views/home/index.html.erb
      #+BEGIN_SRC ruby
-       <%= Reading.weight_at_time(current_user, Time.now) %>
+       <h1> Weight Now: <%= Reading.weight_at_time(current_user, Time.now) %></h1>
      #+END_SRC
-
 * [100%] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
   2. [X] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
@@ -432,7 +542,6 @@
          lbs_per_second = ( goal_loss_rate / 86400.0 / 3500.0 )
          return ( goal_start_weight - lbs_per_second * elapsed_time ).to_f
        end
-        
      #+END_SRC
   3. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
@@ -440,11 +549,17 @@
      #+END_SRC
   4. [X] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
      #+BEGIN_SRC html
+       <li><a href="/google_graph/three_day" data-no-turbolink>3 day graph</a></li>
+       <li><a href="/google_graph/month" data-no-turbolink>28 day graph</a></li>
+       <li><a href="/google_graph/year" data-no-turbolink>1 year graph</a></li>
+     #+END_SRC
+     #+BEGIN_SRC html
+       # I tried this, but it messes up the display, i.e. CSS
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "3 day graph", google_graph_three_day_path %></div></li>
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "1 year graph", google_graph_year_path %></div></li>
      #+END_SRC
-  5. [X] Place a chart_array method in Readings model file:../app/models/reading.rb
+  5. [X] Write a class `chart_array` method in Readings file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.chart_array(user,period)
          weight_array = Array.new
@@ -457,7 +572,6 @@
 
          if ( period == 'day' )
            # Get weight values for last 3 days
-           weight_array = Array.new
            weight_array.push(['Last 3 days','Goal','Weight'])
            number_of_periods = 72
            
@@ -469,8 +583,8 @@
              else
                weight = Reading.weight_at_time(user, time_at_point_in_past)
              end
-             weight_array.push(["", weight.to_f, goal.to_f])
              goal = Goal.goal_at_time(user, time_at_point_in_past)
+             weight_array.push(["", weight.to_f, goal.to_f])
            end
          elsif ( period == 'month' )
            weight_array.push(['Year','Weight','Goal'])
@@ -507,7 +621,7 @@
      #+END_SRC
      - Commentary: :: We will pass data into Google javascript in the view
      - Commentary: :: We will pass data into Google javascript in the view
-  6. [X] Put Google Graph javascript into view a view partial three day file:../app/views/layouts/_google_graph.html.erb
+  6. [X] VIEW Put Google Graph javascript into view a view partial three day file:../app/views/layouts/_google_graph.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -546,65 +660,31 @@
          end
        end
      #+END_SRC
-  8. [X] Call partial from 3 day, month, and 1 year views file:../app/views/google_graph/year.html.erb
+  8. [X] VIEW Call partial from 3 day, month, and 1 year views file:../app/views/google_graph/year.html.erb
      #+BEGIN_SRC html
+       DEBUG chart data: <%= @google_chart_data_array %><br />
+       DEBUG chart options: <%= @chart_options %>
        <%= render 'layouts/google_graph' %>
      #+END_SRC
-* [85%] Incorporate Twitter Bootstrap see  [[file:/scpc:troy@usahealthscience.com:/home/troy/srv/bootstrap/128/kehoe/emacs/][~/srv/bootstrap/128/kehoe/emacs/]]
-   1. [X] Install bootstrap-sass
-	#+BEGIN_SRC sh
-	  sudo gem install bootstrap-sass
-	#+END_SRC
-      - ( Successfully installed bootstrap-sass-2.3.1.0 Wed May  8 08:55:02 PDT 2013 )
-   2. [X] Add `bootstrap-sass` gems in [[file:../Gemfile][Gemfile]]
-	#+BEGIN_SRC ruby
-        gem 'bootstrap-sass'
-      #+END_SRC
-      - Note: See http://rubygems.org/gems/bootstrap-sass for latest version
-      - Note: `sass-rails` is already in your Gemfile
-      - Note: Can specify version in Gemfile: e.g., gem "bootstrap-sass", "~> 2.3.1.0"
-   3. [X] Add the following line to file:../config/application.rb
-	#+BEGIN_SRC ruby
-        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
-	#+END_SRC
-      - Place after the `class Application < Rails::Application` line
-      - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
-   4. [X] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in [[file:../app/assets/javascripts/application.js][app/assets/javascripts/application.js]]
-	#+BEGIN_SRC js
-        # place at end of file, after other require lines
-        //= require bootstrap
-	#+END_SRC
-   5. [X] Rename application.css application.scss
-	    #+BEGIN_SRC sh
-            cd ../app/assets/stylesheets/ && mv -v application.css application.css.scss
-          #+END_SRC
-   6. [X] Import Bootstrap in an SCSS file with a new [[file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss][app/assets/stylesheets/bootstrap_and_overrides.css.scss]] file
-	#+BEGIN_SRC css
-        /* import twitter bootstrap */
-        @import "bootstrap";
-        body { padding-top: 60px; }
-        @import "bootstrap-responsive";
-	#+END_SRC
-      - bootstrap_and_overrides.css.scss is automatically included and compiled by the `*= require_tree .` statement in application.css.scss
-   7. [ ] Restart server
 * [100%] Display readings latest first
   1. [X] file:../app/controllers/readings_controller.rb ( welcome controller, index method )
      #+BEGIN_SRC ruby
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
      + Since we've introduced the by_user method we need to define it. See next step.
-* [0%] SimpleForm
-  1. [ ] Install
+  2. [X] VIEW file:../app/views/readings/index.html.erb
+* [100%] SimpleForm
+  1. [X] Install
      #+BEGIN_SRC sh
        # Saturday, May 11, 2013
        # See for latest version: http://rubygems.org/gems/simple_form/versions/3.0.0.rc
-       gem install simple_form --pre
+       sudo gem install simple_form --pre
      #+END_SRC
-  2. [ ] file:../Gemfile
+  2. [X] file:../Gemfile
      #+BEGIN_SRC ruby
        gem 'simple_form'
      #+END_SRC
-  4. [ ] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
+  3. [X] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
      #+BEGIN_SRC sh
        rails generate simple_form:install --bootstrap
      #+END_SRC
@@ -615,6 +695,20 @@
        
            = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
      #+END_EXAMPLE
+  4. [X] VIEW file:../app/views/readings/_form.html.erb
+     #+BEGIN_SRC html
+       <!-- <%= form_for(@reading) do |f| %> -->
+       <%= simple_form_for(@reading, :html => { :class => 'form-horizontal' } ) do |f| %>
+     #+END_SRC 
+  4. VIEW file:../app/views/readings/_form.html.erb
+     #+BEGIN_SRC html
+       <!-- <div class="actions"> -->
+       <!--   <%= f.submit %> -->
+       <!-- </div> -->
+       <%= f.button :submit, :class => 'btn-primary' %>
+       
+     #+END_SRC
+     
 * [0%] Deploy to marv.usahealthscience.com
   1. [ ] weight.usahealthscience.com
      1. [ ] http://namecheap.com
@@ -647,7 +741,7 @@
 	  yum install httpd-devel
 	#+END_SRC
 	
-* TODO [0%] Display readings table on Welcome Page
+* [0%] Display readings table on Welcome Page
   - @readings = Readings.all gives every user's readings; we only want the logged in user's readings
   - [ ] Controller: @readings = Reading.by_user(session[:user_id]).order('reading_time DESC') 
     + file:../../app/controllers/welcome_controller.rb ( welcome controller, index method )
@@ -693,7 +787,7 @@
           </tbody>
         </table>
       #+END_SRC
-* TODO [0%] Build a mailer to send messages to users 
+* [0%] Build a mailer to send messages to users 
   - see Chapter 13: Task H: Sending Mail
   - [ ] environment.rb
     - file:../../config/environments/development.rb
@@ -762,7 +856,7 @@
       user_id = 1
       GoalReminder.goal.deliver
     #+END_SRC
-* TODO [0%] Weight loss/gain over the last 28 days
+* [0%] Weight loss/gain over the last 28 days
   - [ ] Define a weight_loss_interval function 
     + I wasn't sure whether to put in reading or user model. I
       decided to put in reading model because that's where the
@@ -782,7 +876,7 @@
       #+BEGIN_SRC html
         <h1>28 days: <%= Reading.weight_loss_interval(session[:user_id],Time.now.ago(86400*28), Time.now) %></h1>
       #+END_SRC
-* TODO [0%] Change time zone
+* [0%] Change time zone
   - rake -D time
   - rake time:zones:us
   - [ ] file:../../config/application.rb
@@ -790,7 +884,7 @@
       # config.time_zone = 'Central Time (US & Canada)'
       config.time_zone = 'Pacific Time (US & Canada)'
     #+END_SRC
-* TODO [0%] Graph last 28 days
+* [0%] Graph last 28 days
   1. [ ] file:../../app/controllers/graph_controller.rb
     #+BEGIN_SRC ruby
       def month
