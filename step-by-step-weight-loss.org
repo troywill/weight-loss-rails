@@ -593,6 +593,28 @@
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
      + Since we've introduced the by_user method we need to define it. See next step.
+* [0%] SimpleForm
+  1. [ ] Install
+     #+BEGIN_SRC sh
+       # Saturday, May 11, 2013
+       # See for latest version: http://rubygems.org/gems/simple_form/versions/3.0.0.rc
+       gem install simple_form --pre
+     #+END_SRC
+  2. [ ] file:../Gemfile
+     #+BEGIN_SRC ruby
+       gem 'simple_form'
+     #+END_SRC
+  4. [ ] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
+     #+BEGIN_SRC sh
+       rails generate simple_form:install --bootstrap
+     #+END_SRC
+     #+BEGIN_EXAMPLE
+          Inside your views, use the 'simple_form_for' with one of the Bootstrap form
+         classes, '.form-horizontal', '.form-inline', '.form-search' or
+         '.form-vertical', as the following:
+       
+           = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
+     #+END_EXAMPLE
 * [0%] Deploy to marv.usahealthscience.com
   1. [ ] weight.usahealthscience.com
      1. [ ] http://namecheap.com
