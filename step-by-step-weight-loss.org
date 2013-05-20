@@ -1,83 +1,157 @@
-* [/] Create a new rails application
-  1. [0\/$1] Install Ruby on Rails 4
-     1. [ ] Install ruby 2.0.0p0 (2013-02-24 revision 39474)
-     2. [ ] sudo gem update (1m30s)
-     3. [ ] sprockets
-	#+BEGIN_SRC sh
-	  sudo gem install sprockets --prerelease --no-ri --no-rdoc
-	#+END_SRC
-     4. [ ] sprockets-rails (17 gems installed)
-	#+BEGIN_SRC sh
-	  sudo gem install sprockets-rails --prerelease --no-ri --no-rdoc
-	#+END_SRC
-     5. [ ] rails
+* [5/5] Create a new rails application
+  1. [X] Create a new application
+     #+BEGIN_SRC sh
+       rails new weight --database postgresql
+     #+END_SRC
+  2. [X] 
+  3. [X] 
+  4. [X] Install Ruby on Rails 4
+     1. [X] Install ruby 2.0.0p0 (2013-02-24 revision 39474) or ruby 1.9.3
+     2. [X] Install rails
 	#+BEGIN_SRC sh
           sudo gem install rails --prerelease --no-ri --no-rdoc
 	#+END_SRC
-     6. [ ] therubyracer
-	1. [ ] cd /usr/bin && unlink python && ln -s python3 python	
-	2. [ ] ref
+     3. [X] therubyracer
+	1. [X] cd /usr/bin && unlink python && ln -s python3 python	
+	2. [X] ref
            #+BEGIN_SRC sh
              sudo gem install ref --no-ri --no-rdoc  
            #+END_SRC
-	3. [ ] libv8
+	3. [X] libv8
            1. libv8 fails to compile with GCC-4.8
 	   2. https://github.com/cowboyd/libv8/issues/90
            3. fixed with patch http://portage.perestoroniny.ru/dev-ruby/libv8/files/libv8-cf-gcc-4.8.0.patch
-           4. [ ] git clone git://github.com/cowboyd/libv8.git
-           5. [ ] cd libv8
-           6. [ ] wget http://portage.perestoroniny.ru/dev-ruby/libv8/files/libv8-cf-gcc-4.8.0.patch
-           7. [ ] sudo pacman --sync svn
-	   8. [ ] sudo bundle install
-           9. [ ] bundle exec rake checkout
-           10. [ ] patch -p0 -i libv8-cf-gcc-4.8.0.patch
-           11. [ ] bundle exec rake compile
-	   12. [ ] bundle exec rake binary
-	   13. [ ] sudo gem install --local pkg/libv8-3.16.14.1-x86-linux.gem
-     7. [0\/$1] theruby racer
-	1. [ ] git clone git://github.com/cowboyd/therubyracer.git
-	2. [ ] cd therubyracer
-	3. [ ] sudo bundle install
-	4. [ ] rake compile
-	5. [ ] rake build
-	6. [ ] sudo gem install --local pkg/therubyracer-0.12.0beta1.gem
-     8. [ ] sudo gem install devise --version 3.0.0.rc
-     9. [ ] Run the 'rails' command as root
+           4. [X] git clone git://github.com/cowboyd/libv8.git
+           5. [X] cd libv8
+           6. [X] wget http://portage.perestoroniny.ru/dev-ruby/libv8/files/libv8-cf-gcc-4.8.0.patch
+           7. [X] sudo pacman --sync svn
+	   8. [X] sudo bundle install
+           9. [X] bundle exec rake checkout
+           10. [X] patch -p0 -i libv8-cf-gcc-4.8.0.patch
+           11. [X] bundle exec rake compile
+	   12. [X] bundle exec rake binary
+	   13. [X] sudo gem install --local pkg/libv8-3.16.14.1-x86-linux.gem
+     4. [X] theruby racer
+	1. [X] git clone git://github.com/cowboyd/therubyracer.git
+	2. [X] cd therubyracer
+	3. [X] sudo bundle install
+	4. [X] rake compile
+	5. [X] rake build
+	6. [X] sudo gem install --local pkg/therubyracer-0.12.0beta1.gem
+     5. [X] Install Devise
+        #+BEGIN_SRC sh
+          gem install devise --version 3.0.0.rc --no-ri --no-rdoc 
+        #+END_SRC
+     6. [X] Run the 'rails' command as root
 	#+BEGIN_SRC sh
           sudo rails new throwaway
         #+END_SRC
-     10. Stuff that didn't work
-	 - gem fetch libv8 # Fetching: libv8-3.11.8.17-x86-linux.gem (100%)
-	 - gem unpack libv8 #
-	 - sudo gem install libv8 --version 3.16.14.1 ( FAIL )
-	 - sudo gem install libv8 --version 3.11.8.17
-	 - cd /stow/ruby-2.0.0-p0/usr/local/lib/ruby/gems/2.0.0/gems/libv8-3.16.14.1
-	 - patch -p0 -i libv8-cf-gcc-4.8.0.patch
-	 - bundle exec rake compile
-	 - rake --tasks
-	 - rake binary
-	 - gem install --local libv8-3.16.14.1-x86-linux.gem
-	 - sudo gem install libv8 --version 3.11.8.12
-	 - sudo pacman --sync v8
-	 - sudo gem install libv8 -- --with-system-v8 --version 3.11.8.12
-	 - sudo gem install libv8 --version 3.11.8.12 -- --with-system-v8
-	 - sudo gem install therubyracer => no matching function for call to ‘v8::Context::SetData(rr::String)
-  2. [ ] Create an new rails application structure
-  3. [ ] Enable a JavaScript runtime in file:../Gemfile
+     7. Stuff that didn't work
+        - gem fetch libv8 # Fetching: libv8-3.11.8.17-x86-linux.gem (100%)
+        - gem unpack libv8 #
+        - sudo gem install libv8 --version 3.16.14.1 ( FAIL )
+        - sudo gem install libv8 --version 3.11.8.17
+        - cd /stow/ruby-2.0.0-p0/usr/local/lib/ruby/gems/2.0.0/gems/libv8-3.16.14.1
+        - patch -p0 -i libv8-cf-gcc-4.8.0.patch
+        - bundle exec rake compile
+        - rake --tasks
+        - rake binary
+        - gem install --local libv8-3.16.14.1-x86-linux.gem
+        - sudo gem install libv8 --version 3.11.8.12
+        - sudo pacman --sync v8
+        - sudo gem install libv8 -- --with-system-v8 --version 3.11.8.12
+        - sudo gem install libv8 --version 3.11.8.12 -- --with-system-v8
+        - sudo gem install therubyracer => no matching function for
+          call to ‘v8::Context::SetData(rr::String)
+  5. [X] Set up database
+     1. [X] Create a "weight" user with "weight" password
+        #+BEGIN_SRC sh
+          createuser --pwprompt --echo weight
+        #+END_SRC
+        #+BEGIN_EXAMPLE
+          troy@troywill:~/srv/weight/139/weight2/config$           createuser --pwprompt --echo weight
+          Enter password for new role: 
+          Enter it again: 
+          Shall the new role be a superuser? (y/n) n
+          Shall the new role be allowed to create databases? (y/n) n
+          Shall the new role be allowed to create more new roles? (y/n) n
+          CREATE ROLE weight PASSWORD 'md5103012df4b715f58a539b009a0b8b340' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;
+        #+END_EXAMPLE
+     2. [X] Create development, test, and production database
+        #+BEGIN_SRC sh
+         createdb weight_development --owner weight
+         createdb weight_test --owner weight
+         createdb weight_production --owner weight
+        #+END_SRC
+     3. [X] [[file:../config/database.yml][config/database.yml]]
+        #+BEGIN_SRC conf
+          development:
+            adapter: postgresql
+            encoding: unicode
+            database: weight_development
+            pool: 5
+            username: weight
+            password: weight
+          
+            # Connect on a TCP socket. Omitted by default since the client uses a
+            # domain socket that doesn't need configuration. Windows does not have
+            # domain sockets, so uncomment these lines.
+            #host: localhost
+          
+            # The TCP port the server listens on. Defaults to 5432.
+            # If your server runs on a different port number, change accordingly.
+            #port: 5432
+          
+            # Schema search path. The server defaults to $user,public
+            #schema_search_path: myapp,sharedapp,public
+          
+            # Minimum log levels, in increasing order:
+            #   debug5, debug4, debug3, debug2, debug1,
+            #   log, notice, warning, error, fatal, and panic
+            # Defaults to warning.
+            #min_messages: notice
+          
+          # Warning: The database defined as "test" will be erased and
+          # re-generated from your development database when you run "rake".
+          # Do not set this db to the same as development or production.
+          test:
+            adapter: postgresql
+            encoding: unicode
+            database: weight_test
+            pool: 5
+            username: weight
+            password: weight
+          
+          production:
+            adapter: postgresql
+            encoding: unicode
+            database: weight_production
+            pool: 5
+            username: weight
+            password: weight
+        #+END_SRC
+     4. [X] FILE file:./pg_hba.conf /etc/postgresql/8.4/main/pg_hba.conf
+        #+BEGIN_SRC conf
+          local   weight_development         weight                            password
+          local   weight_production          weight                            password
+          local   weight_test                weight                            password
+        #+END_SRC
+* [4/4] Create an new rails application structure
+  1. [X] Enable a JavaScript runtime in file:../Gemfile
      #+BEGIN_SRC ruby
        # See https://github.com/sstephenson/execjs#readme for more supported runtimes
        gem 'therubyracer', platforms: :ruby
      #+END_SRC
-  4. [ ] Create a “home” controller and a “home/index” page
+  2. [X] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
        rails generate controller home index --no-controller-specs --skip-stylesheets --skip-javascripts
      #+END_SRC
      - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  5. [ ] Set the default route to home/index in file:../config/routes.rb
+  3. [X] Set the default route to home/index in file:../config/routes.rb
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-  6. [ ] Set the time zone file:../config/application.rb
+  4. [X] Set the time zone file:../config/application.rb
      #+BEGIN_SRC sh
        rake -D time
        rake time:zones:us
@@ -85,24 +159,24 @@
      #+BEGIN_SRC ruby
        config.time_zone = 'Pacific Time (US & Canada)'
      #+END_SRC
-* [/] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
-  1. [ ] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
+* [5/6] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+  1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
        gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
      #+END_SRC
-  2. [ ] Run the Devise gem install generator
+  2. [X] Run the Devise gem install generator
      #+BEGIN_SRC sh
        rails generate devise:install
      #+END_SRC
-  3. [ ] Generate a User Model and generate routes for user activities
+  3. [X] Generate a User Model and generate routes for user activities
      #+BEGIN_SRC sh
        rails generate devise User
      #+END_SRC
-  4. [ ] Run the devise_create_users database migration the was created by in the previous command
+  4. [X] Run the devise_create_users database migration the was created by in the previous command
      #+BEGIN_SRC sh
        rake db:migrate
      #+END_SRC
-  5. [ ] (Re)start the Rails server
+  5. [X] (Re)start the Rails server
      #+BEGIN_SRC 
        kill -USR1 `cat ../tmp/pids/server.pid `; rails server --daemon
      #+END_SRC
