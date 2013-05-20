@@ -508,14 +508,14 @@
        <h1>Goal loss rate: <%= Goal.where(:user_id => current_user.id).last.goal_loss_rate %>
        <h1>Goal now <%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%></h1>
      #+END_SRC
-* [/] Weight as a function of time
-  1. [ ] In Reading model, initial_reading function file:../app/models/reading.rb
+* [6/6] Weight as a function of time
+  1. [X] In Reading model, initial_reading function file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
          return Reading.order('reading_time ASC').where(:user_id => user.id).first
        end
      #+END_SRC
-  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
+  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.get_readings_after( user, start_time, end_time )
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
@@ -524,7 +524,7 @@
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  3. [ ] In Reading model, apply_filter file:../app/models/reading.rb
+  3. [X] In Reading model, apply_filter file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
          if ( weight == initial_time )
@@ -544,7 +544,7 @@
          return  weight
        end
      #+END_SRC
-  4. [ ] In Reading model, interpolate file:../app/models/reading.rb
+  4. [X] In Reading model, interpolate file:../app/models/reading.rb
      #+BEGIN_SRC ruby
 	def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
 	  filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
@@ -554,7 +554,7 @@
 	  interpolated_weight = last_weight + percent * delta_weight
 	end
       #+END_SRC
-  5. [ ] In Reading model, weight_at_time function file:../app/models/reading.rb
+  5. [X] In Reading model, weight_at_time function file:../app/models/reading.rb
       #+BEGIN_SRC ruby
 	def self.weight_at_time(user, time)
 	  setting = Setting.where(:user_id => user.id).last
@@ -583,13 +583,14 @@
 	  return weight
 	end
       #+END_SRC
-  6. [ ] Display weight now in file:../app/views/home/index.html.erb
+  6. [X] Display weight now in file:../app/views/home/index.html.erb
      #+BEGIN_SRC ruby
        <h1> Weight Now: <%= Reading.weight_at_time(current_user, Time.now) %></h1>
      #+END_SRC
-* [/] Draw Google Graph
+** TODO Create an initial setting so application doesn't crash
+* [1/7] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
-  2. [ ] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
+  2. [X] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        def self.goal_at_time(user, time)
          goal = Goal.where(:user_id => user.id).last
