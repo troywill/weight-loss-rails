@@ -357,8 +357,8 @@
         #+END_SRC
         - note that @user comes from application controller, identify_user method
      2. [X] Remove user id field from file:../app/views/readings/_form.html.erb
-* [/] Create "Settings" model, controller, and views, default values
-  1. [ ] Generate setting scaffold
+* [10/10] Create "Settings" model, controller, and views, default values
+  1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
@@ -374,7 +374,7 @@
            locale:string \
            --force
      #+END_SRC
-  2. [ ] Validations file:../app/models/setting.rb
+  2. [X] Validations file:../app/models/setting.rb
 	#+BEGIN_SRC ruby
           validates :filter_rate_gain, :presence => true, :numericality => true
           validates :filter_rate_loss, :presence => true, :numericality => true
@@ -385,29 +385,29 @@
           validates :timezone, :presence => true, :numericality => true
           validates :locale,  :presence => true
 	 #+END_SRC
-  3. [ ] Set default values in file:../db/migrate 2013...._create_settings.rb
+  3. [X] Set default values in file:../db/migrate 2013...._create_settings.rb
      #+BEGIN_SRC ruby
        t.integer :user_id
        t.integer :filter_rate_gain, :default => 500
        t.integer :filter_rate_loss, :default => 7000
-       t.boolean :custom_graph, :default => 0
+       t.boolean :custom_graph, :default => false
        t.integer :graph_upper, :default => 300
        t.integer :graph_lower, :default => 0
        t.integer :graph_lines, :default => 5
-       t.boolean :si, :default => 0
+       t.boolean :si, :default => false
        t.boolean :clothing, :default => 0
        t.decimal :clothing_wt, :default => 5
        t.integer :timezone, :default => -7
        t.string :locale, :default => "en_US.UTF-8"
      #+END_SRC
-  4. [ ] Database migration
-  5. [ ] Add current_user.id to create method file:../app/controllers/settings_controller.rb
+  4. [X] Database migration
+  5. [X] Add current_user.id to create method file:../app/controllers/settings_controller.rb
      #+BEGIN_SRC ruby
        def create
          @setting = Setting.new(setting_params)
          @setting.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  6. [ ] Remove user_id from form file:../app/views/settings/_form.html.erb
+  6. [X] Remove user_id from form file:../app/views/settings/_form.html.erb
      #+BEGIN_SRC ruby
        # Delete following div, user_id is supplied in the controller instead
        <div class="field">
@@ -415,22 +415,22 @@
          <%= f.number_field :user_id %>
        </div>
      #+END_SRC
-  7. [ ] settings_path in application layout file:../app/views/layouts/_navigation.html.erb
+  7. [X] settings_path in application layout file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <li><%= link_to "Settings", settings_path %></li>
      #+END_SRC
-  8. [ ] Relationship between Setting and User file:../app/models/setting.rb
+  8. [X] Relationship between Setting and User file:../app/models/setting.rb
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
          ...
      #+END_SRC
-  9. [ ] Relationship between User and Setting file:../app/models/user.rb
+  9. [X] Relationship between User and Setting file:../app/models/user.rb
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
      #+END_SRC
-  10. [ ] Add New Settings to be created when a new user is created file:../app/models/user.rb
+  10. [X] Add New Settings to be created when a new user is created file:../app/models/user.rb
       - No user controller with Devise
       - Use the standard after_create callback provided by Rails.
 	#+BEGIN_SRC ruby
@@ -449,8 +449,8 @@
             end
           end
 	#+END_SRC
-* [/] Create Goal model, controller, and views
-  1. [ ] Generate scaffold
+* [9/9] Create Goal model, controller, and views
+  1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
@@ -458,29 +458,29 @@
            goal_loss_rate:integer \
            goal_finish_time:datetime
      #+END_SRC
-  2. [ ] Relationship between Goal and User file:../app/models/goal.rb
+  2. [X] Relationship between Goal and User file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
        ...
      #+END_SRC
-  3. [ ] Relationship between User and Goal file:../app/models/user.rb
+  3. [X] Relationship between User and Goal file:../app/models/user.rb
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
          has_many :goals
      #+END_SRC
-  4. [ ] Default values file:../db/migrate/ 2013xxx_create_goals.rb
+  4. [X] Default values file:../db/migrate/ 2013xxx_create_goals.rb
      #+BEGIN_SRC ruby
        t.integer :goal_loss_rate, :default => 0
      #+END_SRC
-  5. [ ] Validations file:../app/models/goal.rb
+  5. [X] Validations file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        validates :user_id, :presence => true, :numericality => true
        validates :goal_loss_rate, :presence => true, :numericality => true
      #+END_SRC
-  6. [ ] Migrate database
-  7. [ ] user_id file:../app/controllers/goals_controller.rb
+  6. [X] Migrate database
+  7. [X] user_id file:../app/controllers/goals_controller.rb
      #+BEGIN_SRC ruby
        # POST /goals
        # POST /goals.json
@@ -488,13 +488,13 @@
          @goal = Goal.new(goal_params)
          @goal.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  8. [ ] update form file:../app/views/goals/_form.html.erb
-  9. [ ] navigation file:../app/views/layouts/_navigation.html.erb
+  8. [X] update form file:../app/views/goals/_form.html.erb
+  9. [X] navigation file:../app/views/layouts/_navigation.html.erb
      #+BEGIN_SRC html
        <li><%= link_to "Goals", goals_path %></li>
      #+END_SRC
-* [/] Display current goal
-  1. [ ] goal_now in Goal model file:../app/models/goal.rb
+* [2/2] Display current goal
+  1. [X] goal_now in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
        def self.goal_now(user)
          goal = Goal.where(:user_id => user.id).last
@@ -503,10 +503,10 @@
          return ( goal.goal_start_weight - lbs_per_second * elapsed_time )
        end
      #+END_SRC
-  2. [ ] View file:../app/views/home/index.html.erb
+  2. [X] View file:../app/views/home/index.html.erb
      #+BEGIN_SRC html
        <h1>Goal loss rate: <%= Goal.where(:user_id => current_user.id).last.goal_loss_rate %>
-       <h1><%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%></h1>
+       <h1>Goal now <%= number_with_precision(Goal.goal_now(current_user), :precision => 3)%></h1>
      #+END_SRC
 * [/] Weight as a function of time
   1. [ ] In Reading model, initial_reading function file:../app/models/reading.rb
