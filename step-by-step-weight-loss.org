@@ -588,7 +588,7 @@
        <h1> Weight Now: <%= Reading.weight_at_time(current_user, Time.now) %></h1>
      #+END_SRC
 ** TODO Create an initial setting so application doesn't crash
-* [1/7] Draw Google Graph
+* [7/7] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
   2. [X] Create a goal as a function of time method, place in Goal model file:../app/models/goal.rb
      #+BEGIN_SRC ruby
@@ -605,11 +605,16 @@
          return ( goal_start_weight - lbs_per_second * elapsed_time ).to_f
        end
      #+END_SRC
-  3. [ ] Generate the controller for generating Graphs
+     - Test with rails console
+       #+BEGIN_SRC ruby
+         user = User.find(1)
+         goal_now = Goal.goal_at_time(user,Time.now)
+       #+END_SRC
+  3. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph three_day week month year four_year
      #+END_SRC
-  4. [ ] Path for Google Graph three day in navigation file:../app/views/layouts/_navigation.html.erb layout
+  4. [X] No turbolinks Google Graphs navigation file:../app/views/layouts/_navigation.html.erb layout
      #+BEGIN_SRC html
        <li><a href="/google_graph/three_day" data-no-turbolink>3 day graph</a></li>
        <li><a href="/google_graph/month" data-no-turbolink>28 day graph</a></li>
@@ -621,7 +626,7 @@
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "1 year graph", google_graph_year_path %></div></li>
      #+END_SRC
-  5. [ ] Write a class `chart_array` method in Readings file:../app/models/reading.rb
+  5. [X] Write a class `chart_array` method in Readings file:../app/models/reading.rb
      #+BEGIN_SRC ruby
        def self.chart_array(user,period)
          weight_array = Array.new
@@ -681,9 +686,14 @@
          return weight_array
        end
      #+END_SRC
-     - Commentary: :: We will pass data into Google javascript in the view
-     - Commentary: :: We will pass data into Google javascript in the view
-  6. [ ] VIEW Put Google Graph javascript into view a view partial three day file:../app/views/layouts/_google_graph.html.erb
+     - Commentary: We will pass data into Google javascript in the view
+     - Test in rails console
+       #+BEGIN_SRC ruby
+         user = User.find(1)
+         Reading.chart_array(user,'three_day')
+         => [["", 100.0, 101.0], ["", 150.0, 151.0]]
+       #+END_SRC
+  6. [X] VIEW Put Google Graph javascript into view a view partial three day file:../app/views/layouts/_google_graph.html.erb
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -701,7 +711,7 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  7. [ ] Put google chart data array into controller file:../app/controllers/google_graph_controller.rb
+  7. [X] Put google chart data array into controller file:../app/controllers/google_graph_controller.rb
      #+BEGIN_SRC ruby
        class GoogleGraphController < ApplicationController
          def three_day
@@ -722,19 +732,18 @@
          end
        end
      #+END_SRC
-  8. [ ] VIEW Call partial from 3 day, month, and 1 year views file:../app/views/google_graph/year.html.erb
+  8. [X] VIEW Call partial from 3 day, month, and 1 year views file:../app/views/google_graph/year.html.erb
      #+BEGIN_SRC html
        DEBUG chart data: <%= @google_chart_data_array %><br />
        DEBUG chart options: <%= @chart_options %>
        <%= render 'layouts/google_graph' %>
      #+END_SRC
-* [/] Display readings latest first
-  1. [ ] file:../app/controllers/readings_controller.rb ( welcome controller, index method )
+* [1/1] Display readings latest first
+  1. [X] file:../app/controllers/readings_controller.rb ( welcome controller, index method )
      #+BEGIN_SRC ruby
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
      + Since we've introduced the by_user method we need to define it. See next step.
-  2. [ ] VIEW file:../app/views/readings/index.html.erb
 * [/] SimpleForm
   1. [ ] Install
      #+BEGIN_SRC sh
