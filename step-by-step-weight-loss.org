@@ -42,6 +42,46 @@
             password: 
         #+END_SRC
   4. rake db:create
+* [4/7] SimpleForm
+  1. [X] Install
+     #+BEGIN_SRC sh
+       # Saturday, May 11, 2013
+       # See for latest version: http://rubygems.org/gems/simple_form/versions/3.0.0.rc
+       gem install simple_form --pre
+     #+END_SRC
+  2. [X] [[file:../Gemfile][Gemfile]]
+     #+BEGIN_SRC ruby
+       gem 'simple_form'
+     #+END_SRC
+  3. [X] bundle install
+  4. [X] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
+     #+BEGIN_SRC sh
+       rails generate simple_form:install --bootstrap
+     #+END_SRC
+     #+BEGIN_EXAMPLE
+          Inside your views, use the 'simple_form_for' with one of the Bootstrap form
+         classes, '.form-horizontal', '.form-inline', '.form-search' or
+         '.form-vertical', as the following:
+       
+           = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
+     #+END_EXAMPLE
+  5. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+     #+BEGIN_SRC html
+       <!-- <%= form_for(@reading) do |f| %> -->
+       <%= simple_form_for(@reading, :html => { :class => 'form-horizontal' } ) do |f| %>
+     #+END_SRC 
+  6. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+     #+BEGIN_SRC html
+       <!-- <div class="actions"> -->
+       <!--   <%= f.submit %> -->
+       <!-- </div> -->
+       <%= f.button :submit, :class => 'btn-primary' %>
+     #+END_SRC
+  7. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+     #+BEGIN_SRC html
+       <%= f.input :weight %>
+       <%= f.input :clothing_wt %>
+     #+END_SRC
 * [3/3] Create a new rails application structure
   1. [X] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
@@ -95,13 +135,14 @@
   5. [X] Deploy the code
           #+BEGIN_SRC sh
             git push heroku master
+            heroku run rake
           #+END_SRC
   6. [X] Visit the application
   7. [X] View the logs
      #+BEGIN_SRC sh
        heroku logs
      #+END_SRC
-* [6/6] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+* [7/7] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
        gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
@@ -128,7 +169,7 @@
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
      - file:../app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
-  8. [ ] Deploy to Heroku
+  8. [X] Deploy to Heroku
      #+BEGIN_SRC sh
        bundle install
        git add app config db
@@ -190,7 +231,7 @@
         git commit -a
         git push heroku master
       #+END_SRC
-* [ ] Layout to work with Bootstrap
+* [8/8] Layout to work with Bootstrap
   1. [X] New Application Layout with Twitter Bootstrap [[file:../app/views/layouts/application.html.erb][app/views/layouts/application.html.erb]]
      #+BEGIN_SRC html
        <!DOCTYPE html>
@@ -348,58 +389,18 @@
        git commit -a
        git push heroku master
      #+END_SRC
-
-* [ ] SimpleForm
-  1. [ ] Install
-     #+BEGIN_SRC sh
-       # Saturday, May 11, 2013
-       # See for latest version: http://rubygems.org/gems/simple_form/versions/3.0.0.rc
-       gem install simple_form --pre
-     #+END_SRC
-  2. [ ] [[file:../Gemfile][Gemfile]]
-     #+BEGIN_SRC ruby
-       gem 'simple_form'
-     #+END_SRC
-  3. [ ] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
-     #+BEGIN_SRC sh
-       rails generate simple_form:install --bootstrap
-     #+END_SRC
-     #+BEGIN_EXAMPLE
-          Inside your views, use the 'simple_form_for' with one of the Bootstrap form
-         classes, '.form-horizontal', '.form-inline', '.form-search' or
-         '.form-vertical', as the following:
-       
-           = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
-     #+END_EXAMPLE
-  4. [ ] VIEW file:../app/views/readings/_form.html.erb
-     #+BEGIN_SRC html
-       <!-- <%= form_for(@reading) do |f| %> -->
-       <%= simple_form_for(@reading, :html => { :class => 'form-horizontal' } ) do |f| %>
-     #+END_SRC 
-  5. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
-     #+BEGIN_SRC html
-       <!-- <div class="actions"> -->
-       <!--   <%= f.submit %> -->
-       <!-- </div> -->
-       <%= f.button :submit, :class => 'btn-primary' %>
-     #+END_SRC
-  6. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
-     #+BEGIN_SRC html
-       <%= f.input :weight %>
-       <%= f.input :clothing_wt %>
-     #+END_SRC
-* [ ] Create "Readings" model, controller, and views
-  1. [ ] Generate reading scaffold
+* [7/7] Create "Readings" model, controller, and views
+  1. [X] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [ ] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
+  2. [X] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [ ] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
+  3. [X] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
            def change
@@ -407,15 +408,15 @@
                t.integer :user_id
                t.decimal :weight
                t.datetime :reading_time
-               t.decimal :clothing_wt, :default => 5
+               t.decimal :clothing_wt, :default => 3
                
                t.timestamps
              end
            end
          end
        #+END_SRC
-  4. [ ] Migrate the database, i.e. rake db:migrate 
-  5. [ ] [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
+  4. [X] Migrate the database, i.e. rake db:migrate 
+  5. [X] [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
      #+BEGIN_SRC html
        <ul class="dropdown-menu">
          <li><%= link_to "New reading", new_reading_path %></li>
@@ -423,8 +424,8 @@
          <li class="divider"></li>
        </ul>
      #+END_SRC
-  6. [ ] [100%] User ID on new Reading
-     1. [ ] Add user id to create method in readings controller [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
+  6. [X] [100%] User ID on new Reading
+     1. [X] Add user id to create method in readings controller [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
 	#+BEGIN_SRC ruby
           def create
             @reading = Reading.new(reading_params)
@@ -432,7 +433,7 @@
             @reading.reading_time = Time.now
         #+END_SRC
         - note that current_user is provided by the Devise authentication system
-     2. [ ] Remove user id and reading_time fields from [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+     2. [X] Remove user id and reading_time fields from [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
   7. Reading Layout file:../app/views/layouts/readings.html.erb
      #+BEGIN_SRC html
        <!DOCTYPE html>
@@ -460,11 +461,17 @@
          </body>
        </html>
      #+END_SRC
-  8. [ ] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
+  8. [X] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
      #+BEGIN_SRC ruby
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
-* [ ] Create "Settings" model, controller, and views, default values
+  9. [ ] Deploy to Heroku
+     #+BEGIN_SRC sh
+       git add app
+       git commit -a
+       git push heroku master
+     #+END_SRC
+* [/] Create "Settings" model, controller, and views, default values
   1. [ ] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
@@ -558,7 +565,7 @@
             end
           end
 	#+END_SRC
-* [ ] Create Goal model, controller, and views
+* [/] Create Goal model, controller, and views
   1. [ ] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
@@ -620,7 +627,7 @@
       #+END_SRC
 ** TODO Edit last goal
 ** TODO link_to with Twitter CSS
-* [ ] Display current goal
+* [/] Display current goal
   1. [ ] goal_now in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        def self.goal_now(user)
@@ -648,7 +655,7 @@
      #+BEGIN_SRC html
        <%= goal_now %>
      #+END_SRC
-* [ ] Weight as a function of time
+* [/] Weight as a function of time
   1. [ ] In Reading model, initial_reading function [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
@@ -739,7 +746,7 @@
        <h1> Weight Now: <%= weight_now %></h1>
      #+END_SRC
 ** TODO Create an initial setting so application doesn't crash
-* [ ] Draw Google Graph
+* [/] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
   2. [ ] Create a goal as a function of time method, place in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
