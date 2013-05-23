@@ -11,5 +11,4 @@ rails generate scaffold setting user_id:integer \
     clothing:boolean \
     clothing_wt:decimal\
     timezone:integer \
-    locale:string \
-    --force
+    locale:string

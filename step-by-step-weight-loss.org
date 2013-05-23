@@ -389,7 +389,7 @@
        git commit -a
        git push heroku master
      #+END_SRC
-* [7/7] Create "Readings" model, controller, and views
+* [9/9] Create "Readings" model, controller, and views
   1. [X] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
@@ -465,14 +465,19 @@
      #+BEGIN_SRC ruby
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
-  9. [ ] Deploy to Heroku
-     #+BEGIN_SRC sh
-       git add app
-       git commit -a
-       git push heroku master
+  9. [X] Bootstrap table [[file:../app/views/readings/index.html.erb][app/views/readings/index.html.erb]]
+     #+BEGIN_SRC html
+       <table class="table">
      #+END_SRC
-* [/] Create "Settings" model, controller, and views, default values
-  1. [ ] Generate setting scaffold
+  10. [X] Deploy to Heroku
+      #+BEGIN_SRC sh
+        git add app config db lib
+        git commit -a
+        git push heroku master
+        run rake db:migrate
+      #+END_SRC
+* [11/11] Create "Settings" model, controller, views, and default values
+  1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
@@ -485,16 +490,15 @@
            clothing:boolean \
            clothing_wt:decimal\
            timezone:integer \
-           locale:string \
-           --force
+           locale:string
      #+END_SRC
-  2. [ ] Use readings layout file:../app/controllers/settings_controller.rb
+  2. [X] Use readings layout file:../app/controllers/settings_controller.rb
      #+BEGIN_SRC ruby
        class SettingsController < ApplicationController
          layout "readings"
          before_action :set_setting, only: [:show, :edit, :update, :destroy]
      #+END_SRC
-  3. [ ] Validations [[file:../app/models/setting.rb][app/models/setting.rb]]
+  3. [X] Validations [[file:../app/models/setting.rb][app/models/setting.rb]]
 	#+BEGIN_SRC ruby
           validates :filter_rate_gain, :presence => true, :numericality => true
           validates :filter_rate_loss, :presence => true, :numericality => true
@@ -505,7 +509,7 @@
           validates :timezone, :presence => true, :numericality => true
           validates :locale,  :presence => true
 	 #+END_SRC
-  4. [ ] Set default values in [[file:../db/migrate/][db/migrate 2013...._create_settings.rb]]
+  4. [X] Set default values in [[file:../db/migrate/][db/migrate 2013...._create_settings.rb]]
      #+BEGIN_SRC ruby
        t.integer :user_id
        t.integer :filter_rate_gain, :default => 500
@@ -520,14 +524,16 @@
        t.integer :timezone, :default => -7
        t.string :locale, :default => "en_US.UTF-8"
      #+END_SRC
-  5. [ ] Migrate database
-  6. [ ] Add current_user.id to create method [[file:../app/controllers/settings_controller.rb][app/controllers/settings_controller.rb]]
+  5. [X] Migrate database
+  6. [X] Add current_user.id to create method [[file:../app/controllers/settings_controller.rb][app/controllers/settings_controller.rb]]
      #+BEGIN_SRC ruby
        def create
          @setting = Setting.new(setting_params)
-         @setting.user_id = current_user.id # current_user provided by Devise
+         if current_user
+           @setting.user_id = current_user.id # current_user provided by Devise
+         end
      #+END_SRC
-  7. [ ] Remove user_id from form [[file:../app/views/settings/_form.html.erb][app/views/settings/_form.html.erb]]
+  7. [X] Remove user_id from form [[file:../app/views/settings/_form.html.erb][app/views/settings/_form.html.erb]]
      #+BEGIN_SRC ruby
        # Delete following div, user_id is supplied in the controller instead
        <div class="field">
@@ -535,18 +541,18 @@
          <%= f.number_field :user_id %>
        </div>
      #+END_SRC
-  8. [ ] Relationship between Setting and User [[file:../app/models/setting.rb][app/models/setting.rb]]
+  8. [X] Relationship between Setting and User [[file:../app/models/setting.rb][app/models/setting.rb]]
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
          ...
      #+END_SRC
-  9. [ ] Relationship between User and Setting [[file:../app/models/user.rb][models/user.rb]]
+  9. [X] Relationship between User and Setting [[file:../app/models/user.rb][models/user.rb]]
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
      #+END_SRC
-  10. [ ] Add New Settings to be created when a new user is created [[file:../app/models/user.rb][app/models/user.rb]]
+  10. [X] Add New Settings to be created when a new user is created [[file:../app/models/user.rb][app/models/user.rb]]
       - No user controller with Devise
       - Use the standard after_create callback provided by Rails.
 	#+BEGIN_SRC ruby
@@ -565,8 +571,15 @@
             end
           end
 	#+END_SRC
-* [/] Create Goal model, controller, and views
-  1. [ ] Generate scaffold
+  11. [X] Deploy to Heroku
+      #+BEGIN_SRC sh
+        git add app db
+        git commit -a
+        git push heroku master
+        run rake db:migrate
+      #+END_SRC
+* [12/12] Create Goal model, controller, and views
+  1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
@@ -574,61 +587,75 @@
            goal_loss_rate:integer \
            goal_finish_time:datetime
      #+END_SRC
-  2. [ ] Layout file:../app/controllers/goals_controller.rb
-  3. [ ] Table class file:../app/views/goals/index.html.erb
+  2. [X] Layout [[file:../app/controllers/goals_controller.rb][app/controllers/goals_controller.rb]]
+     #+BEGIN_SRC ruby
+       class GoalsController < ApplicationController
+         layout "readings"
+     #+END_SRC
+  3. [X] Table class [[file:../app/views/goals/index.html.erb][app/views/goals/index.html.erb]]
      #+BEGIN_SRC html
        <table class="table">
      #+END_SRC
-  4. [ ] Relationship between Goal and User [[file:../app/models/goal.rb][app/models/goal.rb]]
+  4. [X] Relationship between Goal and User [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
        ...
      #+END_SRC
-  5. [ ] Relationship between User and Goal [[file:../app/models/user.rb][app/models/user.rb]]
+  5. [X] Relationship between User and Goal [[file:../app/models/user.rb][app/models/user.rb]]
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
          has_many :goals
      #+END_SRC
-  6. [ ] Default values [[file:../db/migrate/][db/migrate/ 2013xxx_create_goals.rb]]
+  6. [X] Default values [[file:../db/migrate/][db/migrate/ 2013xxx_create_goals.rb]]
      #+BEGIN_SRC ruby
        t.integer :goal_loss_rate, :default => 0
      #+END_SRC
-  7. [ ] Validations [[file:../app/models/goal.rb][app/models/goal.rb]]
+  7. [X] Validations [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        validates :goal_start_weight, :presence => true, :numericality => true
        validates :user_id, :presence => true, :numericality => true
        validates :goal_loss_rate, :presence => true, :numericality => true
      #+END_SRC
-  8. [ ] Migrate database
-  9. [ ] user_id [[file:../app/controllers/goals_controller.rb][app/controllers/goals_controller.rb]]
+  8. [X] Migrate database
+  9. [X] user_id [[file:../app/controllers/goals_controller.rb][app/controllers/goals_controller.rb]]
      #+BEGIN_SRC ruby
        # POST /goals
        # POST /goals.json
+       
        def create
          @goal = Goal.new(goal_params)
-         @goal.user_id = current_user.id # current_user provided by Devise
+         if current_user
+           @goal.user_id = current_user.id # current_user provided by Devise
+         end
      #+END_SRC
-  10. [ ] update form [[file:../app/views/goals/_form.html.erb][app/views/goals/_form.html.erb]]
-  11. [ ] navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
+  10. [X] update form [[file:../app/views/goals/_form.html.erb][app/views/goals/_form.html.erb]]
+      remove user_id
+  11. [X] navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
       #+BEGIN_SRC html
-          <!-- GOALS -->
-          <li class="dropdown">
-            <a href="/goals" class="dropdown-toggle" --
-               data-toggle="dropdown">Goals <b class="caret"></b></a> --
-            <ul class="dropdown-menu">
-              <li class="divider"></li>
-              <li><%= link_to "Set a new goal", new_goal_path %></li>
-              <li><%= link_to "See/edit past goals", goals_path %></li>
-            </ul>
-          </li>
-        </ul>
+        <!-- GOALS -->
+        <li class="dropdown">
+          <a href="/goals" class="dropdown-toggle" data-toggle="dropdown">Goals <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "Set a new goal", new_goal_path %></li>
+            <li><%= link_to "See/edit past goals", goals_path %></li>
+          </ul>
+        </li>
       #+END_SRC
+  12. [X] Deploy to Heroku
+      #+BEGIN_SRC sh
+        git add app db
+        git commit -a
+        git push heroku master
+        run rake db:migrate
+      #+END_SRC
+       
 ** TODO Edit last goal
 ** TODO link_to with Twitter CSS
-* [/] Display current goal
-  1. [ ] goal_now in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
+
+* [3/3] Display current goal
+  1. [X] goal_now in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        def self.goal_now(user)
          goal = Goal.where(:user_id => user.id).last
@@ -641,7 +668,7 @@
          end
        end
      #+END_SRC
-  2. [ ] TODO goal_now helper file:../app/helpers/application_helper.rb
+  2. [X] TODO goal_now helper file:../app/helpers/application_helper.rb
      #+BEGIN_SRC ruby
        module ApplicationHelper
          def goal_now
@@ -651,18 +678,20 @@
          end
        end
      #+END_SRC
-  3. [ ] View [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
+  3. [X] View [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
      #+BEGIN_SRC html
-       <%= goal_now %>
+       <% if current_user %>
+       <h1>Your goal now :<%= goal_now %></h1>
+       <% end %>
      #+END_SRC
-* [/] Weight as a function of time
-  1. [ ] In Reading model, initial_reading function [[file:../app/models/reading.rb][app/models/reading.rb]]
+* [8/8] Weight as a function of time
+  1. [X] In Reading model, initial_reading function [[file:../app/models/reading.rb][app/models/reading.rb]] 
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
          return Reading.order('reading_time ASC').where(:user_id => user.id).first
        end
      #+END_SRC
-  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) [[file:../app/models/reading.rb][app/models/reading.rb]]
+  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.get_readings_after( user, start_time, end_time )
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
@@ -671,7 +700,7 @@
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  3. [ ] In Reading model, apply_filter [[file:../app/models/reading.rb][app/models/reading.rb]]
+  3. [X] In Reading model, apply_filter [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
          if ( weight == initial_time )
@@ -691,7 +720,7 @@
          return  weight
        end
      #+END_SRC
-  4. [ ] In Reading model, interpolate [[file:../app/models/reading.rb][app/models/reading.rb]]
+  4. [X] In Reading model, interpolate [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
 	def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
 	  filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
@@ -701,7 +730,7 @@
 	  interpolated_weight = last_weight + percent * delta_weight
 	end
       #+END_SRC
-  5. [ ] In Reading model, weight_at_time function [[file:../app/models/reading.rb][app/models/reading.rb]]
+  5. [X] In Reading model, weight_at_time function [[file:../app/models/reading.rb][app/models/reading.rb]]
       #+BEGIN_SRC ruby
         def self.weight_at_time(user, time)
           setting = Setting.where(:user_id => user.id).last
@@ -732,7 +761,7 @@
         end
         
       #+END_SRC
-  6. [ ] Weight now helper file:../app/helpers/application_helper.rb
+  6. [X] Weight now helper file:../app/helpers/application_helper.rb
      #+BEGIN_SRC ruby
        def weight_now
          if current_user
@@ -741,14 +770,19 @@
          end
        end
      #+END_SRC
-  7. [ ] Display weight now in [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
+  7. [X] Display weight now in [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
      #+BEGIN_SRC ruby
-       <h1> Weight Now: <%= weight_now %></h1>
+       <h1>Your weight now :<%= weight_now %></h1>
+     #+END_SRC
+  8. [X] Deploy to Heroku
+     #+BEGIN_SRC sh
+       git commit -a
+       git push heroku master
      #+END_SRC
 ** TODO Create an initial setting so application doesn't crash
-* [/] Draw Google Graph
+* [9/9] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
-  2. [ ] Create a goal as a function of time method, place in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
+  2. [X] Create a goal as a function of time method, place in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        def self.goal_at_time(user, time)
          goal = Goal.where(:user_id => user.id).last
@@ -768,15 +802,24 @@
          user = User.find(1)
          goal_now = Goal.goal_at_time(user,Time.now)
        #+END_SRC
-  3. [ ] Generate the controller for generating Graphs
+  3. [X] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph hour three_day week month year four_year
      #+END_SRC
-  4. [ ] No turbolinks Google Graphs navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]] layout
+  4. [X] No turbolinks Google Graphs navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]] layout
      #+BEGIN_SRC html
-       <li><a href="/google_graph/three_day" data-no-turbolink>3 day graph</a></li>
-       <li><a href="/google_graph/month" data-no-turbolink>28 day graph</a></li>
-       <li><a href="/google_graph/year" data-no-turbolink>1 year graph</a></li>
+       <!-- Graphs -->
+       <li class="dropdown">
+         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Graphs <b class="caret"></b></a>
+         <ul class="dropdown-menu">
+           <li><a href="/google_graph/three_day" data-no-turbolink>3 day graph</a></li>
+           <li><a href="/google_graph/month" data-no-turbolink>28 day graph</a></li>
+           <li><a href="/google_graph/year" data-no-turbolink>1 year graph</a></li>
+           <li class="divider"></li>
+           <li class="nav-header">For Fun</li>
+           <li><a href="/google_graph/hour" data-no-turbolink>Last hour graph</a></li>
+         </ul>
+       </li>
      #+END_SRC
      #+BEGIN_SRC html
        # I tried this, but it messes up the display, i.e. CSS
@@ -784,65 +827,34 @@
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "1 year graph", google_graph_year_path %></div></li>
      #+END_SRC
-  5. [ ] Write a class `chart_array` method in Readings [[file:../app/models/reading.rb][app/models/reading.rb]]
+  5. [X] Write a class `chart_array` method in Readings [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
-       def self.chart_array(user,period)
+       def self.chart_array(user, number_of_intervals, interval )
          weight_array = Array.new
          weight = 0
          time_at_point_in_past = 0
-       
+         
          initial_reading = Reading.initial_reading(user)
          time_initial = initial_reading.reading_time
          weight_initial = initial_reading.weight
-
-         if ( period == 'three_day' )
-           # Get weight values for last 3 days
-           weight_array.push(['Last 3 days','Goal','Weight'])
-           number_of_periods = 72
+         
+         weight_array.push(["title", 'Weight', 'Goal'])
+         
+         (0..number_of_intervals).each do |period_num|
+           time_at_point_in_past = Time.now-(number_of_intervals-period_num) * interval
            
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).hour
-             
-             if ( time_at_point_in_past < time_initial )
-               weight = weight_initial
-             else
-               weight = Reading.weight_at_time(user, time_at_point_in_past)
-             end
-             goal = Goal.goal_at_time(user, time_at_point_in_past)
-             weight_array.push(["", weight.to_f, goal.to_f])
+           if ( time_at_point_in_past < time_initial )
+             weight = weight_initial
+           else
+             weight = Reading.weight_at_time(user, time_at_point_in_past)
            end
-         elsif ( period == 'month' )
-           weight_array.push(['Year','Weight','Goal'])
-           number_of_periods = 28
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).day
-             if ( time_at_point_in_past < time_initial )
-               weight = weight_initial
-             else
-               weight = Reading.weight_at_time(user, time_at_point_in_past)
-             end
-             goal = Goal.goal_at_time(user, time_at_point_in_past)
-             weight_array.push(["", weight.to_f, goal.to_f])
-           end
-         elsif ( period == 'year' )
-           # Get weight values for last year
-           weight_array.push(['Last Year','Weight','Goal'])
-           number_of_periods = 12
-       
-           (0..number_of_periods).each do |period_num|
-             time_at_point_in_past = Time.now-(number_of_periods-period_num).month
-             
-             if ( time_at_point_in_past < time_initial )
-               weight = weight_initial
-             else
-               weight = Reading.weight_at_time(user, time_at_point_in_past)
-             end
-             goal = Goal.goal_at_time(user, time_at_point_in_past)
-             weight_array.push(["", weight.to_f, goal.to_f])
-           end
+           goal = Goal.goal_at_time(user, time_at_point_in_past)
+           weight_array.push(["", weight.to_f, goal.to_f])
          end
          return weight_array
        end
+       
+       
      #+END_SRC
      - Commentary: We will pass data into Google javascript in the view
      - Test in rails console
@@ -851,7 +863,7 @@
          Reading.chart_array(user,'three_day')
          => [["", 100.0, 101.0], ["", 150.0, 151.0]]
        #+END_SRC
-  6. [ ] VIEW Put Google Graph javascript into view a view partial [[file:../app/views/layouts/_google_graph.html.erb][app/views/layouts/_google_graph.html.erb]]
+  6. [X] VIEW Put Google Graph javascript into view a view partial [[file:../app/views/layouts/_google_graph.html.erb][app/views/layouts/_google_graph.html.erb]]
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -860,7 +872,7 @@
                 
          function drawChart() {
          var data = google.visualization.arrayToDataTable(<%= raw @google_chart_data_array %>);
-         var options = { title: 'Weight 3 days', pointSize:2 };
+         var options = { <%= raw @chart_options %> };
                              
          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
          chart.draw(data, options);
@@ -869,39 +881,55 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  7. [ ] Put google chart data array into controller [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
+  7. [X] Put google chart data array into controller [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
      #+BEGIN_SRC ruby
        class GoogleGraphController < ApplicationController
+       
+         layout "readings"
+       
+         def hour
+           @google_chart_data_array = Reading.chart_array(current_user,'Last hour',12,300).to_json
+           title = "'Weight last hour #{Time.now.to_formatted_s(:short)}'";
+           @chart_options = "title: #{title}, pointSize:2"
+         end
          def three_day
-           @google_chart_data_array = Reading.chart_array(current_user,'day').to_json
-           @chart_options = "title: 'Weight 3 days', pointSize:2"
-         end
-         def month
-           @google_chart_data_array = Reading.chart_array(current_user,'month').to_json
-           @chart_options = "title:'Weight 1 month',pointSize:2"
-         end
-         def year
-           @google_chart_data_array = Reading.chart_array(current_user,'year').to_json
-           @chart_options = "title:'Weight 1 year',pointSize:2"
-         end
-         def four_year
+           @google_chart_data_array = Reading.chart_array(current_user,'BAR',72,259200 ).to_json
+           title = "'Weight last three days #{Time.now.to_formatted_s(:short)}'";
+           @chart_options = "title: #{title}, pointSize:2"
          end
          def week
          end
+         def month
+           @google_chart_data_array = Reading.chart_array(current_user,'month',28,28*86400).to_json
+           title = "'Weight last month #{Time.now.to_formatted_s(:short)}'";
+           @chart_options = "title: #{title}, pointSize:2"
+         end
+         def year
+           @google_chart_data_array = Reading.chart_array(current_user,'year',24,365*86400).to_json
+           title = "'Weight last year #{Time.now.to_formatted_s(:short)}'";
+           @chart_options = "title: #{title}, pointSize:2"
+         end
+         def four_year
+         end
        end
      #+END_SRC
-  8. [ ] VIEW Call partial from 3 day, month, and 1 year views [[file:../app/views/google_graph/][app/views/google_graph/]]
+  8. [X] VIEW Call partial from 3 day, month, and 1 year views [[file:../app/views/google_graph/][app/views/google_graph/]]
      #+BEGIN_SRC html
        DEBUG chart data: <%= @google_chart_data_array %><br />
        DEBUG chart options: <%= @chart_options %>
        <%= render 'layouts/google_graph' %>
      #+END_SRC
-  9. [ ] Simplify layout [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
+  9. [X] Simplify layout [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
      #+BEGIN_SRC ruby
        class GoogleGraphController < ApplicationController
          layout "readings"
      #+END_SRC
-     
+  10. [X] Deploy to Heroku
+      #+BEGIN_SRC sh
+        git add app
+        git commit -a
+        git push heroku master
+      #+END_SRC      
 * [/] Deploy to marv.usahealthscience.com
   1. [ ] weight.usahealthscience.com
      1. [ ] http://namecheap.com
