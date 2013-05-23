@@ -1,97 +1,58 @@
-* [2/2] Create a new rails application
+* [3/3] Create a new rails application
   1. [X] Create a new application
      #+BEGIN_SRC sh
        rails new weight --database postgresql 
      #+END_SRC
-  2. [X] Set up database
-     1. [X] Create a "weight" user with "weight" password
+  2. [X] Enable a JavaScript runtime in [[file:../Gemfile][Gemfile]]
+     #+BEGIN_SRC ruby
+       # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+       gem 'therubyracer', platforms: :ruby
+     #+END_SRC
+  3. [X] Set up database
+     1. [X] Create development, test, and production database
         #+BEGIN_SRC sh
-          createuser --pwprompt --echo weight
+         createdb weight_development
+         createdb weight_test
+         createdb weight_production
         #+END_SRC
-        #+BEGIN_EXAMPLE
-          troy@troywill:~/srv/weight/139/weight2/config$           createuser --pwprompt --echo weight
-          Enter password for new role: 
-          Enter it again: 
-          Shall the new role be a superuser? (y/n) n
-          Shall the new role be allowed to create databases? (y/n) n
-          Shall the new role be allowed to create more new roles? (y/n) n
-          CREATE ROLE weight PASSWORD 'md5103012df4b715f58a539b009a0b8b340' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;
-        #+END_EXAMPLE
-     2. [X] Create development, test, and production database
-        #+BEGIN_SRC sh
-         createdb weight_development --owner weight
-         createdb weight_test --owner weight
-         createdb weight_production --owner weight
-        #+END_SRC
-     3. [X] [[file:../config/database.yml][config/database.yml]]
+     2. [X] [[file:../config/database.yml][config/database.yml]]
         #+BEGIN_SRC conf
           development:
             adapter: postgresql
             encoding: unicode
             database: weight_development
             pool: 5
-            username: weight
-            password: weight
+            username: troy
+            password: 
           
-            # Connect on a TCP socket. Omitted by default since the client uses a
-            # domain socket that doesn't need configuration. Windows does not have
-            # domain sockets, so uncomment these lines.
-            #host: localhost
-          
-            # The TCP port the server listens on. Defaults to 5432.
-            # If your server runs on a different port number, change accordingly.
-            #port: 5432
-          
-            # Schema search path. The server defaults to $user,public
-            #schema_search_path: myapp,sharedapp,public
-          
-            # Minimum log levels, in increasing order:
-            #   debug5, debug4, debug3, debug2, debug1,
-            #   log, notice, warning, error, fatal, and panic
-            # Defaults to warning.
-            #min_messages: notice
-          
-          # Warning: The database defined as "test" will be erased and
-          # re-generated from your development database when you run "rake".
-          # Do not set this db to the same as development or production.
           test:
             adapter: postgresql
             encoding: unicode
             database: weight_test
             pool: 5
-            username: weight
-            password: weight
+            username: troy
+            password: 
           
           production:
             adapter: postgresql
             encoding: unicode
             database: weight_production
             pool: 5
-            username: weight
-            password: weight
+            username: troy
+            password: 
         #+END_SRC
-     4. [X] FILE file:./pg_hba.conf /etc/postgresql/8.4/main/pg_hba.conf
-        #+BEGIN_SRC conf
-          local   weight_development         weight                            password
-          local   weight_production          weight                            password
-          local   weight_test                weight                            password
-        #+END_SRC
-* [4/4] Create a new rails application structure
-  1. [X] Enable a JavaScript runtime in [[file:../Gemfile][Gemfile]]
-     #+BEGIN_SRC ruby
-       # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-       gem 'therubyracer', platforms: :ruby
-     #+END_SRC
-  2. [X] Create a “home” controller and a “home/index” page
+  4. rake db:create
+* [3/3] Create a new rails application structure
+  1. [X] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
        rails generate controller home index --skip-stylesheets --skip-javascripts
      #+END_SRC
      - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  3. [X] Set the default route to home/index in [[file:../config/routes.rb][config/routes.rb]]
+  2. [X] Set the default route to home/index in [[file:../config/routes.rb][config/routes.rb]]
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-  4. [X] Set the time zone [[file:../config/application.rb][config/application.rb]]
+  3. [X] Set the time zone [[file:../config/application.rb][config/application.rb]]
      #+BEGIN_SRC sh
        rake --describe time
        rake time:zones:us
@@ -99,37 +60,86 @@
      #+BEGIN_SRC ruby
        config.time_zone = 'Pacific Time (US & Canada)'
      #+END_SRC
+* [6/6] Deploy to Heroku
+  1. [X] [[file:../Gemfile][Gemfile]] ( see https://devcenter.heroku.com/articles/rails4, May 22, 2013 ) 
+     #+BEGIN_SRC ruby
+       ruby '1.9.3'
+       group :production do
+         gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'
+         gem 'rails3_serve_static_assets', github: 'heroku/rails3_serve_static_assets'
+       end
+     #+END_SRC
+  2. [X] bundle install
+  3. [3/3] Git   
+     1. [X] Create an empty git repository
+         #+BEGIN_SRC sh
+           git init
+         #+END_SRC
+     2. [X] .gitignore file:../.gitignore
+        #+BEGIN_SRC sh
+          * Ignore Weight Loss Rails
+          /weight-loss-rails
+        #+END_SRC
+     3. [X] Store the application in Git
+         #+BEGIN_SRC sh
+           git add .
+           git commit -m "init"
+         #+END_SRC
+  4. [X] Create the application on Heroku
+          #+BEGIN_SRC sh
+            $ heroku create
+            Creating warm-citadel-7982... done, region is us
+            http://warm-citadel-7982.herokuapp.com/ | git@heroku.com:warm-citadel-7982.git
+            Git remote heroku added
+          #+END_SRC
+  5. [X] Deploy the code
+          #+BEGIN_SRC sh
+            git push heroku master
+          #+END_SRC
+  6. [X] Visit the application
+  7. [X] View the logs
+     #+BEGIN_SRC sh
+       heroku logs
+     #+END_SRC
 * [6/6] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [X] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC conf
        gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
      #+END_SRC
-  2. [X] Run the Devise gem install generator
+  2. [X] bundle install
+  3. [X] Run the Devise gem install generator
      #+BEGIN_SRC sh
        rails generate devise:install
      #+END_SRC
-  3. [X] Generate a User Model and generate routes for user activities
+  4. [X] Generate a User Model and generate routes for user activities
      #+BEGIN_SRC sh
        rails generate devise User
      #+END_SRC
-  4. [X] Run the devise_create_users database migration the was created by in the previous command
+  5. [X] Run the devise_create_users database migration the was created by in the previous command
      #+BEGIN_SRC sh
        rake db:migrate
      #+END_SRC
-  5. [X] (Re)start the Rails server
+  6. [X] (Re)start the Rails server
      #+BEGIN_SRC 
        kill -USR1 `cat ../tmp/pids/server.pid `; rails server --daemon
      #+END_SRC
-  6. Devise
+  7. Devise
      - To verify if a user is signed in, use the following helper: user_signed_in?
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
      - file:../app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
+  8. [ ] Deploy to Heroku
+     #+BEGIN_SRC sh
+       bundle install
+       git add app config db
+       git commit -a
+       git push heroku master
+     #+END_SRC
 ** (Optional) create a user from console
    #+BEGIN_SRC ruby
      User.new(:email => "user@name.com", :password => 'password', :password_confirmation => 'password').save
    #+END_SRC
-* [7/8] Incorporate Twitter Hero Bootstrap
+* [8/9] Incorporate Twitter Hero Bootstrap
    1. [X] Install bootstrap-sass
 	#+BEGIN_SRC sh
 	  gem install bootstrap-sass
@@ -139,9 +149,8 @@
       #+BEGIN_SRC ruby
         gem 'bootstrap-sass', '~> 2.3.1.0'
       #+END_SRC
-      - Note: See http://rubygems.org/gems/bootstrap-sass for latest version
-      - Note: `sass-rails` is already in your Gemfile
-      - Note: Can specify version in Gemfile: e.g., gem "bootstrap-sass", "~> 2.3.1.0"
+      - See http://rubygems.org/gems/bootstrap-sass for latest version
+      - `sass-rails` is already in Gemfile
    3. [X] Add the following line to [[file:../config/application.rb][config/application.rb]]
 	#+BEGIN_SRC ruby
         config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
@@ -174,7 +183,14 @@
       #+BEGIN_SRC css
         select { width: 110px; }
       #+END_SRC
-* [6/6] Layout to work with Bootstrap
+   9. [X] Deploy to Heroku
+      #+BEGIN_SRC sh
+        bundle install
+        git add app
+        git commit -a
+        git push heroku master
+      #+END_SRC
+* [ ] Layout to work with Bootstrap
   1. [X] New Application Layout with Twitter Bootstrap [[file:../app/views/layouts/application.html.erb][app/views/layouts/application.html.erb]]
      #+BEGIN_SRC html
        <!DOCTYPE html>
@@ -204,45 +220,44 @@
      #+END_SRC
   2. [X] Create a "navbar" Navigation partial in [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
      #+BEGIN_SRC html
-              <div class="navbar navbar-inverse navbar-fixed-top">
-                <div class="navbar-inner">
-                  <div class="container">
-                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
-                    <div class="nav-collapse collapse">
-                      <ul class="nav">
-                        <li class="active">link_to('Home', root_path)</li>
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Readings <b class="caret"></b></a>
-                          <ul class="dropdown-menu">
-                            <!-- link_to "New reading", new_reading_path -->
-                            <!-- link_to "See all readings", readings_path -->
-                            <li><a href="#">New Reading</a></li>
-                            <li><a href="#">List Readings</a></li>
-                            <li class="divider"></li>
-                          </ul>
-                        </li>
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Graphs <b class="caret"></b></a>
-                          <ul class="dropdown-menu">
-                            <li><a href="#">28 day graph</a></li>
-                            <li><a href="#">3 day graph</a></li>
-                            <li><a href="#">1 year graph</a></li>
-                            <li class="divider"></li>
-                            <li class="nav-header">For Fun</li>
-                            <li><a href="#">Last Hour</a></li>
-                          </ul>
-                        </li>
-                      </ul>
-                      <%= render 'layouts/identity' %>
-                    </div><!--/.nav-collapse -->
-                  </div>
-                </div>
-              </div>
-              <% end %>
+       <div class="navbar navbar-inverse navbar-fixed-top">
+         <div class="navbar-inner">
+           <div class="container">
+             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+             </button>
+             <div class="nav-collapse collapse">
+               <ul class="nav">
+                 <li class="active"><%= link_to('Home', root_path) %></li>
+                 <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Readings <b class="caret"></b></a>
+                   <ul class="dropdown-menu">
+                     <!-- link_to "New reading", new_reading_path -->
+                     <!-- link_to "See all readings", readings_path -->
+                     <li><a href="#">New Reading</a></li>
+                     <li><a href="#">List Readings</a></li>
+                     <li class="divider"></li>
+                   </ul>
+                 </li>
+                 <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Graphs <b class="caret"></b></a>
+                   <ul class="dropdown-menu">
+                     <li><a href="#">28 day graph</a></li>
+                     <li><a href="#">3 day graph</a></li>
+                     <li><a href="#">1 year graph</a></li>
+                     <li class="divider"></li>
+                     <li class="nav-header">For Fun</li>
+                     <li><a href="#">Last Hour</a></li>
+                   </ul>
+                 </li>
+               </ul>
+               <%= render 'layouts/identity' %>
+             </div><!--/.nav-collapse -->
+           </div>
+         </div>
+       </div>
      #+END_SRC
   3. [X] Create an "identity" partial in [[file:../app/views/layouts/_identity.html.erb][app/views/layouts/_identity.html.erb]]
      #+BEGIN_SRC html
@@ -284,18 +299,24 @@
          </div>
        </div>
      #+END_SRC
-  5. [X] Create a Messages partial in file:../app/views/layouts/_messages.html.erb
+  5. [X] Hero unit [[file:../app/views/layouts/_hero_unit.html.erb][app/views/layouts/_hero_unit.html.erb]]
+     #+BEGIN_SRC html
+       <div class="hero-unit">
+         <%= yield %>
+       </div>
+     #+END_SRC
+  6. [X] Create a Messages partial in [[file:../app/views/layouts/_messages.html.erb][app/views/layouts/_messages.html.erb]]
      #+BEGIN_SRC html
        <% flash.each do |name, msg| %>
          <% if msg.is_a?(String) %>
-         <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
-           <a class="close" data-dismiss="alert">&#215;</a>
-           <%= content_tag :div, msg, :id => "flash_#{name}" %>
-         </div>
+           <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+             <a class="close" data-dismiss="alert">&#215;</a>
+             <%= content_tag :div, msg, :id => "flash_#{name}" %>
+           </div>
          <% end %>
        <% end %>
      #+END_SRC
-  6. [X] Create a "devise" partial in [[file:../app/views/layouts/_devise.html.erb][app/views/layouts/_devise.html.erb]]
+  7. [X] Create a "devise" partial in [[file:../app/views/layouts/_devise.html.erb][app/views/layouts/_devise.html.erb]]
      #+BEGIN_SRC html
        <!DOCTYPE html>
        <html lang="en">
@@ -321,18 +342,25 @@
          </body>
        </html>
      #+END_SRC
-* [6/6] SimpleForm
-  1. [X] Install
+  8. [X] Deploy to Heroku
+     #+BEGIN_SRC sh
+       git add app
+       git commit -a
+       git push heroku master
+     #+END_SRC
+
+* [ ] SimpleForm
+  1. [ ] Install
      #+BEGIN_SRC sh
        # Saturday, May 11, 2013
        # See for latest version: http://rubygems.org/gems/simple_form/versions/3.0.0.rc
        gem install simple_form --pre
      #+END_SRC
-  2. [X] [[file:../Gemfile][Gemfile]]
+  2. [ ] [[file:../Gemfile][Gemfile]]
      #+BEGIN_SRC ruby
        gem 'simple_form'
      #+END_SRC
-  3. [X] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
+  3. [ ] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
      #+BEGIN_SRC sh
        rails generate simple_form:install --bootstrap
      #+END_SRC
@@ -343,35 +371,35 @@
        
            = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
      #+END_EXAMPLE
-  4. [X] VIEW file:../app/views/readings/_form.html.erb
+  4. [ ] VIEW file:../app/views/readings/_form.html.erb
      #+BEGIN_SRC html
        <!-- <%= form_for(@reading) do |f| %> -->
        <%= simple_form_for(@reading, :html => { :class => 'form-horizontal' } ) do |f| %>
      #+END_SRC 
-  5. [X] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+  5. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
      #+BEGIN_SRC html
        <!-- <div class="actions"> -->
        <!--   <%= f.submit %> -->
        <!-- </div> -->
        <%= f.button :submit, :class => 'btn-primary' %>
      #+END_SRC
-  6. [X] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+  6. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
      #+BEGIN_SRC html
        <%= f.input :weight %>
        <%= f.input :clothing_wt %>
      #+END_SRC
-* [7/7] Create "Readings" model, controller, and views
-  1. [X] Generate reading scaffold
+* [ ] Create "Readings" model, controller, and views
+  1. [ ] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [X] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
+  2. [ ] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [X] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
+  3. [ ] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
            def change
@@ -386,8 +414,8 @@
            end
          end
        #+END_SRC
-  4. [X] Migrate the database, i.e. rake db:migrate 
-  5. [X] [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
+  4. [ ] Migrate the database, i.e. rake db:migrate 
+  5. [ ] [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
      #+BEGIN_SRC html
        <ul class="dropdown-menu">
          <li><%= link_to "New reading", new_reading_path %></li>
@@ -395,8 +423,8 @@
          <li class="divider"></li>
        </ul>
      #+END_SRC
-  6. [X] [100%] User ID on new Reading
-     1. [X] Add user id to create method in readings controller [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
+  6. [ ] [100%] User ID on new Reading
+     1. [ ] Add user id to create method in readings controller [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
 	#+BEGIN_SRC ruby
           def create
             @reading = Reading.new(reading_params)
@@ -404,7 +432,7 @@
             @reading.reading_time = Time.now
         #+END_SRC
         - note that current_user is provided by the Devise authentication system
-     2. [X] Remove user id and reading_time fields from [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
+     2. [ ] Remove user id and reading_time fields from [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
   7. Reading Layout file:../app/views/layouts/readings.html.erb
      #+BEGIN_SRC html
        <!DOCTYPE html>
@@ -432,12 +460,12 @@
          </body>
        </html>
      #+END_SRC
-  8. [X] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
+  8. [ ] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
      #+BEGIN_SRC ruby
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
-* [10/10] Create "Settings" model, controller, and views, default values
-  1. [X] Generate setting scaffold
+* [ ] Create "Settings" model, controller, and views, default values
+  1. [ ] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
@@ -453,13 +481,13 @@
            locale:string \
            --force
      #+END_SRC
-  2. [X] Use readings layout file:../app/controllers/settings_controller.rb
+  2. [ ] Use readings layout file:../app/controllers/settings_controller.rb
      #+BEGIN_SRC ruby
        class SettingsController < ApplicationController
          layout "readings"
          before_action :set_setting, only: [:show, :edit, :update, :destroy]
      #+END_SRC
-  3. [X] Validations [[file:../app/models/setting.rb][app/models/setting.rb]]
+  3. [ ] Validations [[file:../app/models/setting.rb][app/models/setting.rb]]
 	#+BEGIN_SRC ruby
           validates :filter_rate_gain, :presence => true, :numericality => true
           validates :filter_rate_loss, :presence => true, :numericality => true
@@ -470,7 +498,7 @@
           validates :timezone, :presence => true, :numericality => true
           validates :locale,  :presence => true
 	 #+END_SRC
-  4. [X] Set default values in [[file:../db/migrate/][db/migrate 2013...._create_settings.rb]]
+  4. [ ] Set default values in [[file:../db/migrate/][db/migrate 2013...._create_settings.rb]]
      #+BEGIN_SRC ruby
        t.integer :user_id
        t.integer :filter_rate_gain, :default => 500
@@ -485,14 +513,14 @@
        t.integer :timezone, :default => -7
        t.string :locale, :default => "en_US.UTF-8"
      #+END_SRC
-  5. [X] Migrate database
-  6. [X] Add current_user.id to create method [[file:../app/controllers/settings_controller.rb][app/controllers/settings_controller.rb]]
+  5. [ ] Migrate database
+  6. [ ] Add current_user.id to create method [[file:../app/controllers/settings_controller.rb][app/controllers/settings_controller.rb]]
      #+BEGIN_SRC ruby
        def create
          @setting = Setting.new(setting_params)
          @setting.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  7. [X] Remove user_id from form [[file:../app/views/settings/_form.html.erb][app/views/settings/_form.html.erb]]
+  7. [ ] Remove user_id from form [[file:../app/views/settings/_form.html.erb][app/views/settings/_form.html.erb]]
      #+BEGIN_SRC ruby
        # Delete following div, user_id is supplied in the controller instead
        <div class="field">
@@ -500,18 +528,18 @@
          <%= f.number_field :user_id %>
        </div>
      #+END_SRC
-  8. [X] Relationship between Setting and User [[file:../app/models/setting.rb][app/models/setting.rb]]
+  8. [ ] Relationship between Setting and User [[file:../app/models/setting.rb][app/models/setting.rb]]
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
          ...
      #+END_SRC
-  9. [X] Relationship between User and Setting [[file:../app/models/user.rb][models/user.rb]]
+  9. [ ] Relationship between User and Setting [[file:../app/models/user.rb][models/user.rb]]
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
      #+END_SRC
-  10. [X] Add New Settings to be created when a new user is created [[file:../app/models/user.rb][app/models/user.rb]]
+  10. [ ] Add New Settings to be created when a new user is created [[file:../app/models/user.rb][app/models/user.rb]]
       - No user controller with Devise
       - Use the standard after_create callback provided by Rails.
 	#+BEGIN_SRC ruby
@@ -530,8 +558,8 @@
             end
           end
 	#+END_SRC
-* [11/11] Create Goal model, controller, and views
-  1. [X] Generate scaffold
+* [ ] Create Goal model, controller, and views
+  1. [ ] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
@@ -539,35 +567,35 @@
            goal_loss_rate:integer \
            goal_finish_time:datetime
      #+END_SRC
-  2. [X] Layout file:../app/controllers/goals_controller.rb
-  3. [X] Table class file:../app/views/goals/index.html.erb
+  2. [ ] Layout file:../app/controllers/goals_controller.rb
+  3. [ ] Table class file:../app/views/goals/index.html.erb
      #+BEGIN_SRC html
        <table class="table">
      #+END_SRC
-  4. [X] Relationship between Goal and User [[file:../app/models/goal.rb][app/models/goal.rb]]
+  4. [ ] Relationship between Goal and User [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        class Setting < ActiveRecord::Base
          belongs_to :user
        ...
      #+END_SRC
-  5. [X] Relationship between User and Goal [[file:../app/models/user.rb][app/models/user.rb]]
+  5. [ ] Relationship between User and Goal [[file:../app/models/user.rb][app/models/user.rb]]
      #+BEGIN_SRC ruby
        class User < ActiveRecord::Base
          has_one :setting
          has_many :goals
      #+END_SRC
-  6. [X] Default values [[file:../db/migrate/][db/migrate/ 2013xxx_create_goals.rb]]
+  6. [ ] Default values [[file:../db/migrate/][db/migrate/ 2013xxx_create_goals.rb]]
      #+BEGIN_SRC ruby
        t.integer :goal_loss_rate, :default => 0
      #+END_SRC
-  7. [X] Validations [[file:../app/models/goal.rb][app/models/goal.rb]]
+  7. [ ] Validations [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        validates :goal_start_weight, :presence => true, :numericality => true
        validates :user_id, :presence => true, :numericality => true
        validates :goal_loss_rate, :presence => true, :numericality => true
      #+END_SRC
-  8. [X] Migrate database
-  9. [X] user_id [[file:../app/controllers/goals_controller.rb][app/controllers/goals_controller.rb]]
+  8. [ ] Migrate database
+  9. [ ] user_id [[file:../app/controllers/goals_controller.rb][app/controllers/goals_controller.rb]]
      #+BEGIN_SRC ruby
        # POST /goals
        # POST /goals.json
@@ -575,8 +603,8 @@
          @goal = Goal.new(goal_params)
          @goal.user_id = current_user.id # current_user provided by Devise
      #+END_SRC
-  10. [X] update form [[file:../app/views/goals/_form.html.erb][app/views/goals/_form.html.erb]]
-  11. [X] navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
+  10. [ ] update form [[file:../app/views/goals/_form.html.erb][app/views/goals/_form.html.erb]]
+  11. [ ] navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
       #+BEGIN_SRC html
           <!-- GOALS -->
           <li class="dropdown">
@@ -592,8 +620,8 @@
       #+END_SRC
 ** TODO Edit last goal
 ** TODO link_to with Twitter CSS
-* [3/3] Display current goal
-  1. [X] goal_now in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
+* [ ] Display current goal
+  1. [ ] goal_now in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        def self.goal_now(user)
          goal = Goal.where(:user_id => user.id).last
@@ -606,7 +634,7 @@
          end
        end
      #+END_SRC
-  2. [X] TODO goal_now helper file:../app/helpers/application_helper.rb
+  2. [ ] TODO goal_now helper file:../app/helpers/application_helper.rb
      #+BEGIN_SRC ruby
        module ApplicationHelper
          def goal_now
@@ -616,18 +644,18 @@
          end
        end
      #+END_SRC
-  3. [X] View [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
+  3. [ ] View [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
      #+BEGIN_SRC html
        <%= goal_now %>
      #+END_SRC
-* [7/7] Weight as a function of time
-  1. [X] In Reading model, initial_reading function [[file:../app/models/reading.rb][app/models/reading.rb]]
+* [ ] Weight as a function of time
+  1. [ ] In Reading model, initial_reading function [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.initial_reading( user )
          return Reading.order('reading_time ASC').where(:user_id => user.id).first
        end
      #+END_SRC
-  2. [X] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) [[file:../app/models/reading.rb][app/models/reading.rb]]
+  2. [ ] In Reading model, self.get_readings_after, self.get_next_reading_after( user_id, time ) [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.get_readings_after( user, start_time, end_time )
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time >= ? AND reading_time <= ?', start_time, end_time)
@@ -636,7 +664,7 @@
          return Reading.order('reading_time ASC').where(:user_id => user.id).where('reading_time > ?', time).first
        end
      #+END_SRC
-  3. [X] In Reading model, apply_filter [[file:../app/models/reading.rb][app/models/reading.rb]]
+  3. [ ] In Reading model, apply_filter [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.apply_filter( max_gain_rate, max_loss_rate, initial_time, initial_weight, time, weight )
          if ( weight == initial_time )
@@ -656,7 +684,7 @@
          return  weight
        end
      #+END_SRC
-  4. [X] In Reading model, interpolate [[file:../app/models/reading.rb][app/models/reading.rb]]
+  4. [ ] In Reading model, interpolate [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
 	def self.interpolate( max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight, time )
 	  filtered_next_weight = apply_filter(max_gain_rate, max_loss_rate, last_time, last_weight, next_time, next_weight )
@@ -666,7 +694,7 @@
 	  interpolated_weight = last_weight + percent * delta_weight
 	end
       #+END_SRC
-  5. [X] In Reading model, weight_at_time function [[file:../app/models/reading.rb][app/models/reading.rb]]
+  5. [ ] In Reading model, weight_at_time function [[file:../app/models/reading.rb][app/models/reading.rb]]
       #+BEGIN_SRC ruby
         def self.weight_at_time(user, time)
           setting = Setting.where(:user_id => user.id).last
@@ -697,7 +725,7 @@
         end
         
       #+END_SRC
-  6. [X] Weight now helper file:../app/helpers/application_helper.rb
+  6. [ ] Weight now helper file:../app/helpers/application_helper.rb
      #+BEGIN_SRC ruby
        def weight_now
          if current_user
@@ -706,14 +734,14 @@
          end
        end
      #+END_SRC
-  7. [X] Display weight now in [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
+  7. [ ] Display weight now in [[file:../app/views/home/index.html.erb][app/views/home/index.html.erb]]
      #+BEGIN_SRC ruby
        <h1> Weight Now: <%= weight_now %></h1>
      #+END_SRC
 ** TODO Create an initial setting so application doesn't crash
-* [8/8] Draw Google Graph
+* [ ] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
-  2. [X] Create a goal as a function of time method, place in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
+  2. [ ] Create a goal as a function of time method, place in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
        def self.goal_at_time(user, time)
          goal = Goal.where(:user_id => user.id).last
@@ -733,11 +761,11 @@
          user = User.find(1)
          goal_now = Goal.goal_at_time(user,Time.now)
        #+END_SRC
-  3. [X] Generate the controller for generating Graphs
+  3. [ ] Generate the controller for generating Graphs
      #+BEGIN_SRC sh :tangle bin/generate-controller-GoogleGraph :shebang #!/bin/sh
        rails generate controller GoogleGraph hour three_day week month year four_year
      #+END_SRC
-  4. [X] No turbolinks Google Graphs navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]] layout
+  4. [ ] No turbolinks Google Graphs navigation [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]] layout
      #+BEGIN_SRC html
        <li><a href="/google_graph/three_day" data-no-turbolink>3 day graph</a></li>
        <li><a href="/google_graph/month" data-no-turbolink>28 day graph</a></li>
@@ -749,7 +777,7 @@
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "28 day graph", google_graph_month_path %></div></li>
        <li><div id="fuck-turbolinks" data-no-turbolink><%= link_to "1 year graph", google_graph_year_path %></div></li>
      #+END_SRC
-  5. [X] Write a class `chart_array` method in Readings [[file:../app/models/reading.rb][app/models/reading.rb]]
+  5. [ ] Write a class `chart_array` method in Readings [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        def self.chart_array(user,period)
          weight_array = Array.new
@@ -816,7 +844,7 @@
          Reading.chart_array(user,'three_day')
          => [["", 100.0, 101.0], ["", 150.0, 151.0]]
        #+END_SRC
-  6. [X] VIEW Put Google Graph javascript into view a view partial [[file:../app/views/layouts/_google_graph.html.erb][app/views/layouts/_google_graph.html.erb]]
+  6. [ ] VIEW Put Google Graph javascript into view a view partial [[file:../app/views/layouts/_google_graph.html.erb][app/views/layouts/_google_graph.html.erb]]
      #+BEGIN_SRC html
        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
        <script type="text/javascript">
@@ -834,7 +862,7 @@
        <div id="chart_div" style="width: 900px; height: 500px;"></div>
      #+END_SRC
      - var options={title:'Weight',pointSize:5,vAxis:{minValue: 180}};
-  7. [X] Put google chart data array into controller [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
+  7. [ ] Put google chart data array into controller [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
      #+BEGIN_SRC ruby
        class GoogleGraphController < ApplicationController
          def three_day
@@ -855,81 +883,18 @@
          end
        end
      #+END_SRC
-  8. [X] VIEW Call partial from 3 day, month, and 1 year views [[file:../app/views/google_graph/][app/views/google_graph/]]
+  8. [ ] VIEW Call partial from 3 day, month, and 1 year views [[file:../app/views/google_graph/][app/views/google_graph/]]
      #+BEGIN_SRC html
        DEBUG chart data: <%= @google_chart_data_array %><br />
        DEBUG chart options: <%= @chart_options %>
        <%= render 'layouts/google_graph' %>
      #+END_SRC
-  9. [X] Simplify layout [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
+  9. [ ] Simplify layout [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
      #+BEGIN_SRC ruby
        class GoogleGraphController < ApplicationController
          layout "readings"
      #+END_SRC
      
-* [2/9] Deploy to Heroku
-  1. [X] [[file:../Gemfile][Gemfile]] ( see https://devcenter.heroku.com/articles/rails4, May 22, 2013 ) 
-     #+BEGIN_SRC ruby
-       gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'
-       gem 'rails3_serve_static_assets', github: 'heroku/rails3_serve_static_assets'
-     #+END_SRC
-  2. [X] bundle install
-  3. [-] Store the application in Git
-      #+BEGIN_SRC sh
-        git init
-        git add .
-        git commit -m "init"
-      #+END_SRC
-  4. [-] Create the application on Heroku
-          #+BEGIN_SRC heroku
-            # http://murmuring-bastion-5947.herokuapp.com/ | git@heroku.com:murmuring-bastion-5947.git
-            heroku create
-          #+END_SRC
-  5. [ ] Deploy the code
-          #+BEGIN_SRC sh
-            git push heroku master
-          #+END_SRC
-  6. [ ] Visit the application
-  7. [ ] View the logs
-
-     
-
-
-
-
-
-         
-  3. [ ] weight.usahealthscience.com
-     1. [ ] http://namecheap.com
-     2. [ ] All Host Records
-        | SUB-DOMAIN | IP ADDRESS/URL  | RECORD TYPE |
-        |------------+-----------------+-------------|
-        | marv       | aaa.bbb.ccc.ddd | A(Address)  |
-  4. [ ] /etc/httpd/conf/httpd.conf (CentOS 6.4)
-     1. [ ] ServerName Directive
-	#+BEGIN_SRC example
-	  #ServerName www.example.com:80
-	  ServerName marv.usahealthscience.com:80
-	#+END_SRC
-     2. [ ] Restart Apache server
-	#+BEGIN_SRC sh
-	  httpd -k restart
-	#+END_SRC
-     3. [ ] Stop Apache server
-	#+BEGIN_SRC sh
-	  httpd -k stop
-	#+END_SRC
-     4. [ ] Backup httpd.conf
-     5. [ ] Remove apache
-	#+BEGIN_SRC sh
-	  yum remove httpd
-          # removes httpd-devel
-	#+END_SRC
-     6. [ ] Install apache
-	#+BEGIN_SRC sh
-	  yum install httpd-devel
-	#+END_SRC
-	
 * [/] Deploy to marv.usahealthscience.com
   1. [ ] weight.usahealthscience.com
      1. [ ] http://namecheap.com
@@ -1493,6 +1458,37 @@ end
         - sudo gem install therubyracer => no matching function for
           call to ‘v8::Context::SetData(rr::String)
 
+** Apache
+  3. [ ] weight.usahealthscience.com
+     1. [ ] http://namecheap.com
+     2. [ ] All Host Records
+        | SUB-DOMAIN | IP ADDRESS/URL  | RECORD TYPE |
+        |------------+-----------------+-------------|
+        | marv       | aaa.bbb.ccc.ddd | A(Address)  |
+  4. [ ] /etc/httpd/conf/httpd.conf (CentOS 6.4)
+     1. [ ] ServerName Directive
+	#+BEGIN_SRC example
+	  #ServerName www.example.com:80
+	  ServerName marv.usahealthscience.com:80
+	#+END_SRC
+     2. [ ] Restart Apache server
+	#+BEGIN_SRC sh
+	  httpd -k restart
+	#+END_SRC
+     3. [ ] Stop Apache server
+	#+BEGIN_SRC sh
+	  httpd -k stop
+	#+END_SRC
+     4. [ ] Backup httpd.conf
+     5. [ ] Remove apache
+	#+BEGIN_SRC sh
+	  yum remove httpd
+          # removes httpd-devel
+	#+END_SRC
+     6. [ ] Install apache
+	#+BEGIN_SRC sh
+	  yum install httpd-devel
+	#+END_SRC
 * HEROKU
 ruby '1.9.3'
 
