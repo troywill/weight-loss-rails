@@ -1,3 +1,4 @@
+* TODO Before filter
 * [3/3] Create a new rails application
   1. [X] Create a new application
      #+BEGIN_SRC sh
@@ -389,18 +390,23 @@
        git commit -a
        git push heroku master
      #+END_SRC
-* [9/9] Create "Readings" model, controller, and views
+* [10/10] Create "Readings" model, controller, and views
   1. [X] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [X] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
+  2. [X] Limit readings to authenticated users [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
+     #+BEGIN_SRC ruby
+       class ReadingsController < ApplicationController
+         before_filter :authenticate_user!
+     #+END_SRC
+  3. [X] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  3. [X] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
+  4. [X] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
            def change
@@ -415,8 +421,8 @@
            end
          end
        #+END_SRC
-  4. [X] Migrate the database, i.e. rake db:migrate 
-  5. [X] [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
+  5. [X] Migrate the database, i.e. rake db:migrate 
+  6. [X] [[file:../app/views/layouts/_navbar.html.erb][app/views/layouts/_navbar.html.erb]]
      #+BEGIN_SRC html
        <ul class="dropdown-menu">
          <li><%= link_to "New reading", new_reading_path %></li>
@@ -424,7 +430,7 @@
          <li class="divider"></li>
        </ul>
      #+END_SRC
-  6. [X] [100%] User ID on new Reading
+  7. [X] [100%] User ID on new Reading
      1. [X] Add user id to create method in readings controller [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
 	#+BEGIN_SRC ruby
           def create
@@ -434,7 +440,7 @@
         #+END_SRC
         - note that current_user is provided by the Devise authentication system
      2. [X] Remove user id and reading_time fields from [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
-  7. Reading Layout file:../app/views/layouts/readings.html.erb
+  8. Reading Layout file:../app/views/layouts/readings.html.erb
      #+BEGIN_SRC html
        <!DOCTYPE html>
        <html lang="en">
@@ -461,22 +467,22 @@
          </body>
        </html>
      #+END_SRC
-  8. [X] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
+  9. [X] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
      #+BEGIN_SRC ruby
         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
-  9. [X] Bootstrap table [[file:../app/views/readings/index.html.erb][app/views/readings/index.html.erb]]
-     #+BEGIN_SRC html
-       <table class="table">
-     #+END_SRC
-  10. [X] Deploy to Heroku
+  10. [X] Bootstrap table [[file:../app/views/readings/index.html.erb][app/views/readings/index.html.erb]]
+      #+BEGIN_SRC html
+        <table class="table">
+      #+END_SRC
+  11. [X] Deploy to Heroku
       #+BEGIN_SRC sh
         git add app config db lib
         git commit -a
         git push heroku master
         run rake db:migrate
       #+END_SRC
-* [11/11] Create "Settings" model, controller, views, and default values
+* [11/12] Create "Settings" model, controller, views, and default values
   1. [X] Generate setting scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
@@ -571,14 +577,19 @@
             end
           end
 	#+END_SRC
-  11. [X] Deploy to Heroku
+  11. [ ] Limit readings to authenticated users [[file:../app/controllers/settings_controller.rb][app/controllers/settings_controller.rb]]
+      #+BEGIN_SRC ruby
+        class SettingsController < ApplicationController
+          before_filter :authenticate_user!
+      #+END_SRC
+  12. [X] Deploy to Heroku
       #+BEGIN_SRC sh
         git add app db
         git commit -a
         git push heroku master
         run rake db:migrate
       #+END_SRC
-* [12/12] Create Goal model, controller, and views
+* [13/13] Create Goal model, controller, and views
   1. [X] Generate scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
@@ -643,14 +654,18 @@
           </ul>
         </li>
       #+END_SRC
-  12. [X] Deploy to Heroku
+  12. [X] Limit goals to authenticated users [[file:../app/controllers/goals_controller.rb][app/controllers/goals_controller.rb]]
+      #+BEGIN_SRC ruby
+        class GoalsController < ApplicationController
+          before_filter :authenticate_user!
+      #+END_SRC
+  13. [X] Deploy to Heroku
       #+BEGIN_SRC sh
         git add app db
         git commit -a
         git push heroku master
         run rake db:migrate
-      #+END_SRC
-       
+      #+END_SRC      
 ** TODO Edit last goal
 ** TODO link_to with Twitter CSS
 
@@ -780,7 +795,7 @@
        git push heroku master
      #+END_SRC
 ** TODO Create an initial setting so application doesn't crash
-* [9/9] Draw Google Graph
+* [10/10] Draw Google Graph
   1. (Optional) See http://zargony.com/2012/02/29/google-charts-on-your-site-the-unobtrusive-way
   2. [X] Create a goal as a function of time method, place in Goal model [[file:../app/models/goal.rb][app/models/goal.rb]]
      #+BEGIN_SRC ruby
@@ -829,7 +844,7 @@
      #+END_SRC
   5. [X] Write a class `chart_array` method in Readings [[file:../app/models/reading.rb][app/models/reading.rb]]
      #+BEGIN_SRC ruby
-       def self.chart_array(user, number_of_intervals, interval )
+       def self.chart_array(user, title, number_of_intervals, interval )
          weight_array = Array.new
          weight = 0
          time_at_point_in_past = 0
@@ -841,7 +856,7 @@
          weight_array.push(["title", 'Weight', 'Goal'])
          
          (0..number_of_intervals).each do |period_num|
-           time_at_point_in_past = Time.now-(number_of_intervals-period_num) * interval
+           time_at_point_in_past = Time.now - (number_of_intervals - period_num) * (interval/number_of_intervals)
            
            if ( time_at_point_in_past < time_initial )
              weight = weight_initial
@@ -853,8 +868,6 @@
          end
          return weight_array
        end
-       
-       
      #+END_SRC
      - Commentary: We will pass data into Google javascript in the view
      - Test in rails console
@@ -888,7 +901,7 @@
          layout "readings"
        
          def hour
-           @google_chart_data_array = Reading.chart_array(current_user,'Last hour',12,300).to_json
+           @google_chart_data_array = Reading.chart_array(current_user,'Last hour',60,3600).to_json
            title = "'Weight last hour #{Time.now.to_formatted_s(:short)}'";
            @chart_options = "title: #{title}, pointSize:2"
          end
@@ -924,7 +937,12 @@
        class GoogleGraphController < ApplicationController
          layout "readings"
      #+END_SRC
-  10. [X] Deploy to Heroku
+  10. [X] Limit graphs to authenticated users [[file:../app/controllers/google_graph_controller.rb][app/controllers/google_graph_controller.rb]]
+      #+BEGIN_SRC ruby
+        class GoalsController < ApplicationController
+          before_filter :authenticate_user!
+      #+END_SRC
+  11. [X] Deploy to Heroku
       #+BEGIN_SRC sh
         git add app
         git commit -a
@@ -1255,7 +1273,7 @@ end
 * CSS Resources
   - http://designshack.net/articles/css/715-awesomely-simple-and-free-css-layouts/
 * Attic
-** TODO [0\/$1] Add New Reading to Welcome Page 
+** TODO [/] Add New Reading to Welcome Page 
   1. [ ] Add a _form partial by copyingreading/_form 
      - Note: we will have an error because @reading is not defined. Fix in next step.
   2. [ ] Add  @reading = Reading.new to index method in welcome controller
@@ -1290,7 +1308,7 @@ end
          <%= f.number_field :user_id %>
        </div>
      #+END_SRC
-** TODO [0\/$1] Draw a graph
+** TODO [/] Draw a graph
   1. http://nubyonrails.com/pages/gruff
   2. https://github.com/topfunky/gruff
   3. http://www.undefined.com/ia/archives/2005/12/gruff_graph_007.html
@@ -1327,7 +1345,7 @@ end
 	#+BEGIN_SRC ruby       
           <img src="<%= url_for :controller => "graph", :action=> "month" %>" style="border:10px solid #aabcca;" />
 	#+END_SRC
-** TODO [0\/$1] Create User model, controller, and view
+** TODO [/] Create User model, controller, and view
    1. [ ] Generate a `user` scaffold
       #+BEGIN_SRC sh
        	rails generate scaffold user name:string email:string
@@ -1337,7 +1355,7 @@ end
        	rake db:migrate
       #+END_SRC
    #+END_SRC
-** TODO [0\/$1] Identify the user
+** TODO [/] Identify the user
    1. [ ] Add a before filter to the application controller
       - See page 201 in Agile book for reference, "ITERATION I3: LIMITING ACCESS"
       - place the line after "class ApplicationController < ActionController::Base"
