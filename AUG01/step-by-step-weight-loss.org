@@ -1,33 +1,21 @@
 * [/] Create a new rails application structure
-  1. [ ] Create a “home” controller and a “home/index” page
-     #+BEGIN_SRC sh :tangle bin/create-home-controller.sh :shebang #!/bin/sh
-       rails generate controller home index --skip-stylesheets --skip-javascripts
-     #+END_SRC
-     - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  2. [ ] Set the default route to home/index in file:config/routes.rb
-     #+BEGIN_SRC ruby
-       root 'home#index'
-     #+END_SRC
-  3. [ ] Set the time zone file:config/application.rb
-     #+BEGIN_SRC sh
-       rake --describe time
-       rake time:zones:us
-     #+END_SRC
-     #+BEGIN_SRC ruby
-       config.time_zone = 'Pacific Time (US & Canada)'
-     #+END_SRC
-* TODO Before filter
-* [/] Create a new rails application
   1. [ ] Create a new application
      #+BEGIN_SRC sh :tangle bin/create-new-rails-application.sh :shebang #!/bin/sh
        rails new weight --database postgresql 
      #+END_SRC
-  2. [ ] Enable a JavaScript runtime in file:Gemfile 
+  2. [ ] cd weight && cp -v ../step-by-step-weight-loss.org .
+  3. [ ] Open step-by-step-weight-loss.org 
+  4. [ ] Enable a JavaScript runtime in file:Gemfile 
      #+BEGIN_SRC ruby
        # See https://github.com/sstephenson/execjs#readme for more supported runtimes
        gem 'therubyracer', platforms: :ruby
      #+END_SRC
-  3. [-] Set up Postgresql database in file:config/database.yml
+  5. [ ] Create a “home” controller and a “home/index” page
+     #+BEGIN_SRC sh :tangle bin/create-home-controller.sh :shebang #!/bin/sh
+       rails generate controller home index --skip-stylesheets --skip-javascripts
+     #+END_SRC
+     - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
+  6. [ ] Set up Postgresql database in file:config/database.yml
      1. [ ] template: template0
 	#+BEGIN_SRC conf
            default: &default
@@ -38,13 +26,8 @@
              pool: 5
              template: template0
          #+END_SRC
-     2. [ ] Create development, test, and production database
-        #+BEGIN_SRC sh
-         createdb weight_development
-         createdb weight_test
-         createdb weight_production
-        #+END_SRC
-     3. [ ] file:config/database.yml
+     2. [ ] rake db:create
+     3. file:config/database.yml
         #+BEGIN_SRC conf
           development:
             adapter: postgresql
@@ -70,61 +53,72 @@
             username: troy
             password: 
         #+END_SRC
-     4. [ ] rake db:create
-* [/] Deploy to Heroku
-  1. [ ] [[file:../Gemfile][Gemfile]] ( see https://devcenter.heroku.com/articles/rails4, May 22, 2013 ) 
+     4. Create development, test, and production database
+        #+BEGIN_SRC sh
+         createdb weight_development
+         createdb weight_test
+         createdb weight_production
+        #+END_SRC
+  7. [ ] Set the default route to home/index in file:config/routes.rb
      #+BEGIN_SRC ruby
-       ruby '1.9.3'
-       group :production do
-         gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'
-         gem 'rails3_serve_static_assets', github: 'heroku/rails3_serve_static_assets'
-       end
+       root 'home#index'
      #+END_SRC
+  8. [ ] Set the time zone file:config/application.rb
+     #+BEGIN_SRC sh
+       rake --describe time
+       rake time:zones:us
+     #+END_SRC
+     #+BEGIN_SRC ruby
+       config.time_zone = 'Pacific Time (US & Canada)'
+     #+END_SRC
+* [/] Deploy to Heroku
+  1. [ ] file:Gemfile ( see https://devcenter.heroku.com/articles/rails4, August 4, 2014 ) 
+     #+BEGIN_SRC ruby
+       gem 'rails_12factor', group: :production
+      #+END_SRC
   2. [ ] bundle install
   3. [/] Git   
      1. [ ] Create an empty git repository
          #+BEGIN_SRC sh
            git init
          #+END_SRC
-     2. [ ] .gitignore file:../.gitignore
-        #+BEGIN_SRC sh
-          * Ignore Weight Loss Rails
-          /weight-loss-rails
-        #+END_SRC
-     3. [ ] Store the application in Git
+     2. [ ] Store the application in Git
          #+BEGIN_SRC sh
            git add .
            git commit -m "init"
          #+END_SRC
   4. [ ] Create the application on Heroku
-          #+BEGIN_SRC sh
-            $ heroku create
-            Creating warm-citadel-7982... done, region is us
-            http://warm-citadel-7982.herokuapp.com/ | git@heroku.com:warm-citadel-7982.git
-            Git remote heroku added
-          #+END_SRC
-  5. [ ] Deploy the code
-          #+BEGIN_SRC sh
-            git push heroku master
-            heroku run rake
-          #+END_SRC
-  6. [ ] Visit the application
-  7. [ ] View the logs
+     #+BEGIN_SRC sh
+       heroku create
+       # Creating desolate-savannah-5538... done, stack is cedar
+       # http://desolate-savannah-5538.herokuapp.com/ | git@heroku.com:desolate-savannah-5538.git     
+     #+END_SRC
+  5. [ ] Deploy the code 
+     #+BEGIN_SRC sh :tangle bin/deploy-to-heroku.sh :shebang #!/bin/sh
+       git commit -a
+       git push heroku master
+     #+END_SRC
+  6. [ ] Create the database
+     #+BEGIN_SRC sh :tangle bin/create-the-database.sh :shebang #!/bin/sh
+       heroku run rake db:create
+     #+END_SRC
+  7. [ ] Visit the application with web browser
+  8. [ ] View the logs
      #+BEGIN_SRC sh
        heroku logs
      #+END_SRC
 * [/] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
-  1. [ ] Enable `devise` gem in [[file:../Gemfile][Gemfile]]
+  1. [ ] Enable `devise` gem in file:Gemfile
      #+BEGIN_SRC conf
-       gem 'devise', '~> 3.0.0.rc' # Wed May  8 18:03:54 PDT 2013, Rails 4.0.0.rc1
+       gem 'devise', '~> 3.2.4' # August 1, 2014
      #+END_SRC
   2. [ ] bundle install
   3. [ ] Run the Devise gem install generator
-     #+BEGIN_SRC sh
+     #+BEGIN_SRC sh :tangle bin/devise-install-generator.sh :shebang #!/bin/sh
        rails generate devise:install
      #+END_SRC
   4. [ ] Generate a User Model and generate routes for user activities
-     #+BEGIN_SRC sh
+     #+BEGIN_SRC sh :tangle bin/generate-devise-user.sh :shebang #!/bin/sh
        rails generate devise User
      #+END_SRC
   5. [ ] Run the devise_create_users database migration the was created by in the previous command
@@ -138,7 +132,7 @@
   7. Devise
      - To verify if a user is signed in, use the following helper: user_signed_in?
      - See https://github.com/plataformatec/devise#controller-filters-and-helpers
-     - file:../app/views/home/index.html.erb
+     - file:app/views/home/index.html.erb
      - For the current signed-in user, this helper is available: current_user
   8. [ ] Deploy to Heroku
      #+BEGIN_SRC sh
@@ -147,6 +141,10 @@
        git commit -a
        git push heroku master
      #+END_SRC
+  9. [ ] Migrate the database
+     #+BEGIN_SRC sh
+        heroku run rake db:migrate
+     #+END_SRC
 ** (Optional) create a user from console
    #+BEGIN_SRC ruby
      User.new(:email => "user@name.com", :password => 'password', :password_confirmation => 'password').save
@@ -154,14 +152,15 @@
 * [/] Incorporate Twitter Hero Bootstrap
    1. [ ] Add `bootstrap-sass` gems in file:Gemfile
       #+BEGIN_SRC ruby
+        # August 1, 2014
         gem 'bootstrap-sass', '~> 3.2.0.1'
       #+END_SRC
       - See http://rubygems.org/gems/bootstrap-sass for latest version
       - `sass-rails` is already in Gemfile
-   2. [ ] Add the following line to [[file:../config/application.rb][config/application.rb]]
-	#+BEGIN_SRC ruby
-        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)	  
-	#+END_SRC
+   2. Add the following line to file:config/application.rb
+      #+BEGIN_SRC ruby
+        config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+      #+END_SRC
       - Place after the `class Application < Rails::Application` line
       - See [[https://github.com/thomas-mcdonald/bootstrap-sass#rails-4][bootstrap-sass#rails-4]] if curious
    3. [ ] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in file:app/assets/javascripts/application.js
@@ -185,7 +184,7 @@
         cat ../tmp/pids/server.pid
         kill -USR1 `cat ../tmp/pids/server.pid `
       #+END_SRC
-   7. [ ] Narrow select class width from 220px to 110px file:../app/assets/stylesheets/bootstrap_and_overrides.css.scss
+   7. [ ] Narrow select class width from 220px to 110px file:app/assets/stylesheets/bootstrap_and_overrides.css.scss
       #+BEGIN_SRC css
         select { width: 110px; }
       #+END_SRC
@@ -215,7 +214,7 @@
          <body>
            <%= render 'layouts/navbar' %>
            <div class="container">
-             <%= render 'layouts/hero_unit' %>
+             <%= render 'layouts/jumbotron' %>
              <hr>
              <footer>
                <p>&copy; Company 2013</p>
@@ -224,48 +223,890 @@
          </body>
        </html>
      #+END_SRC
-  2. [ ] Create a "navbar" Navigation partial in file:app/views/layouts/_navbar.html.erb 
-     #+BEGIN_SRC html :tangle app/views/layouts/_navbar.html.erb :padline no
-       <div class="navbar navbar-inverse navbar-fixed-top">
-         <div class="navbar-inner">
+  2. [ ] View http://getbootstrap.com/examples/jumbotron/index.html
+     #+BEGIN_SRC html :tangle /tmp/jumbotron.html :padline no
+       <!DOCTYPE html>
+       <html lang="en">
+         <head>
+           <meta charset="utf-8">
+           <meta http-equiv="X-UA-Compatible" content="IE=edge">
+           <meta name="viewport" content="width=device-width, initial-scale=1">
+           <meta name="description" content="">
+           <meta name="author" content="">
+           <link rel="icon" href="../../favicon.ico">
+
+           <title>Jumbotron Template for Bootstrap</title>
+
+           <!-- Bootstrap core CSS -->
+           <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+           <!-- Custom styles for this template -->
+           <link href="jumbotron.css" rel="stylesheet">
+
+           <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+           <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+           <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+           <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+           <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+           <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+           <!--[if lt IE 9]>
+             <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+           <![endif]-->
+         </head>
+
+         <body>
+
+           <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+             <div class="container">
+               <div class="navbar-header">
+                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                 </button>
+                 <a class="navbar-brand" href="#">Project name</a>
+               </div>
+               <div class="navbar-collapse collapse">
+                 <form class="navbar-form navbar-right" role="form">
+                   <div class="form-group">
+                     <input type="text" placeholder="Email" class="form-control">
+                   </div>
+                   <div class="form-group">
+                     <input type="password" placeholder="Password" class="form-control">
+                   </div>
+                   <button type="submit" class="btn btn-success">Sign in</button>
+                 </form>
+               </div><!--/.navbar-collapse -->
+             </div>
+           </div>
+
+           <!-- Main jumbotron for a primary marketing message or call to action -->
+           <div class="jumbotron">
+             <div class="container">
+               <h1>Hello, world!</h1>
+               <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+               <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+             </div>
+           </div>
+
            <div class="container">
-             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <!-- Example row of columns -->
+             <div class="row">
+               <div class="col-md-4">
+                 <h2>Heading</h2>
+                 <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                 <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+               </div>
+               <div class="col-md-4">
+                 <h2>Heading</h2>
+                 <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                 <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+              </div>
+               <div class="col-md-4">
+                 <h2>Heading</h2>
+                 <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                 <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+               </div>
+             </div>
+
+             <hr>
+
+             <footer>
+               <p>&copy; Company 2014</p>
+             </footer>
+           </div> <!-- /container -->
+
+
+           <!-- Bootstrap core JavaScript
+           ================================================== -->
+           <!-- Placed at the end of the document so the pages load faster -->
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+           <script src="../../dist/js/bootstrap.min.js"></script>
+         </body>
+       </html>
+
+     #+END_SRC
+  3. [ ] View http://getbootstrap.com/examples/starter-template/index.html
+     #+BEGIN_SRC html
+       <!DOCTYPE html>
+       <html lang="en">
+         <head>
+           <meta charset="utf-8">
+           <meta http-equiv="X-UA-Compatible" content="IE=edge">
+           <meta name="viewport" content="width=device-width, initial-scale=1">
+           <meta name="description" content="">
+           <meta name="author" content="">
+           <link rel="icon" href="../../favicon.ico">
+
+           <title>Starter Template for Bootstrap</title>
+
+           <!-- Bootstrap core CSS -->
+           <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+           <!-- Custom styles for this template -->
+           <link href="starter-template.css" rel="stylesheet">
+
+           <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+           <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+           <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+           <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+           <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+           <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+           <!--[if lt IE 9]>
+             <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+           <![endif]-->
+         </head>
+
+         <body>
+
+           <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+             <div class="container">
+               <div class="navbar-header">
+                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                 </button>
+                 <a class="navbar-brand" href="#">Project name</a>
+               </div>
+               <div class="collapse navbar-collapse">
+                 <ul class="nav navbar-nav">
+                   <li class="active"><a href="#">Home</a></li>
+                   <li><a href="#about">About</a></li>
+                   <li><a href="#contact">Contact</a></li>
+                 </ul>
+               </div><!--/.nav-collapse -->
+             </div>
+           </div>
+
+           <div class="container">
+
+             <div class="starter-template">
+               <h1>Bootstrap starter template</h1>
+               <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+             </div>
+
+           </div><!-- /.container -->
+
+
+           <!-- Bootstrap core JavaScript
+           ================================================== -->
+           <!-- Placed at the end of the document so the pages load faster -->
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+           <script src="../../dist/js/bootstrap.min.js"></script>
+         </body>
+       </html>
+
+     #+END_SRC
+  4. [ ] View http://getbootstrap.com/examples/theme/index.html for dropdown menu
+     #+BEGIN_SRC html
+       <!DOCTYPE html>
+       <html lang="en">
+         <head>
+           <meta charset="utf-8">
+           <meta http-equiv="X-UA-Compatible" content="IE=edge">
+           <meta name="viewport" content="width=device-width, initial-scale=1">
+           <meta name="description" content="">
+           <meta name="author" content="">
+           <link rel="icon" href="../../favicon.ico">
+
+           <title>Theme Template for Bootstrap</title>
+
+           <!-- Bootstrap core CSS -->
+           <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+           <!-- Bootstrap theme -->
+           <link href="../../dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+           <!-- Custom styles for this template -->
+           <link href="theme.css" rel="stylesheet">
+
+           <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+           <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+           <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+           <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+           <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+           <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+           <!--[if lt IE 9]>
+             <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+           <![endif]-->
+         </head>
+
+         <body role="document">
+
+           <!-- Fixed navbar -->
+           <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+             <div class="container">
+               <div class="navbar-header">
+                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                 </button>
+                 <a class="navbar-brand" href="#">Bootstrap theme</a>
+               </div>
+               <div class="navbar-collapse collapse">
+                 <ul class="nav navbar-nav">
+                   <li class="active"><a href="#">Home</a></li>
+                   <li><a href="#about">About</a></li>
+                   <li><a href="#contact">Contact</a></li>
+                   <li class="dropdown">
+                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                     <ul class="dropdown-menu" role="menu">
+                       <li><a href="#">Action</a></li>
+                       <li><a href="#">Another action</a></li>
+                       <li><a href="#">Something else here</a></li>
+                       <li class="divider"></li>
+                       <li class="dropdown-header">Nav header</li>
+                       <li><a href="#">Separated link</a></li>
+                       <li><a href="#">One more separated link</a></li>
+                     </ul>
+                   </li>
+                 </ul>
+               </div><!--/.nav-collapse -->
+             </div>
+           </div>
+
+           <div class="container theme-showcase" role="main">
+
+             <!-- Main jumbotron for a primary marketing message or call to action -->
+             <div class="jumbotron">
+               <h1>Hello, world!</h1>
+               <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+               <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Buttons</h1>
+             </div>
+             <p>
+               <button type="button" class="btn btn-lg btn-default">Default</button>
+               <button type="button" class="btn btn-lg btn-primary">Primary</button>
+               <button type="button" class="btn btn-lg btn-success">Success</button>
+               <button type="button" class="btn btn-lg btn-info">Info</button>
+               <button type="button" class="btn btn-lg btn-warning">Warning</button>
+               <button type="button" class="btn btn-lg btn-danger">Danger</button>
+               <button type="button" class="btn btn-lg btn-link">Link</button>
+             </p>
+             <p>
+               <button type="button" class="btn btn-default">Default</button>
+               <button type="button" class="btn btn-primary">Primary</button>
+               <button type="button" class="btn btn-success">Success</button>
+               <button type="button" class="btn btn-info">Info</button>
+               <button type="button" class="btn btn-warning">Warning</button>
+               <button type="button" class="btn btn-danger">Danger</button>
+               <button type="button" class="btn btn-link">Link</button>
+             </p>
+             <p>
+               <button type="button" class="btn btn-sm btn-default">Default</button>
+               <button type="button" class="btn btn-sm btn-primary">Primary</button>
+               <button type="button" class="btn btn-sm btn-success">Success</button>
+               <button type="button" class="btn btn-sm btn-info">Info</button>
+               <button type="button" class="btn btn-sm btn-warning">Warning</button>
+               <button type="button" class="btn btn-sm btn-danger">Danger</button>
+               <button type="button" class="btn btn-sm btn-link">Link</button>
+             </p>
+             <p>
+               <button type="button" class="btn btn-xs btn-default">Default</button>
+               <button type="button" class="btn btn-xs btn-primary">Primary</button>
+               <button type="button" class="btn btn-xs btn-success">Success</button>
+               <button type="button" class="btn btn-xs btn-info">Info</button>
+               <button type="button" class="btn btn-xs btn-warning">Warning</button>
+               <button type="button" class="btn btn-xs btn-danger">Danger</button>
+               <button type="button" class="btn btn-xs btn-link">Link</button>
+             </p>
+
+
+
+             <div class="page-header">
+               <h1>Tables</h1>
+             </div>
+             <div class="row">
+               <div class="col-md-6">
+                 <table class="table">
+                   <thead>
+                     <tr>
+                       <th>#</th>
+                       <th>First Name</th>
+                       <th>Last Name</th>
+                       <th>Username</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     <tr>
+                       <td>1</td>
+                       <td>Mark</td>
+                       <td>Otto</td>
+                       <td>@mdo</td>
+                     </tr>
+                     <tr>
+                       <td>2</td>
+                       <td>Jacob</td>
+                       <td>Thornton</td>
+                       <td>@fat</td>
+                     </tr>
+                     <tr>
+                       <td>3</td>
+                       <td>Larry</td>
+                       <td>the Bird</td>
+                       <td>@twitter</td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+               <div class="col-md-6">
+                 <table class="table table-striped">
+                   <thead>
+                     <tr>
+                       <th>#</th>
+                       <th>First Name</th>
+                       <th>Last Name</th>
+                       <th>Username</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     <tr>
+                       <td>1</td>
+                       <td>Mark</td>
+                       <td>Otto</td>
+                       <td>@mdo</td>
+                     </tr>
+                     <tr>
+                       <td>2</td>
+                       <td>Jacob</td>
+                       <td>Thornton</td>
+                       <td>@fat</td>
+                     </tr>
+                     <tr>
+                       <td>3</td>
+                       <td>Larry</td>
+                       <td>the Bird</td>
+                       <td>@twitter</td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+             </div>
+
+             <div class="row">
+               <div class="col-md-6">
+                 <table class="table table-bordered">
+                   <thead>
+                     <tr>
+                       <th>#</th>
+                       <th>First Name</th>
+                       <th>Last Name</th>
+                       <th>Username</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     <tr>
+                       <td rowspan="2">1</td>
+                       <td>Mark</td>
+                       <td>Otto</td>
+                       <td>@mdo</td>
+                     </tr>
+                     <tr>
+                       <td>Mark</td>
+                       <td>Otto</td>
+                       <td>@TwBootstrap</td>
+                     </tr>
+                     <tr>
+                       <td>2</td>
+                       <td>Jacob</td>
+                       <td>Thornton</td>
+                       <td>@fat</td>
+                     </tr>
+                     <tr>
+                       <td>3</td>
+                       <td colspan="2">Larry the Bird</td>
+                       <td>@twitter</td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+               <div class="col-md-6">
+                 <table class="table table-condensed">
+                   <thead>
+                     <tr>
+                       <th>#</th>
+                       <th>First Name</th>
+                       <th>Last Name</th>
+                       <th>Username</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     <tr>
+                       <td>1</td>
+                       <td>Mark</td>
+                       <td>Otto</td>
+                       <td>@mdo</td>
+                     </tr>
+                     <tr>
+                       <td>2</td>
+                       <td>Jacob</td>
+                       <td>Thornton</td>
+                       <td>@fat</td>
+                     </tr>
+                     <tr>
+                       <td>3</td>
+                       <td colspan="2">Larry the Bird</td>
+                       <td>@twitter</td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Thumbnails</h1>
+             </div>
+             <img data-src="holder.js/200x200" class="img-thumbnail" alt="A generic square placeholder image with a white border around it, making it resemble a photograph taken with an old instant camera">
+
+
+
+             <div class="page-header">
+               <h1>Labels</h1>
+             </div>
+             <h1>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </h1>
+             <h2>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </h2>
+             <h3>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </h3>
+             <h4>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </h4>
+             <h5>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </h5>
+             <h6>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </h6>
+             <p>
+               <span class="label label-default">Default</span>
+               <span class="label label-primary">Primary</span>
+               <span class="label label-success">Success</span>
+               <span class="label label-info">Info</span>
+               <span class="label label-warning">Warning</span>
+               <span class="label label-danger">Danger</span>
+             </p>
+
+
+
+             <div class="page-header">
+               <h1>Badges</h1>
+             </div>
+             <p>
+               <a href="#">Inbox <span class="badge">42</span></a>
+             </p>
+             <ul class="nav nav-pills">
+               <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+               <li><a href="#">Profile</a></li>
+               <li><a href="#">Messages <span class="badge">3</span></a></li>
+             </ul>
+
+
+             <div class="page-header">
+               <h1>Dropdown menus</h1>
+             </div>
+             <div class="dropdown theme-dropdown clearfix">
+               <a id="dropdownMenu1" href="#" role="button" class="sr-only dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+               <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                 <li class="active" role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                 <li role="presentation" class="divider"></li>
+                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+               </ul>
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Navs</h1>
+             </div>
+             <ul class="nav nav-tabs" role="tablist">
+               <li class="active"><a href="#">Home</a></li>
+               <li><a href="#">Profile</a></li>
+               <li><a href="#">Messages</a></li>
+             </ul>
+             <ul class="nav nav-pills">
+               <li class="active"><a href="#">Home</a></li>
+               <li><a href="#">Profile</a></li>
+               <li><a href="#">Messages</a></li>
+             </ul>
+
+
+
+             <div class="page-header">
+               <h1>Navbars</h1>
+             </div>
+
+             <div class="navbar navbar-default">
+               <div class="container">
+                 <div class="navbar-header">
+                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                   </button>
+                   <a class="navbar-brand" href="#">Project name</a>
+                 </div>
+                 <div class="navbar-collapse collapse">
+                   <ul class="nav navbar-nav">
+                     <li class="active"><a href="#">Home</a></li>
+                     <li><a href="#about">About</a></li>
+                     <li><a href="#contact">Contact</a></li>
+                     <li class="dropdown">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                       <ul class="dropdown-menu" role="menu">
+                         <li><a href="#">Action</a></li>
+                         <li><a href="#">Another action</a></li>
+                         <li><a href="#">Something else here</a></li>
+                         <li class="divider"></li>
+                         <li class="dropdown-header">Nav header</li>
+                         <li><a href="#">Separated link</a></li>
+                         <li><a href="#">One more separated link</a></li>
+                       </ul>
+                     </li>
+                   </ul>
+                 </div><!--/.nav-collapse -->
+               </div>
+             </div>
+
+             <div class="navbar navbar-inverse">
+               <div class="container">
+                 <div class="navbar-header">
+                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                   </button>
+                   <a class="navbar-brand" href="#">Project name</a>
+                 </div>
+                 <div class="navbar-collapse collapse">
+                   <ul class="nav navbar-nav">
+                     <li class="active"><a href="#">Home</a></li>
+                     <li><a href="#about">About</a></li>
+                     <li><a href="#contact">Contact</a></li>
+                     <li class="dropdown">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                       <ul class="dropdown-menu" role="menu">
+                         <li><a href="#">Action</a></li>
+                         <li><a href="#">Another action</a></li>
+                         <li><a href="#">Something else here</a></li>
+                         <li class="divider"></li>
+                         <li class="dropdown-header">Nav header</li>
+                         <li><a href="#">Separated link</a></li>
+                         <li><a href="#">One more separated link</a></li>
+                       </ul>
+                     </li>
+                   </ul>
+                 </div><!--/.nav-collapse -->
+               </div>
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Alerts</h1>
+             </div>
+             <div class="alert alert-success" role="alert">
+               <strong>Well done!</strong> You successfully read this important alert message.
+             </div>
+             <div class="alert alert-info" role="alert">
+               <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
+             </div>
+             <div class="alert alert-warning" role="alert">
+               <strong>Warning!</strong> Best check yo self, you're not looking too good.
+             </div>
+             <div class="alert alert-danger" role="alert">
+               <strong>Oh snap!</strong> Change a few things up and try submitting again.
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Progress bars</h1>
+             </div>
+             <div class="progress">
+               <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="sr-only">60% Complete</span></div>
+             </div>
+             <div class="progress">
+               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"><span class="sr-only">40% Complete (success)</span></div>
+             </div>
+             <div class="progress">
+               <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%"><span class="sr-only">20% Complete</span></div>
+             </div>
+             <div class="progress">
+               <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"><span class="sr-only">60% Complete (warning)</span></div>
+             </div>
+             <div class="progress">
+               <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%"><span class="sr-only">80% Complete (danger)</span></div>
+             </div>
+             <div class="progress">
+               <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"><span class="sr-only">100% Complete</span></div>
+             </div>
+             <div class="progress">
+               <div class="progress-bar progress-bar-success" style="width: 35%"><span class="sr-only">35% Complete (success)</span></div>
+               <div class="progress-bar progress-bar-warning" style="width: 20%"><span class="sr-only">20% Complete (warning)</span></div>
+               <div class="progress-bar progress-bar-danger" style="width: 10%"><span class='sr-only'>10% Complete (danger)</span></div>
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>List groups</h1>
+             </div>
+             <div class="row">
+               <div class="col-sm-4">
+                 <ul class="list-group">
+                   <li class="list-group-item">Cras justo odio</li>
+                   <li class="list-group-item">Dapibus ac facilisis in</li>
+                   <li class="list-group-item">Morbi leo risus</li>
+                   <li class="list-group-item">Porta ac consectetur ac</li>
+                   <li class="list-group-item">Vestibulum at eros</li>
+                 </ul>
+               </div><!-- /.col-sm-4 -->
+               <div class="col-sm-4">
+                 <div class="list-group">
+                   <a href="#" class="list-group-item active">
+                     Cras justo odio
+                   </a>
+                   <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                   <a href="#" class="list-group-item">Morbi leo risus</a>
+                   <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                   <a href="#" class="list-group-item">Vestibulum at eros</a>
+                 </div>
+               </div><!-- /.col-sm-4 -->
+               <div class="col-sm-4">
+                 <div class="list-group">
+                   <a href="#" class="list-group-item active">
+                     <h4 class="list-group-item-heading">List group item heading</h4>
+                     <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                   </a>
+                   <a href="#" class="list-group-item">
+                     <h4 class="list-group-item-heading">List group item heading</h4>
+                     <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                   </a>
+                   <a href="#" class="list-group-item">
+                     <h4 class="list-group-item-heading">List group item heading</h4>
+                     <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                   </a>
+                 </div>
+               </div><!-- /.col-sm-4 -->
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Panels</h1>
+             </div>
+             <div class="row">
+               <div class="col-sm-4">
+                 <div class="panel panel-default">
+                   <div class="panel-heading">
+                     <h3 class="panel-title">Panel title</h3>
+                   </div>
+                   <div class="panel-body">
+                     Panel content
+                   </div>
+                 </div>
+                 <div class="panel panel-primary">
+                   <div class="panel-heading">
+                     <h3 class="panel-title">Panel title</h3>
+                   </div>
+                   <div class="panel-body">
+                     Panel content
+                   </div>
+                 </div>
+               </div><!-- /.col-sm-4 -->
+               <div class="col-sm-4">
+                 <div class="panel panel-success">
+                   <div class="panel-heading">
+                     <h3 class="panel-title">Panel title</h3>
+                   </div>
+                   <div class="panel-body">
+                     Panel content
+                   </div>
+                 </div>
+                 <div class="panel panel-info">
+                   <div class="panel-heading">
+                     <h3 class="panel-title">Panel title</h3>
+                   </div>
+                   <div class="panel-body">
+                     Panel content
+                   </div>
+                 </div>
+               </div><!-- /.col-sm-4 -->
+               <div class="col-sm-4">
+                 <div class="panel panel-warning">
+                   <div class="panel-heading">
+                     <h3 class="panel-title">Panel title</h3>
+                   </div>
+                   <div class="panel-body">
+                     Panel content
+                   </div>
+                 </div>
+                 <div class="panel panel-danger">
+                   <div class="panel-heading">
+                     <h3 class="panel-title">Panel title</h3>
+                   </div>
+                   <div class="panel-body">
+                     Panel content
+                   </div>
+                 </div>
+               </div><!-- /.col-sm-4 -->
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Wells</h1>
+             </div>
+             <div class="well">
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+             </div>
+
+
+
+             <div class="page-header">
+               <h1>Carousel</h1>
+             </div>
+             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+               <ol class="carousel-indicators">
+                 <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                 <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                 <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+               </ol>
+               <div class="carousel-inner">
+                 <div class="item active">
+                   <img data-src="holder.js/1140x500/auto/#777:#555/text:First slide" alt="First slide">
+                 </div>
+                 <div class="item">
+                   <img data-src="holder.js/1140x500/auto/#666:#444/text:Second slide" alt="Second slide">
+                 </div>
+                 <div class="item">
+                   <img data-src="holder.js/1140x500/auto/#555:#333/text:Third slide" alt="Third slide">
+                 </div>
+               </div>
+               <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                 <span class="glyphicon glyphicon-chevron-left"></span>
+               </a>
+               <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                 <span class="glyphicon glyphicon-chevron-right"></span>
+               </a>
+             </div>
+
+
+           </div> <!-- /container -->
+
+
+           <!-- Bootstrap core JavaScript
+           ================================================== -->
+           <!-- Placed at the end of the document so the pages load faster -->
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+           <script src="../../dist/js/bootstrap.min.js"></script>
+           <script src="../../assets/js/docs.min.js"></script>
+         </body>
+       </html>
+
+     #+END_SRC
+  5. [ ] Create a "navbar" Navigation partial in file:app/views/layouts/_navbar.html.erb 
+     #+BEGIN_SRC html :tangle app/views/layouts/_navbar.html.erb :padline no
+       <!-- August 4, 2014 -->
+       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+         <div class="container">
+           <div class="navbar-header">
+             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+               <span class="sr-only">Toggle navigation</span>
                <span class="icon-bar"></span>
                <span class="icon-bar"></span>
                <span class="icon-bar"></span>
              </button>
-             <div class="nav-collapse collapse">
-               <ul class="nav">
-                 <li class="active"><%= link_to('Home', root_path) %></li>
-                 <li class="dropdown">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Readings <b class="caret"></b></a>
-                   <ul class="dropdown-menu">
-                     <!-- link_to "New reading", new_reading_path -->
-                     <!-- link_to "See all readings", readings_path -->
-                     <li><a href="#">New Reading</a></li>
-                     <li><a href="#">List Readings</a></li>
-                     <li class="divider"></li>
-                   </ul>
-                 </li>
-                 <li class="dropdown">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Graphs <b class="caret"></b></a>
-                   <ul class="dropdown-menu">
-                     <li><a href="#">28 day graph</a></li>
-                     <li><a href="#">3 day graph</a></li>
-                     <li><a href="#">1 year graph</a></li>
-                     <li class="divider"></li>
-                     <li class="nav-header">For Fun</li>
-                     <li><a href="#">Last Hour</a></li>
-                   </ul>
-                 </li>
-               </ul>
-               <%= render 'layouts/identity' %>
-             </div><!--/.nav-collapse -->
            </div>
+           <div class="navbar-collapse collapse">
+             <ul class="nav navbar-nav">
+               <li class="active"><%= link_to('Home', root_path) %></li>
+               <li class="dropdown">
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Readings <span class="caret"></span></a>
+                 <ul class="dropdown-menu" role="menu">
+                   <!-- link_to "New reading", new_reading_path -->
+                   <!-- link_to "See all readings", readings_path -->
+                   <li><a href="#">New Reading</a></li>
+                   <li><a href="#">List Readings</a></li>
+                   <li class="divider"></li>
+                 </ul>
+               </li>
+               <li class="dropdown">
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Graphs <span class="caret"></span></a>
+                 <ul class="dropdown-menu" role="menu">
+                   <li><a href="#">28 day graph</a></li>
+                   <li><a href="#">3 day graph</a></li>
+                   <li><a href="#">1 year graph</a></li>
+                   <li class="divider"></li>
+                   <li class="nav-header">For Fun</li>
+                   <li><a href="#">Last Hour</a></li>
+                 </ul>
+               </li>
+             </ul>
+             <%= render 'layouts/identity' %>
+           </div><!--/.nav-collapse -->
          </div>
        </div>
      #+END_SRC
-  3. [ ] Create an "identity" partial in file:app/views/layouts/_identity.html.erb 
+  6. [ ] Create an "identity" partial in file:app/views/layouts/_identity.html.erb 
      #+BEGIN_SRC html :tangle app/views/layouts/_identity.html.erb :padline no
        <ul class="nav pull-right">
          <% if user_signed_in? %>
@@ -276,42 +1117,49 @@
          <% end %>
        </ul>
      #+END_SRC
-  4. [ ] Create a "hero_unit" partial in file:app/views/layouts/_hero_unit.html.erb 
-     #+BEGIN_SRC html :tangle app/views/layouts/_hero_unit.html.erb :padline no
-       <!-- Main hero unit for a primary marketing message or call to action -->
-       <div class="hero-unit">
-         <h1>Hello, world!</h1>
-         <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-         <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-         <%= yield %>
+  7. [ ] Create a "jumbotron" partial in file:app/views/layouts/_jumbotron.html.erb 
+     #+BEGIN_SRC html :tangle app/views/layouts/_jumbotron.html.erb :padline no
+       <!-- August 4, 2014 -->
+       <!-- Main jumbotron for a primary marketing message or call to action -->
+       <div class="jumbotron">
+         <div class="container">
+           <h1>Hello, world!</h1>
+           <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+           <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+           <%= yield %>
+         </div>
        </div>
-       
-       <!-- Example row of columns -->
-       <div class="row">
-         <div class="span4">
-           <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-           <p><a class="btn" href="#">View details &raquo;</a></p>
-         </div>
-         <div class="span4">
-           <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-           <p><a class="btn" href="#">View details &raquo;</a></p>
-         </div>
-         <div class="span4">
-           <h2>Heading</h2>
-           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-           <p><a class="btn" href="#">View details &raquo;</a></p>
+       <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+       <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+
+       <div class="container">
+         <!-- Example row of columns -->
+         <div class="row">
+           <div class="col-md-4">
+             <h2>Heading</h2>
+             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+             <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+           </div>
+           <div class="col-md-4">
+             <h2>Heading</h2>
+             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+             <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+           </div>
+           <div class="col-md-4">
+             <h2>Heading</h2>
+             <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+             <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+           </div>
          </div>
        </div>
      #+END_SRC
-  5. [ ] Hero unit file:app/views/layouts/_hero_unit.html.erb 
-     #+BEGIN_SRC html tangle app/views/layouts/_hero_unit.html.erb :padline no
-       <div class="hero-unit">
+  8. [ ] Hero unit file:app/views/layouts/_jumbotron.html.erb 
+     #+BEGIN_SRC html :tangle app/views/layouts/_jumbotron.html.erb :padline no
+       <div class="jumbotron">
          <%= yield %>
        </div>
      #+END_SRC
-  6. [ ] Create a Messages partial in [[file:../app/views/layouts/_messages.html.erb][app/views/layouts/_messages.html.erb]]
+  9. [ ] Create a Messages partial in [[file:../app/views/layouts/_messages.html.erb][app/views/layouts/_messages.html.erb]]
      #+BEGIN_SRC html
        <% flash.each do |name, msg| %>
          <% if msg.is_a?(String) %>
@@ -322,38 +1170,38 @@
          <% end %>
        <% end %>
      #+END_SRC
-  7. [ ] Create a "devise" partial in [[file:../app/views/layouts/_devise.html.erb][app/views/layouts/_devise.html.erb]]
-     #+BEGIN_SRC html
-       <!DOCTYPE html>
-       <html lang="en">
-         <head>
-         </head>
-         <title>Bootstrap</title>
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <%= stylesheet_link_tag    "application", media: "all",  "data-turbolinks-track" => true %>
-         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-         <!--[if lt IE 9]>
-             <script src="../assets/js/html5shiv.js"></script>
-             <![endif]-->
-         <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-             <%= csrf_meta_tags %>
-         <body>
-           <div class="container">
-             <%= yield %>
-             <hr>
-             <footer>
-               <p>&copy; Company 2013</p>
-             </footer>
-           </div> <!-- /container -->
-         </body>
-       </html>
-     #+END_SRC
-  8. [ ] Deploy to Heroku
-     #+BEGIN_SRC sh
-       git add app
-       git commit -a
-       git push heroku master
-     #+END_SRC
+  10. [ ] Create a "devise" partial in file:app/views/layouts/_devise.html.erb
+      #+BEGIN_SRC html :tangle app/views/layouts/_devise.html.erb :padline no
+	<!DOCTYPE html>
+	<html lang="en">
+          <head>
+          </head>
+          <title>Bootstrap</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <%= stylesheet_link_tag    "application", media: "all",  "data-turbolinks-track" => true %>
+          <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+          <!--[if lt IE 9]>
+              <script src="../assets/js/html5shiv.js"></script>
+              <![endif]-->
+          <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+              <%= csrf_meta_tags %>
+          <body>
+            <div class="container">
+              <%= yield %>
+              <hr>
+              <footer>
+		<p>&copy; Company 2013</p>
+              </footer>
+            </div> <!-- /container -->
+          </body>
+	</html>
+      #+END_SRC
+  11. [ ] Deploy to Heroku
+      #+BEGIN_SRC sh
+	git add app
+	git commit -a
+	git push heroku master
+      #+END_SRC
 * [/] Create "Readings" model, controller, and views
   1. [ ] Generate reading scaffold
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
