@@ -77,7 +77,7 @@
        # August 6, 2014
        gem 'rails_12factor', group: :production
       #+END_SRC
-  2. [ ] bundle install
+  2. [ ] run `bundle install`
   3. [/] Git   
      1. [ ] Create an empty git repository
          #+BEGIN_SRC sh
@@ -96,6 +96,7 @@
      #+END_SRC
   5. [ ] Deploy the code 
      #+BEGIN_SRC sh :tangle bin/deploy-to-heroku.sh :shebang #!/bin/sh
+       find . -name '*~' | xargs rm
        git commit -a
        git push heroku master
      #+END_SRC
@@ -104,59 +105,13 @@
      #+BEGIN_SRC sh
        heroku logs
      #+END_SRC
-  8. [ ] http://namecheap.com
+  8. [ ] Visit domain registrar, i.e. http://namecheap.com
   9. [ ] heroku domains:add weight.troywill.com
   10. [ ] All Host Records
       | SUB-DOMAIN | IP ADDRESS/URL                       | RECORD TYPE   |
       |------------+--------------------------------------+---------------|
       | weight     | desolate-savannah-5538.herokuapp.com | CNAME (Alias) |
-* [/] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] > 
-  1. [ ] Enable `devise` gem in file:Gemfile
-     #+BEGIN_SRC conf
-       gem 'devise', '~> 3.2.4' # August 1, 2014
-     #+END_SRC
-  2. [ ] bundle install
-  3. [ ] Run the Devise gem install generator
-     #+BEGIN_SRC sh :tangle bin/devise-install-generator.sh :shebang #!/bin/sh
-       rails generate devise:install
-     #+END_SRC
-  4. [ ] Generate a User Model and generate routes for user activities
-     #+BEGIN_SRC sh :tangle bin/generate-devise-user.sh :shebang #!/bin/sh
-       rails generate devise User
-     #+END_SRC
-  5. [ ] Run the devise_create_users database migration the was created by in the previous command
-     #+BEGIN_SRC sh
-       rake db:migrate
-     #+END_SRC
-  6. [ ] (Re)start the Rails server
-     #+BEGIN_SRC sh :tangle bin/restart-server.sh :shebang #!/bin/bash
-       set -o verbose
-       PID=`cat tmp/pids/server.pid `
-       echo $PID
-       kill -USR1 $PID
-       rails server --daemon
-     #+END_SRC
-  7. Devise
-     - To verify if a user is signed in, use the following helper: user_signed_in?
-     - See https://github.com/plataformatec/devise#controller-filters-and-helpers
-     - file:app/views/home/index.html.erb
-     - For the current signed-in user, this helper is available: current_user
-  8. [ ] Deploy to Heroku
-     #+BEGIN_SRC sh
-       bundle install
-       git add app config db
-       git commit -a
-       git push heroku master
-     #+END_SRC
-  9. [ ] Migrate the database
-     #+BEGIN_SRC sh :tangle bin/heroku-migrate.sh :shebang #!/bin/sh
-        heroku run rake db:migrate
-     #+END_SRC
-** (Optional) create a user from console
-   #+BEGIN_SRC ruby
-     User.new(:email => "user@name.com", :password => 'password', :password_confirmation => 'password').save
-   #+END_SRC
-* [/] Incorporate Twitter Hero Bootstrap 
+* [/] Incorporate Twitter Bootstrap 
    1. [ ] Add `bootstrap-sass` gems in file:Gemfile
       #+BEGIN_SRC ruby
         # August 1, 2014
@@ -176,59 +131,35 @@
         // = require bootstrap
 	#+END_SRC
    4. [ ] Rename application.css application.scss
-	    #+BEGIN_SRC sh
-            cd app/assets/stylesheets/ && mv -v application.css application.css.scss && cd -
-          #+END_SRC
+      #+BEGIN_SRC sh
+        cd app/assets/stylesheets/ && mv -v application.css application.css.scss && cd -
+      #+END_SRC
    5. [ ] Import Bootstrap in an SCSS file with a new file:app/assets/stylesheets/bootstrap_and_overrides.css.scss
 	#+BEGIN_SRC css :tangle app/assets/stylesheets/bootstrap_and_overrides.css.scss :padline no
         /* import twitter bootstrap */
         @import "bootstrap";
         body { padding-top: 60px; padding-bottom: 40px; }
 	#+END_SRC
-   6. [ ] Restart server
-   7. [ ] Narrow select class width from 220px to 110px file:app/assets/stylesheets/bootstrap_and_overrides.css.scss
+   6. Narrow select class width from 220px to 110px file:app/assets/stylesheets/bootstrap_and_overrides.css.scss
       #+BEGIN_SRC css
         select { width: 110px; }
       #+END_SRC
-   8. [ ] Deploy to Heroku
+   7. [ ] Deploy to Heroku
       #+BEGIN_SRC sh
         bundle install
         git add app
         git commit -a
         git push heroku master
       #+END_SRC
-* [/] SimpleForm ( See http://simple-form-bootstrap.plataformatec.com.br/ ) 
-  1. [ ] file:Gemfile
-     #+BEGIN_SRC ruby
-       # August 1, 2014
-       gem 'simple_form', '~> 3.0.2'
-     #+END_SRC
-  2. [ ] bundle install
-  3. [ ] Run the generator: see https://github.com/plataformatec/simple_form#bootstrap 
-     #+BEGIN_SRC sh :tangle bin/simple_form.sh :shebang #!/bin/sh
-       rails generate simple_form:install --bootstrap
-     #+END_SRC
-     Inside your views, use the 'simple_form_for' with one of the Bootstrap form
-     classes, '.form-horizontal', '.form-inline', '.form-search' or
-     '.form-vertical', as the following:
-     = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
-  4. [ ] VIEW file:app/views/readings/_form.html.erb
-     #+BEGIN_SRC html
-       <!-- <%= form_for(@reading) do |f| %> -->
-       <%= simple_form_for(@reading, html: {class: 'form-horizontal' }) do |f| %>
-     #+END_SRC 
-  5. [ ] VIEW file:app/views/readings/_form.html.erb
-     #+BEGIN_SRC html
-       <!-- <div class="actions"> -->
-       <!--   <%= f.submit %> -->
-       <!-- </div> -->
-       <%= f.button :submit, :class => 'btn-primary' %>
-     #+END_SRC
-  6. [ ] VIEW file:app/views/readings/_form.html.erb
-     #+BEGIN_SRC html
-       <%= f.input :weight %>
-       <%= f.input :clothing_wt %>
-     #+END_SRC
+   8. [ ] Restart server
+   9. [ ] (Re)start the Rails server
+      #+BEGIN_SRC sh :tangle bin/restart-server.sh :shebang #!/bin/bash
+	set -o verbose
+	PID=`cat tmp/pids/server.pid `
+	echo $PID
+	kill -USR1 $PID
+	rails server --daemon
+      #+END_SRC
 * [/] Layout to work with Bootstrap 
   1. [ ] New Application Layout with Twitter Bootstrap file:app/views/layouts/application.html.erb
      #+BEGIN_SRC html :tangle app/views/layouts/application.html.erb :padline no
@@ -251,7 +182,7 @@
              <%= render 'layouts/jumbotron' %>
              <hr>
              <footer>
-               <p>&copy; Company 2013</p>
+               <p>&copy; Company 2014</p>
              </footer>
            </div> <!-- /container -->
          </body>
@@ -1193,7 +1124,7 @@
          <%= yield %>
        </div>
      #+END_SRC
-  9. [ ] Create a Messages partial in [[file:../app/views/layouts/_messages.html.erb][app/views/layouts/_messages.html.erb]]
+  9. Create a Messages partial in [[file:../app/views/layouts/_messages.html.erb][app/views/layouts/_messages.html.erb]]
      #+BEGIN_SRC html
        <% flash.each do |name, msg| %>
          <% if msg.is_a?(String) %>
@@ -1236,130 +1167,66 @@
 	git commit -a
 	git push heroku master
       #+END_SRC
-* [/] Create "Readings" model, controller, and views 
-  1. [ ] Generate reading scaffold
-     #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
-       rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
-     #+END_SRC
-  2. [ ] Limit readings to authenticated users file:app/controllers/readings_controller.rb
+* [/] Add SimpleForm Gem ( See http://simple-form-bootstrap.plataformatec.com.br/ ) 
+  1. [ ] file:Gemfile
      #+BEGIN_SRC ruby
-       class ReadingsController < ApplicationController
-         before_filter :authenticate_user!
+       # August 1, 2014
+       gem 'simple_form', '~> 3.0.2'
      #+END_SRC
-  3. [ ] Relationship to User, validations file:app/models/reading.rb
-     #+BEGIN_SRC ruby
-       belongs_to :user
-       validates :user_id, :numericality => true
-       validates :weight, :numericality => true
+  2. [ ] run `bundle install`
+  3. [ ] Run the generator: see https://github.com/plataformatec/simple_form#bootstrap 
+     #+BEGIN_SRC sh :tangle bin/install-simple_form.sh :shebang #!/bin/sh
+       rails generate simple_form:install --bootstrap
      #+END_SRC
-  4. [ ] Default clothing in values in Model file:db/migrate/ 2014..._created_readings.rb
-       #+BEGIN_SRC ruby
-         class CreateReadings < ActiveRecord::Migration
-           def change
-             create_table :readings do |t|
-               t.integer :user_id
-               t.decimal :weight
-               t.datetime :reading_time
-               t.decimal :clothing_wt, :default => 3
-               
-               t.timestamps
-             end
-           end
-         end
-       #+END_SRC
-  5. [ ] rake db:migrate; heroku run rake db:migrate
-  6. [ ] file:app/views/layouts/_navbar.html.erb
-     #+BEGIN_SRC html
-       <ul class="dropdown-menu" role="menu">
-         <li><%= link_to "New reading", new_reading_path %></li>
-         <li><%= link_to "See all readings", readings_path %></li>  
-         <li class="divider"></li>
-       </ul>
+     Inside your views, use the 'simple_form_for' with one of the Bootstrap form
+     classes, '.form-horizontal', '.form-inline', '.form-search' or
+     '.form-vertical', as the following:
+     = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
+* [/] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] > 
+  1. [ ] Enable `devise` gem in file:Gemfile
+     #+BEGIN_SRC conf
+       gem 'devise', '~> 3.2.4' # August 1, 2014
      #+END_SRC
-  7. [ ] User ID on new Reading
-     1. [ ] Add user id to create method in readings controller file:app/controllers/readings_controller.rb
-	#+BEGIN_SRC ruby
-          def create
-            @reading = Reading.new(reading_params)
-            @reading.user_id = current_user.id
-            @reading.reading_time = Time.now
-        #+END_SRC
-        - note that current_user is provided by the Devise authentication system
-     2. [ ] Remove user id and reading_time fields from file:app/views/readings/_form.html.erb
-	#+BEGIN_SRC ruby :tangle app/views/readings/_form.html.erb :padline no
-          <%= form_for(@reading) do |f| %>
-            <% if @reading.errors.any? %>
-              <div id="error_explanation">
-                <h2><%= pluralize(@reading.errors.count, "error") %> prohibited this reading from being saved:</h2>
-
-                <ul>
-                <% @reading.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-                </ul>
-              </div>
-            <% end %>
-
-            <div class="field">
-              <%= f.label :weight %><br>
-              <%= f.text_field :weight %>
-            </div>
-            <div class="field">
-              <%= f.label :clothing_wt %><br>
-              <%= f.text_field :clothing_wt %>
-            </div>
-            <div class="actions">
-              <%= f.submit %>
-            </div>
-          <% end %>        
-	#+END_SRC
-  8. Create Reading Layout file:app/views/layouts/readings.html.erb
-     #+BEGIN_SRC html :tangle app/views/layouts/readings.html.erb :padline no
-       <!DOCTYPE html>
-       <html lang="en">
-         <head>
-         </head>
-         <title>Bootstrap</title>
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <%= stylesheet_link_tag    "application", media: "all",  "data-turbolinks-track" => true %>
-         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-         <!--[if lt IE 9]>
-             <script src="../assets/js/html5shiv.js"></script>
-             <![endif]-->
-         <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-             <%= csrf_meta_tags %>
-         <body>
-           <%= render 'layouts/navbar' %>
-           <div class="container">
-             <%= yield %>
-             <hr>
-             <footer>
-               <p>&copy; Shiloh System 2014</p>
-             </footer>
-           </div> <!-- /container -->
-         </body>
-       </html>
+  2. [ ] run `bundle install`
+  3. [ ] Run the Devise gem install generator
+     #+BEGIN_SRC sh :tangle bin/devise-install-generator.sh :shebang #!/bin/sh
+       rails generate devise:install
      #+END_SRC
-  9. [ ] index method in file:app/controllers/readings_controller.rb
-     #+BEGIN_SRC ruby
-       def index
-         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
-       end
+  4. [ ] Generate a User Model and generate routes for user activities
+     #+BEGIN_SRC sh :tangle bin/generate-devise-user.sh :shebang #!/bin/sh
+       rails generate devise User
      #+END_SRC
-  10. [ ] Bootstrap table file:app/views/readings/index.html.erb
-      #+BEGIN_SRC html
-        <table class="table">
-      #+END_SRC
-  11. [ ] Deploy to Heroku
-      #+BEGIN_SRC sh
-        git add app config db lib
-        git commit -a
-        git push heroku master
-        run rake db:migrate
-      #+END_SRC
-* [/] Create "Settings" model, controller, views, and default values 
+  5. [ ] Run the devise_create_users database migration the was created by in the previous command
+     #+BEGIN_SRC sh
+       rake db:migrate
+     #+END_SRC
+  6. [ ] (Re)start the Rails server
+  7. Devise
+     - To verify if a user is signed in, use the following helper: user_signed_in?
+     - See https://github.com/plataformatec/devise#controller-filters-and-helpers
+     - file:app/views/home/index.html.erb
+     - For the current signed-in user, this helper is available: current_user
+  8. [ ] Deploy to Heroku
+     #+BEGIN_SRC sh
+       bundle install
+       git add app config db lib
+       git commit -a
+       git push heroku master
+     #+END_SRC
+  9. [ ] Migrate the database
+     #+BEGIN_SRC sh
+       rake db:migrate
+     #+END_SRC
+     #+BEGIN_SRC sh :tangle bin/heroku-migrate.sh :shebang #!/bin/sh
+       heroku run rake db:migrate
+     #+END_SRC
+** (Optional) create a user from console
+   #+BEGIN_SRC ruby
+     User.new(:email => "user@name.com", :password => 'password', :password_confirmation => 'password').save
+   #+END_SRC
+* [/] Create "Settings" model, controller, views, and default values
   1. [ ] Generate setting scaffold
-     #+BEGIN_SRC sh :tangle bin/generate-scaffold-setting.sh :shebang #!/bin/sh
+     #+BEGIN_SRC sh :tangle bin/generate-setting-scaffold.sh :shebang #!/bin/sh
        rails generate scaffold setting user_id:integer \
            filter_rate_gain:integer \
            filter_rate_loss:integer \
@@ -1415,24 +1282,23 @@
          end
      #+END_SRC
   7. [ ] Remove user_id from form file:app/views/settings/_form.html.erb
-     #+BEGIN_SRC ruby
-       # Delete following div, user_id is supplied in the controller instead
-       <div class="field">
-         <%= f.label :user_id %><br>
-         <%= f.number_field :user_id %>
-       </div>
+     #+BEGIN_SRC html
+       <%= f.input :user_id %>
      #+END_SRC
   8. [ ] Relationship between Setting and User file:app/models/setting.rb
+     + See http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
      #+BEGIN_SRC ruby
-       class Setting < ActiveRecord::Base
-         belongs_to :user
-         ...
+     class Setting < ActiveRecord::Base
+     belongs_to :user # foreign key - user_id
+     ...
      #+END_SRC
   9. [ ] Relationship between User and Setting file:app/models/user.rb
+     + See http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
      #+BEGIN_SRC ruby
-       class User < ActiveRecord::Base
-         has_one :setting
+     class User < ActiveRecord::Base
+     has_one :setting
      #+END_SRC
+     belongs_to :employee    
   10. [ ] Add New Settings to be created when a new user is created file:app/models/user.rb
       - No user controller with Devise
       - Use the standard after_create callback provided by Rails.
@@ -1464,10 +1330,155 @@
         git push heroku master
         run rake db:migrate
       #+END_SRC
-  13. [ ] Menu Layout
+  13. [ ] Migrate database
+  14. [ ] Menu Layout
+      1. [ ] run rake routes
+      2. [ ] Put settings in navigation bar file:app/views/layouts/_navbar.html.erb
+	 #+BEGIN_SRC html
+           <% if (current_user.id) %>
+             <li><%= link_to('Settings', setting_path(current_user.id)) %></li>
+           <% end %>
+	 #+END_SRC
+  15. [ ] Limit user to view own setting
+      1. [ ] Scan http://stackoverflow.com/questions/16382253/restrict-devise-users-to-their-own-view-association
+      2. [ ] user_is_current_user in file:app/controllers/settings_controller.rb
+	 #+BEGIN_SRC ruby
+             private
+               def user_is_current_user
+                 unless current_user.id == params[:id].to_i
+                   flash[:notice] = "You may only view your own settings."
+                   redirect_to root_path
+                 end
+               end
+	 #+END_SRC
+      3. [ ] before_filter :user_is_current_user in file:app/controllers/settings_controller.rb
+	 #+BEGIN_SRC ruby
+           class SettingsController < ApplicationController
+             before_filter :authenticate_user!
+             before_action :set_setting, only: [:show, :edit, :update, :destroy]
+             before_filter :user_is_current_user  
+	 #+END_SRC
+* [/] Create "Readings" model, controller, and views 
+  1. [ ] Generate reading scaffold
+     #+BEGIN_SRC sh :tangle bin/generate-reading-scaffold.sh :shebang #!/bin/sh
+       rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
+     #+END_SRC
+  2. [ ] Limit readings to authenticated users file:app/controllers/readings_controller.rb
+     #+BEGIN_SRC ruby
+       class ReadingsController < ApplicationController
+         before_filter :authenticate_user!
+     #+END_SRC
+  3. [ ] Relationship to User, validations file:app/models/reading.rb
+     #+BEGIN_SRC ruby
+       belongs_to :user
+       validates :user_id, :numericality => true
+       validates :weight, :numericality => true
+     #+END_SRC
+  4. [ ] Default clothing in values in Model file:db/migrate/ 2014..._created_readings.rb
+       #+BEGIN_SRC ruby
+         class CreateReadings < ActiveRecord::Migration
+           def change
+             create_table :readings do |t|
+               t.integer :user_id
+               t.decimal :weight
+               t.datetime :reading_time
+               t.decimal :clothing_wt, :default => 3
+               
+               t.timestamps
+             end
+           end
+         end
+       #+END_SRC
+  5. [ ] Run `rake db:migrate` and `heroku run rake db:migrate`
+  6. [ ] Add readings after in file:app/views/layouts/_navbar.html.erb
+     #+BEGIN_SRC html
+       <ul class="dropdown-menu" role="menu">
+         <li><%= link_to "New reading", new_reading_path %></li>
+         <li><%= link_to "See all readings", readings_path %></li>  
+         <li class="divider"></li>
+       </ul>
+     #+END_SRC
+  7. [ ] User ID on new Reading
+     1. [ ] Add user id to create method in readings controller file:app/controllers/readings_controller.rb
+	#+BEGIN_SRC ruby
+          def create
+            @reading = Reading.new(reading_params)
+            @reading.user_id = current_user.id
+            @reading.reading_time = Time.now
+        #+END_SRC
+        - note that current_user is provided by the Devise authentication system
+     2. [ ] Remove user id and reading_time fields from file:app/views/readings/_form.html.erb
+	#+BEGIN_SRC html :tangle app/views/readings/_form.html.erb :padline no
+          <%= simple_form_for(@reading) do |f| %>
+            <%= f.error_notification %>
+
+            <div class="form-inputs">
+              <%= f.input :weight %>
+              <%= f.input :clothing_wt %>
+            </div>
+
+            <div class="form-actions">
+              <%= f.button :submit %>
+            </div>
+          <% end %>
+	#+END_SRC
+  8. Create Reading Layout file:app/views/layouts/readings.html.erb
+     #+BEGIN_SRC html :tangle app/views/layouts/readings.html.erb :padline no
+       <!DOCTYPE html>
+       <html lang="en">
+         <head>
+         </head>
+         <title>Bootstrap</title>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <%= stylesheet_link_tag    "application", media: "all",  "data-turbolinks-track" => true %>
+         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+         <!--[if lt IE 9]>
+             <script src="../assets/js/html5shiv.js"></script>
+             <![endif]-->
+         <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+             <%= csrf_meta_tags %>
+         <body>
+           <%= render 'layouts/navbar' %>
+           <div class="container">
+             <%= yield %>
+             <hr>
+             <footer>
+               <p>&copy; Shiloh System 2014</p>
+             </footer>
+           </div> <!-- /container -->
+         </body>
+       </html>
+     #+END_SRC
+  9. [ ] index method in file:app/controllers/readings_controller.rb
+     #+BEGIN_SRC ruby
+       def index
+         @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
+       end
+     #+END_SRC
+  10. [ ] Bootstrap table file:app/views/readings/index.html.erb
+      #+BEGIN_SRC html
+        <table class="table">
+      #+END_SRC
+  11. [ ] Simple form updates
+      1. [ ] VIEW file:app/views/readings/_form.html.erb
+	 #+BEGIN_SRC html
+	   <%= simple_form_for(@reading, html: {class: 'form-horizontal' }) do |f| %>
+	 #+END_SRC 
+      2. [ ] VIEW file:app/views/readings/_form.html.erb
+	 #+BEGIN_SRC html
+	   <%= f.button :submit, :class => 'btn-primary' %>
+	 #+END_SRC
+  12. [ ] Deploy to Heroku
+      #+BEGIN_SRC sh
+        git add app config db lib
+        git commit -a
+        git push heroku master
+        run rake db:migrate
+      #+END_SRC
+  13. [ ] Migrate databases
 * [/] Create Goal model, controller, and views 
   1. [ ] Generate goal scaffold
-     #+BEGIN_SRC sh :tangle bin/generate-scaffold-goal.sh :shebang #!/bin/sh
+     #+BEGIN_SRC sh :tangle bin/generate-goal-scaffold.sh :shebang #!/bin/sh
        rails generate scaffold goal user_id:integer \
            goal_start_weight:decimal \
            goal_start_time:datetime \
@@ -1544,7 +1555,6 @@
       #+END_SRC      
 ** TODO Edit last goal
 ** TODO link_to with Twitter CSS
-
 * [/] Display current goal 
   1. [ ] goal_now in Goal model file:app/models/goal.rb
      #+BEGIN_SRC ruby
