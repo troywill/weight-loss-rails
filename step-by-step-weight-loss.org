@@ -392,6 +392,12 @@
      #+END_SRC
 * [10/10] Create "Readings" model, controller, and views
   1. [X] Generate reading scaffold
+     :PROPERTIES:
+     :Title:     Goldberg Variations
+     :Composer:  J.S. Bach
+     :Publisher: Deutsche Grammophon
+     :NDisks:    1
+     :END:
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
@@ -437,8 +443,8 @@
             @reading = Reading.new(reading_params)
             @reading.user_id = current_user.id
             @reading.reading_time = Time.now
-        #+END_SRC
-        - note that current_user is provided by the Devise authentication system
+	#+END_SRC
+	- note that current_user is provided by the Devise authentication system
      2. [X] Remove user id and reading_time fields from [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
   8. Reading Layout file:../app/views/layouts/readings.html.erb
      #+BEGIN_SRC html
@@ -469,18 +475,18 @@
      #+END_SRC
   9. [X] [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]] ( welcome controller, index method )
      #+BEGIN_SRC ruby
-        @readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
+	@readings = Reading.where(:user_id => current_user.id).order('reading_time DESC')
      #+END_SRC
   10. [X] Bootstrap table [[file:../app/views/readings/index.html.erb][app/views/readings/index.html.erb]]
       #+BEGIN_SRC html
-        <table class="table">
+	<table class="table">
       #+END_SRC
   11. [X] Deploy to Heroku
       #+BEGIN_SRC sh
-        git add app config db lib
-        git commit -a
-        git push heroku master
-        run rake db:migrate
+	git add app config db lib
+	git commit -a
+	git push heroku master
+	run rake db:migrate
       #+END_SRC
 * [11/12] Create "Settings" model, controller, views, and default values
   1. [X] Generate setting scaffold
