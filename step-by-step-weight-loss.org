@@ -6,7 +6,7 @@
   1. [ ] Create a new application
      #+BEGIN_SRC sh :tangle bin/new-rails-application.sh :shebang #!/bin/bash
        set -o nounset
-       RAILS_VERSION=_4.1.6_
+       RAILS_VERSION=_4.1.8_
        rails $RAILS_VERSION new weight --database postgresql 
      #+END_SRC
   2. [ ] Enable a JavaScript runtime in [[file:Gemfile][./Gemfile]]
@@ -26,17 +26,17 @@
             template: template0
         #+END_SRC
      2. [ ] rake db:create
-* [/] Create a new rails application structure
-  1. [ ] Create a “home” controller and a “home/index” page
+  4. [ ] Create a “home” controller and a “home/index” page
      #+BEGIN_SRC sh
        rails generate controller home index --skip-stylesheets --skip-javascripts
      #+END_SRC
+
      - --skip-stylesheets --skip-javascripts to avoid cluttering our application with stylesheet and JavaScript files we don’t need.
-  2. [ ] Set the default route to home/index in file:./config/routes.rb
+  5. [ ] Set the default route to home/index in file:./config/routes.rb
      #+BEGIN_SRC ruby
        root 'home#index'
      #+END_SRC
-  3. [ ] Set the time zone file:./config/application.rb
+  6. [ ] Set the time zone file:./config/application.rb
      #+BEGIN_SRC sh
        rake --describe time
        rake time:zones:us
@@ -45,13 +45,10 @@
        config.time_zone = 'Pacific Time (US & Canada)'
      #+END_SRC
 * [/] Deploy to Heroku
-  1. [ ] [[file:../Gemfile][Gemfile]] ( see https://devcenter.heroku.com/articles/rails4, May 22, 2013 ) 
+  1. [ ] file:./Gemfile ( see https://devcenter.heroku.com/articles/rails4, 23 March 2014 ) 
      #+BEGIN_SRC ruby
-       ruby '1.9.3'
-       group :production do
-         gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'
-         gem 'rails3_serve_static_assets', github: 'heroku/rails3_serve_static_assets'
-       end
+       ruby '2.0.0'
+       gem 'rails_12factor', group: :production
      #+END_SRC
   2. [ ] bundle install
   3. [/] Git   
@@ -59,22 +56,23 @@
          #+BEGIN_SRC sh
            git init
          #+END_SRC
-     2. [ ] .gitignore file:../.gitignore
+     2. ? .gitignore file:./.gitignore
         #+BEGIN_SRC sh
           * Ignore Weight Loss Rails
           /weight-loss-rails
         #+END_SRC
      3. [ ] Store the application in Git
          #+BEGIN_SRC sh
-           git add .
+           git add --all
            git commit -m "init"
          #+END_SRC
   4. [ ] Create the application on Heroku
           #+BEGIN_SRC sh
-            $ heroku create
-            Creating warm-citadel-7982... done, region is us
-            http://warm-citadel-7982.herokuapp.com/ | git@heroku.com:warm-citadel-7982.git
-            Git remote heroku added
+            heroku create
+
+            # Creating sheltered-harbor-3255... done, stack is cedar-14
+            # https://sheltered-harbor-3255.herokuapp.com/ | git@heroku.com:sheltered-harbor-3255.git
+            # Git remote heroku added
           #+END_SRC
   5. [ ] Deploy the code
           #+BEGIN_SRC sh
@@ -89,7 +87,7 @@
 * [/] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [ ] Enable `devise` gem in file:./Gemfile
      #+BEGIN_SRC conf
-       gem 'devise', '~> 3.3.0' # August 13, 2014
+       gem 'devise', '3.4.1' # October 29, 2014
      #+END_SRC
   2. [ ] bundle install
   3. [ ] Run the Devise gem install generator
@@ -166,7 +164,7 @@
 * [/] Incorporate Twitter Hero Bootstrap
    1. [ ] Add `bootstrap-sass` gems in file:./Gemfile
       #+BEGIN_SRC ruby
-        gem 'bootstrap-sass', '~> 3.2.0.2'
+        gem 'bootstrap-sass', '3.3.1.0'
       #+END_SRC
       - See http://rubygems.org/gems/bootstrap-sass/versions for latest version
       - `sass-rails` is already in Gemfile
@@ -180,7 +178,7 @@
    4. [ ] Include the Twitter Bootstrap Javascript ( see [[https://github.com/thomas-mcdonald/bootstrap-sass#javascripts][bootstrap-sass#javascripts]] ) in file:./app/assets/javascripts/application.js
 	#+BEGIN_SRC js
         # place at end of file, after other require lines
-        // = require bootstrap
+        // = require bootstrap-sprockets
 	#+END_SRC
    5. [ ] Rename application.css application.scss
 	    #+BEGIN_SRC sh
@@ -188,7 +186,7 @@
           #+END_SRC
    6. [ ] Import Bootstrap in an SCSS file with a new file:./app/assets/stylesheets/bootstrap_and_overrides.css.scss file
 	#+BEGIN_SRC css
-        /* import twitter bootstrap */
+        @import "bootstrap-sprockets";
         @import "bootstrap";
         body { padding-top: 60px; padding-bottom: 40px; }
 	#+END_SRC
@@ -196,7 +194,7 @@
       #+BEGIN_SRC sh
         bin/server.sh
       #+END_SRC
-   8. [ ] Narrow select class width from 220px to 110px file:./app/assets/stylesheets/bootstrap_and_overrides.css.scss
+   8. ? Narrow select class width from 220px to 110px file:./app/assets/stylesheets/bootstrap_and_overrides.css.scss
       #+BEGIN_SRC css
         select { width: 110px; }
       #+END_SRC
@@ -208,8 +206,8 @@
         git push heroku master
       #+END_SRC
 * [/] Layout to work with Bootstrap
-  1. [ ] New Application Layout with Twitter Bootstrap file:./app/views/layouts/application.html.erb
-     #+BEGIN_SRC html :tangle ./app/views/layouts/application.html.erb
+  1. ? Create a "devise" partial in file:./app/views/layouts/_devise.html.erb
+     #+BEGIN_SRC html :tangle ./app/views/layouts/_devise.html.erb
        <!DOCTYPE html>
        <html lang="en">
          <head>
@@ -222,11 +220,10 @@
              <script src="../assets/js/html5shiv.js"></script>
              <![endif]-->
          <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-         <%= csrf_meta_tags %>
+             <%= csrf_meta_tags %>
          <body>
-           <%= render 'layouts/navbar' %>
            <div class="container">
-             <%= render 'layouts/hero_unit' %>
+             <%= yield %>
              <hr>
              <footer>
                <p>&copy; Company 2013</p>
@@ -235,7 +232,64 @@
          </body>
        </html>
      #+END_SRC
-  2. [ ] Create a "navbar" Navigation partial in file:./app/views/layouts/_navbar.html.erb
+  2. [ ] Create a Messages partial in file:./app/views/layouts/_messages.html.erb
+     #+BEGIN_SRC html :tangle ./app/views/layouts/_messages.html.erb
+       <% flash.each do |name, msg| %>
+         <% if msg.is_a?(String) %>
+           <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+             <a class="close" data-dismiss="alert">&#215;</a>
+             <%= content_tag :div, msg, :id => "flash_#{name}" %>
+           </div>
+         <% end %>
+       <% end %>
+     #+END_SRC
+  3. [ ] Create a "hero_unit" partial in file:./app/views/layouts/_hero_unit.html.erb
+     #+BEGIN_SRC html :tangle ./app/views/layouts/_hero_unit.html.erb
+       <!-- Main hero unit for a primary marketing message or call to action -->
+       <div class="hero-unit">
+         <h1>Hello, world!</h1>
+         <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+         <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+         <%= yield %>
+       </div>
+       
+       <!-- Example row of columns -->
+       <div class="row">
+         <div class="span4">
+           <h2>Heading</h2>
+           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+           <p><a class="btn" href="#">View details &raquo;</a></p>
+         </div>
+         <div class="span4">
+           <h2>Heading</h2>
+           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+           <p><a class="btn" href="#">View details &raquo;</a></p>
+         </div>
+         <div class="span4">
+           <h2>Heading</h2>
+           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+           <p><a class="btn" href="#">View details &raquo;</a></p>
+         </div>
+       </div>
+     #+END_SRC
+  4. [ ] Hero unit file:./app/views/layouts/_hero_unit.html.erb
+     #+BEGIN_SRC html :tangle ./app/views/layouts/_hero_unit.html.erb
+       <div class="hero-unit">
+         <%= yield %>
+       </div>
+     #+END_SRC
+  5. [ ] Create an "identity" partial in file:./app/views/layouts/_identity.html.erb
+     #+BEGIN_SRC html :tangle ./app/views/layouts/_identity.html.erb
+       <ul class="nav pull-right">
+         <% if user_signed_in? %>
+         <li><%= link_to('Logout', destroy_user_session_path, :method=>'delete') %></li>
+           <% else %>
+         <li class="active"><%= link_to('Login', new_user_session_path) %></li>
+         <li><%= link_to('Sign up', new_user_registration_path)%></li>
+         <% end %>
+       </ul>
+     #+END_SRC
+  6. [ ] Create a "navbar" Navigation partial in file:./app/views/layouts/_navbar.html.erb
      #+BEGIN_SRC html :tangle ./app/views/layouts/_navbar.html.erb
        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
          <div class="container">
@@ -278,65 +332,8 @@
          </div>
        </div>
      #+END_SRC
-  3. [ ] Create an "identity" partial in file:./app/views/layouts/_identity.html.erb
-     #+BEGIN_SRC html :tangle ./app/views/layouts/_identity.html.erb
-       <ul class="nav pull-right">
-         <% if user_signed_in? %>
-         <li><%= link_to('Logout', destroy_user_session_path, :method=>'delete') %></li>
-           <% else %>
-         <li class="active"><%= link_to('Login', new_user_session_path) %></li>
-         <li><%= link_to('Sign up', new_user_registration_path)%></li>
-         <% end %>
-       </ul>
-     #+END_SRC
-  4. [ ] Create a "hero_unit" partial in file:./app/views/layouts/_hero_unit.html.erb
-     #+BEGIN_SRC html :tangle ./app/views/layouts/_hero_unit.html.erb
-       <!-- Main hero unit for a primary marketing message or call to action -->
-       <div class="hero-unit">
-         <h1>Hello, world!</h1>
-         <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-         <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-         <%= yield %>
-       </div>
-       
-       <!-- Example row of columns -->
-       <div class="row">
-         <div class="span4">
-           <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-           <p><a class="btn" href="#">View details &raquo;</a></p>
-         </div>
-         <div class="span4">
-           <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-           <p><a class="btn" href="#">View details &raquo;</a></p>
-         </div>
-         <div class="span4">
-           <h2>Heading</h2>
-           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-           <p><a class="btn" href="#">View details &raquo;</a></p>
-         </div>
-       </div>
-     #+END_SRC
-  5. [ ] Hero unit file:./app/views/layouts/_hero_unit.html.erb
-     #+BEGIN_SRC html :tangle ./app/views/layouts/_hero_unit.html.erb
-       <div class="hero-unit">
-         <%= yield %>
-       </div>
-     #+END_SRC
-  6. [ ] Create a Messages partial in file:./app/views/layouts/_messages.html.erb
-     #+BEGIN_SRC html :tangle ./app/views/layouts/_messages.html.erb
-       <% flash.each do |name, msg| %>
-         <% if msg.is_a?(String) %>
-           <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
-             <a class="close" data-dismiss="alert">&#215;</a>
-             <%= content_tag :div, msg, :id => "flash_#{name}" %>
-           </div>
-         <% end %>
-       <% end %>
-     #+END_SRC
-  7. [ ] Create a "devise" partial in file:./app/views/layouts/_devise.html.erb
-     #+BEGIN_SRC html :tangle ./app/views/layouts/_devise.html.erb
+  7. [ ] New Application Layout with Twitter Bootstrap file:./app/views/layouts/application.html.erb
+     #+BEGIN_SRC html :tangle ./app/views/layouts/application.html.erb
        <!DOCTYPE html>
        <html lang="en">
          <head>
@@ -349,10 +346,11 @@
              <script src="../assets/js/html5shiv.js"></script>
              <![endif]-->
          <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-             <%= csrf_meta_tags %>
+         <%= csrf_meta_tags %>
          <body>
+           <%= render 'layouts/navbar' %>
            <div class="container">
-             <%= yield %>
+             <%= render 'layouts/hero_unit' %>
              <hr>
              <footer>
                <p>&copy; Company 2013</p>
@@ -372,18 +370,18 @@
      #+BEGIN_SRC sh :tangle bin/generate-scaffold-reading.sh :shebang #!/bin/sh
        rails generate scaffold reading user_id:integer weight:decimal reading_time:datetime clothing_wt:decimal
      #+END_SRC
-  2. [ ] Limit readings to authenticated users [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
+  2. [ ] Limit readings to authenticated users file:./app/controllers/readings_controller.rb
      #+BEGIN_SRC ruby
        class ReadingsController < ApplicationController
          before_filter :authenticate_user!
      #+END_SRC
-  3. [ ] Relationship to User, validations [[file:../app/models/reading.rb][app/models/reading.rb]]
+  3. [ ] Relationship to User, validations file:./app/models/reading.rb
      #+BEGIN_SRC ruby
        belongs_to :user
        validates :user_id, :numericality => true
        validates :weight, :numericality => true
      #+END_SRC
-  4. [ ] Default clothing in values in Model [[file:../db/migrate/][db/migrate/2012..._created_readings.rb]]
+  4. [ ] Default clothing in values in Model file:./db/migrate/ 2014..._created_readings.rb
        #+BEGIN_SRC ruby
          class CreateReadings < ActiveRecord::Migration
            def change
@@ -407,7 +405,7 @@
          <li class="divider"></li>
        </ul>
      #+END_SRC
-  7. [ ] [100%] User ID on new Reading
+  7. [ ] [0%] User ID on new Reading
      1. [ ] Add user id to create method in readings controller [[file:../app/controllers/readings_controller.rb][app/controllers/readings_controller.rb]]
 	#+BEGIN_SRC ruby
           def create
@@ -1006,7 +1004,7 @@
   - see Chapter 13: Task H: Sending Mail
   - [ ] environment.rb
     - file:../../config/environments/development.rb
-      #+BEGIN_SRC ruby 
+      #+BEGIN_SRC ruby :tangle /tmp/smtp.rb :padline no
         config.action_mailer.delivery_method = :smtp | :sendmail | :test
          
         Depot::Application.configure do
