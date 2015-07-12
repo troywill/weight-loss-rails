@@ -1,21 +1,17 @@
 * Introduction
-  Sunday, October 12, 2014
+  Saturday, July 12, 2015, Rails 4.2.3, released June 25, 2015
   See https://rubygems.org/gems/rails for Rails versions
 * TODO Before filter
-* [/] Create a new rails application
+* [0/6] Create a new rails application
   1. [ ] Create a new application
      #+BEGIN_SRC sh :tangle bin/new-rails-application.sh :shebang #!/bin/bash
        set -o nounset
-       RAILS_VERSION=_4.1.8_
+       RAILS_VERSION=_4.2.3_
        rails $RAILS_VERSION new weight --database postgresql 
      #+END_SRC
-  2. [ ] Enable a JavaScript runtime in [[file:Gemfile][./Gemfile]]
-     #+BEGIN_SRC ruby
-       # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-       gem 'therubyracer', platforms: :ruby
-     #+END_SRC
+  2. [ ] rake about
   3. [ ] Set up database
-     1. [ ] [[file:config/database.yml][./config/database.yml]]
+     1. [ ] file:./config/database.yml
         #+BEGIN_SRC conf
           default: &default
             adapter: postgresql
@@ -44,14 +40,14 @@
      #+BEGIN_SRC ruby
        config.time_zone = 'Pacific Time (US & Canada)'
      #+END_SRC
-* [/] Deploy to Heroku
+* [0/6] Deploy to Heroku
   1. [ ] file:./Gemfile ( see https://devcenter.heroku.com/articles/rails4, 23 March 2014 ) 
      #+BEGIN_SRC ruby
-       ruby '2.0.0'
        gem 'rails_12factor', group: :production
+       ruby '2.2.2'
      #+END_SRC
   2. [ ] bundle install
-  3. [/] Git   
+  3. [0/2] Git   
      1. [ ] Create an empty git repository
          #+BEGIN_SRC sh
            git init
@@ -67,13 +63,13 @@
            git commit -m "init"
          #+END_SRC
   4. [ ] Create the application on Heroku
-          #+BEGIN_SRC sh
-            heroku create
+     #+BEGIN_SRC sh
+       heroku create
 
-            # Creating sheltered-harbor-3255... done, stack is cedar-14
-            # https://sheltered-harbor-3255.herokuapp.com/ | git@heroku.com:sheltered-harbor-3255.git
-            # Git remote heroku added
-          #+END_SRC
+       # Creating immense-atoll-1684... done, stack is cedar-14
+       # https://immense-atoll-1684.herokuapp.com/ | https://git.heroku.com/immense-atoll-1684.git
+       # Git remote heroku added
+     #+END_SRC
   5. [ ] Deploy the code
           #+BEGIN_SRC sh
             git push heroku master
@@ -84,10 +80,10 @@
      #+BEGIN_SRC sh
        heroku logs
      #+END_SRC
-* [/] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
+* [0/7] Create a User authentication system with Devise < see [[file:/troy@usahealthscience.com:/home/troy/srv/devise/128/emacs/emacs/step-by-step-devise.org][step-by-step-devise.org]] >
   1. [ ] Enable `devise` gem in file:./Gemfile
      #+BEGIN_SRC conf
-       gem 'devise', '3.4.1' # October 29, 2014
+       gem 'devise', '3.5.1' # relased May 26, 2015
      #+END_SRC
   2. [ ] bundle install
   3. [ ] Run the Devise gem install generator
@@ -123,15 +119,14 @@
    #+BEGIN_SRC ruby
      User.new(:email => "user@name.com", :password => 'password', :password_confirmation => 'password').save
    #+END_SRC
-* [/] SimpleForm
+* [0/6] SimpleForm
   1. [ ] file:./Gemfile Install, see http://rubygems.org/gems/simple_form/versions/
-     #+BEGIN_SRC sh
-       # 3.0.2 April 9, 2014
-       gem 'simple_form', '~> 3.0.2'
+     #+BEGIN_SRC ruby
+       gem 'simple_form', '~> 3.1.0' # 3.1.0 November 25, 2014
      #+END_SRC
   2. [ ] bundle install
-  3. [ ] Run the generator: see [[https://github.com/plataformatec/simple_form#twitter-bootstrap][simple_form#twitter-bootstrap]]
-     #+BEGIN_SRC sh
+  3. [ ] Run the generator: see https://github.com/plataformatec/simple_form#bootstrap
+     #+BEGIN_SRC sh :tangle tmp/generate-simple_form_bootstrap.sh
        rails generate simple_form:install --bootstrap
      #+END_SRC
      #+BEGIN_EXAMPLE
@@ -142,7 +137,7 @@
        classes, '.form-horizontal', '.form-inline', '.form-search' or
        '.form-vertical', as the following:
 
-         = simple_form_for(@user, html: {class: 'form-horizontal' }) do |form|
+         = simple_form_for(@user, html: { class: 'form-horizontal' }) do |form|
      #+END_EXAMPLE
   4. [ ] VIEW [[file:../app/views/readings/_form.html.erb][app/views/readings/_form.html.erb]]
      #+BEGIN_SRC html
